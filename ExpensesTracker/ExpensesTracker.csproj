@@ -2,16 +2,34 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net7.0-windows</TargetFramework>
+    <TargetFramework>net7.0-windows7.0</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
+    <SupportedOSPlatformVersion>7.0</SupportedOSPlatformVersion>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Views\Assets\Icons\add.png" />
+    <None Remove="Views\Assets\Icons\chart-histogram.png" />
+    <None Remove="Views\Assets\Icons\edit-alt.png" />
+    <None Remove="Views\Assets\Icons\exit.png" />
+    <None Remove="Views\Assets\Icons\home.png" />
+    <None Remove="Views\Assets\Icons\maximize.png" />
+    <None Remove="Views\Assets\Icons\menu.png" />
+    <None Remove="Views\Assets\Icons\minimize.png" />
+    <None Remove="Views\Assets\Icons\settings.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Views\Assets\Icons\chart-histogram.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
 
   <ItemGroup>
     <Folder Include="DataTypes\" />
     <Folder Include="Models\DataControllers\" />
     <Folder Include="ViewModels\" />
-    <Folder Include="Views\Controls\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -20,10 +38,43 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.4">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Views\Assets\Icons\add.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Views\Assets\Icons\edit-alt.png" />
+    <Resource Include="Views\Assets\Icons\exit.png" />
+    <Resource Include="Views\Assets\Icons\home.png" />
+    <Resource Include="Views\Assets\Icons\maximize.png" />
+    <Resource Include="Views\Assets\Icons\menu.png" />
+    <Resource Include="Views\Assets\Icons\minimize.png" />
+    <Resource Include="Views\Assets\Icons\settings.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Properties\Settings.Designer.cs">
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
   </ItemGroup>
 
 </Project>
