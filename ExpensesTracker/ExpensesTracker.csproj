@@ -29,7 +29,6 @@
   <ItemGroup>
     <Folder Include="DataTypes\" />
     <Folder Include="Models\DataControllers\" />
-    <Folder Include="ViewModels\" />
   </ItemGroup>
 
   <ItemGroup>

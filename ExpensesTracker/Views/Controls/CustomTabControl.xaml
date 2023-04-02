@@ -7,8 +7,8 @@
              mc:Ignorable="d" 
              d:DesignHeight="24">
   <StackPanel  Orientation ="Horizontal" Height="24">
-    <TextBlock x:Name="Description" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Bottom" FontSize="16"><Run Language="pl-pl" Text="Home"/></TextBlock>
-    <Button HorizontalAlignment="Left" VerticalAlignment="Top" Height="8" Width="8" Margin="0,2,0,0">
+    <TextBlock x:Name="Description" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Bottom" FontSize="16" Text="{Binding Path=TabName, RelativeSource={RelativeSource AncestorType={x:Type local:CustomTabControl}}}"/>
+    <Button HorizontalAlignment="Left" VerticalAlignment="Top" Height="8" Width="8" Margin="0,2,0,0" Visibility="{Binding Path=CloseTabVisible, RelativeSource={RelativeSource AncestorType={x:Type local:CustomTabControl}}}" Click="Button_Click">
       <Button.Background>
         <ImageBrush ImageSource="/Views/Assets/Icons/exit.png" Stretch="Uniform" TileMode="None"/>
       </Button.Background>

@@ -5,8 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ExpensesTracker"
         xmlns:ctrls="clr-namespace:ExpensesTracker.Views.Controls"
+        xmlns:vm="clr-namespace:ExpensesTracker.ViewModels"
         mc:Ignorable="d"
-        Title="Expenses tracker" Height="500" Width="800" MinWidth="800" MinHeight="500" ScrollViewer.HorizontalScrollBarVisibility="Auto" FontFamily="Comic Sans MS" WindowStyle="None" Closing="Window_Closing" >
+        d:DataContext="{d:DesignInstance vm:MainWindowViewModel}"
+        Title="Expenses tracker" Height="500" Width="800" MinWidth="800" MinHeight="500" ScrollViewer.HorizontalScrollBarVisibility="Auto" FontFamily="Comic Sans MS" WindowStyle="None" Closing="Window_Closing">
 
   <!-- This removes white bar at the top meant for resizing -->
   <WindowChrome.WindowChrome>
@@ -24,30 +26,35 @@
       <RowDefinition Height="20"/>
     </Grid.RowDefinitions>
 
-    <Image Source="/Views/Assets/Icons/menu.png" MouseDown="Menu_MouseDown" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="9,0,0,0"  />
+    <Image Source="/Views/Assets/Icons/menu.png" MouseLeftButtonDown="Menu_MouseLeftButtonDown" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="9,0,0,0"  />
     
-    <ctrls:CustomTabControl Grid.Column=" 1" HorizontalAlignment="Left"/>
-    
-    <StackPanel Orientation="Horizontal" Grid.Column="1" FlowDirection="RightToLeft" MouseDown="Bar_MouseDown" Background="#00000000" >
-      <Image MouseDown="Exit_MouseDown" Source="/Views/Assets/Icons/exit.png" Margin="10,5,0,5" />
-      <Image MouseDown="Maximize_MouseDown" Source="/Views/Assets/Icons/maximize.png" Margin="10,5,0,5" />
+    <StackPanel x:Name="TopBar" Orientation="Horizontal" Grid.Column="1" Background="#00000000">
+      <StackPanel x:Name="Tabs" Orientation="Horizontal" HorizontalAlignment="Left" >
+        <ctrls:CustomTabControl x:Name="HomeTab" HorizontalAlignment="Left" TabName="Home" CloseTabVisible="Hidden" Background ="#FFC7D5E8"/>
+      </StackPanel>
+
+      <StackPanel x:Name="MinMaxClose" Orientation="Horizontal" MouseDown="Bar_MouseDown" HorizontalAlignment="Right">
       <Image MouseDown="Minimize_MouseDown" Source="/Views/Assets/Icons/minimize.png" Margin="10,5,0,5" />
+      <Image MouseDown="Maximize_MouseDown" Source="/Views/Assets/Icons/maximize.png" Margin="10,5,0,5" />
+      <Image MouseDown="Exit_MouseDown" Source="/Views/Assets/Icons/exit.png" Margin="10,5,0,5" />
+      </StackPanel>
     </StackPanel>
 
-    <StackPanel x:Name="MenuSP" Grid.Row="1" Margin="0,0,0,0" Background="#FFC7D5E8">
-      <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+
+    <StackPanel x:Name="MenuSP" Grid.Row="1" Margin="0,0,0,0" Background="#FFC7D5E8" >
+      <StackPanel Orientation="Horizontal" Margin="0,10,0,0" Background="Transparent" MouseLeftButtonDown="MenuHome_MouseLeftButtonDown">
         <Image Width="32" Height="32" Source="/Views/Assets/Icons/home.png" Stretch="Fill" Margin="5,0,0,0" />
-        <TextBlock  Text="Home" Margin="10,0,0,0" VerticalAlignment="Center" Visibility="Hidden" TextWrapping="Wrap"/>
+        <TextBlock Text="Home" Margin="10,0,0,0" VerticalAlignment="Center" Visibility="Hidden" TextWrapping="Wrap"/>
       </StackPanel>
-      <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+      <StackPanel Orientation="Horizontal" Margin="0,10,0,0" Background="Transparent">
         <Image Width="32" Height="32" Source="/Views/Assets/Icons/edit-alt.png" Stretch="Fill" Margin="5,0,0,0" />
         <TextBlock Text="Database" Margin="10,0,0,0" VerticalAlignment="Center" Visibility="Hidden" TextWrapping="Wrap"/>
       </StackPanel>
-      <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+      <StackPanel Orientation="Horizontal" Margin="0,10,0,0" Background="Transparent" MouseLeftButtonDown="MenuGraph_MouseLeftButtonDown">
         <Image Width="32" Height="32" Source="/Views/Assets/Icons/chart-histogram.png" Stretch="Fill" Margin="5,0,0,0" />
         <TextBlock Text="Graphs" Margin="10,0,0,0" VerticalAlignment="Center" Visibility="Hidden" TextWrapping="Wrap"/>
       </StackPanel>
-      <StackPanel Orientation="Horizontal" Margin="0,10,0,0" Grid.Row="1" VerticalAlignment="Bottom">
+      <StackPanel Orientation="Horizontal" Margin="0,10,0,0" Grid.Row="1" VerticalAlignment="Bottom" Background="Transparent">
         <Image Width="32" Height="32" Source="/Views/Assets/Icons/settings.png" Stretch="Fill" Margin="5,0,0,0" />
         <TextBlock Text="Settings" Margin="10,0,0,0" VerticalAlignment="Center" Visibility="Hidden" TextWrapping="Wrap"/>
       </StackPanel>

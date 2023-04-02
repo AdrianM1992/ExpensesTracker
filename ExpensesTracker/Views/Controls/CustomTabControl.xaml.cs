@@ -1,17 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace ExpensesTracker.Views.Controls
 {
@@ -20,9 +8,35 @@ namespace ExpensesTracker.Views.Controls
   /// </summary>
   public partial class CustomTabControl : UserControl
   {
+    /// <summary>
+    /// Name of tab in top bar
+    /// </summary>
+    public string TabName
+    {
+      get { return (string)GetValue(TabNameProperty); }
+      set { SetValue(TabNameProperty, value); }
+    }
+    public static readonly DependencyProperty TabNameProperty =
+        DependencyProperty.Register("TabName", typeof(string), typeof(CustomTabControl), new PropertyMetadata(""));
+
+    /// <summary>
+    /// Visibility state of close button
+    /// </summary>
+    public Visibility CloseTabVisible
+    {
+      get { return (Visibility)GetValue(CloseTabVisibleProperty); }
+      set { SetValue(CloseTabVisibleProperty, value); }
+    }
+    public static readonly DependencyProperty CloseTabVisibleProperty =
+        DependencyProperty.Register("CloseTabVisible", typeof(Visibility), typeof(CustomTabControl), new PropertyMetadata(Visibility.Visible));
+
     public CustomTabControl()
     {
       InitializeComponent();
+    }
+
+    private void Button_Click(object sender, RoutedEventArgs e)
+    {
     }
   }
 }
