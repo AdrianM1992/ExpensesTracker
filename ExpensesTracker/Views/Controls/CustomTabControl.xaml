@@ -6,13 +6,18 @@
              xmlns:local="clr-namespace:ExpensesTracker.Views.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="24">
-  <StackPanel  Orientation ="Horizontal" Height="24">
-    <TextBlock x:Name="Description" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Bottom" FontSize="16" Text="{Binding Path=TabName, RelativeSource={RelativeSource AncestorType={x:Type local:CustomTabControl}}}"/>
-    <Button HorizontalAlignment="Left" VerticalAlignment="Top" Height="8" Width="8" Margin="0,2,0,0" Visibility="{Binding Path=CloseTabVisible, RelativeSource={RelativeSource AncestorType={x:Type local:CustomTabControl}}}" Click="Button_Click">
+  
+  <Grid  Height="24" >
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition/>
+      <ColumnDefinition/>
+    </Grid.ColumnDefinitions>
+    <Rectangle Grid.ColumnSpan="2" RadiusY="3" RadiusX="3"  Margin="0,2,0,0" Fill="{Binding Path=BackgroundTabColor, RelativeSource={RelativeSource AncestorType={x:Type local:CustomTabControl}}}"/>
+    <TextBlock x:Name="Description" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Bottom" FontSize="16" Text="{Binding Path=TabName, RelativeSource={RelativeSource AncestorType={x:Type local:CustomTabControl}}}" Margin="2,2,2,2"/>
+    <Button Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top" Height="8" Width="8" Margin="2,4,2,2" Visibility="{Binding Path=CloseTabVisible, RelativeSource={RelativeSource AncestorType={x:Type local:CustomTabControl}}}" Click="Button_Click">
       <Button.Background>
         <ImageBrush ImageSource="/Views/Assets/Icons/exit.png" Stretch="Uniform" TileMode="None"/>
       </Button.Background>
     </Button>
-
-  </StackPanel>
+  </Grid>
 </UserControl>

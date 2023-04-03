@@ -9,6 +9,7 @@
       Title="DataGraphs">
 
     <Grid>
-        
-    </Grid>
+    <Ellipse HorizontalAlignment="Left" Height="215" Margin="265,145,0,0" Stroke="Black" VerticalAlignment="Top" Width="340" Fill="#FFC52929"/>
+
+  </Grid>
 </Page>
