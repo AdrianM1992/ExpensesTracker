@@ -27,26 +27,30 @@
     </Grid.RowDefinitions>
 
     <Image Source="/Views/Assets/Icons/menu.png" MouseLeftButtonDown="Menu_MouseLeftButtonDown" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="9,0,0,0" Width="24" Height="24"  />
-    <!--Może ten stackpanel zamienić na grid-->
-    <StackPanel x:Name="TopBar" Orientation="Horizontal" Grid.Column="1" Background="#00000000">
-      <StackPanel x:Name="Tabs" Orientation="Horizontal" HorizontalAlignment="Left" >
+
+    <Grid Grid.Row="0" Grid.Column="1">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition/>
+        <ColumnDefinition Width= "76" />
+      </Grid.ColumnDefinitions>
+
+      <StackPanel x:Name="Tabs" Orientation="Horizontal" Background="#00000000" MouseDown="Bar_MouseDown" >
         <ctrls:CustomTabControl x:Name="HomeTab" HorizontalAlignment="Left" VerticalAlignment="Bottom" TabName="Home" CloseTabVisible="Hidden"/>
       </StackPanel>
-
-      <StackPanel x:Name="MinMaxClose" Orientation="Horizontal" MouseDown="Bar_MouseDown" HorizontalAlignment="Right">
-      <Image MouseDown="Minimize_MouseDown" Source="/Views/Assets/Icons/minimize.png" Margin="10,5,0,5" Width="12" Height="12" VerticalAlignment="Top" />
-      <Image MouseDown="Maximize_MouseDown" Source="/Views/Assets/Icons/maximize.png" Margin="10,5,0,5" Width="12" Height="12" VerticalAlignment="Top" />
-      <Image MouseDown="Exit_MouseDown" Source="/Views/Assets/Icons/exit.png" Margin="10,5,0,5" Width="12" Height="12" VerticalAlignment="Top" />
-      </StackPanel>
-    </StackPanel>
-
+      <StackPanel x:Name="MinMaxClose" Orientation="Horizontal" HorizontalAlignment="Right" Grid.Column="1" Margin="0,0,10,0">
+         <Image MouseDown="Minimize_MouseDown" Source="/Views/Assets/Icons/minimize.png" Margin="10,5,0,5" Width="12" Height="12" VerticalAlignment="Top" />
+         <Image MouseDown="Maximize_MouseDown" Source="/Views/Assets/Icons/maximize.png" Margin="10,5,0,5" Width="12" Height="12" VerticalAlignment="Top" />
+         <Image MouseDown="Exit_MouseDown" Source="/Views/Assets/Icons/exit.png" Margin="10,5,0,5" Width="12" Height="12" VerticalAlignment="Top" />
+       </StackPanel>
+    </Grid>
+    
     <Border Grid.Row="1" BorderThickness="1" BorderBrush="Gray">
     <StackPanel x:Name="MenuSP" Grid.Row="1" Margin="0,0,0,0" Background="{DynamicResource {x:Static SystemColors.ScrollBarBrushKey}}"  >
       <StackPanel Orientation="Horizontal" Margin="0,10,0,0" Background="Transparent" MouseLeftButtonDown="MenuHome_MouseLeftButtonDown">
         <Image Width="32" Height="32" Source="/Views/Assets/Icons/home.png" Stretch="Fill" Margin="5,0,0,0" />
         <TextBlock Text="Home" Margin="10,0,0,0" VerticalAlignment="Center" Visibility="Hidden" TextWrapping="Wrap"/>
       </StackPanel>
-      <StackPanel Orientation="Horizontal" Margin="0,10,0,0" Background="Transparent">
+      <StackPanel Orientation="Horizontal" Margin="0,10,0,0" Background="Transparent" MouseLeftButtonDown="Database_MouseLeftButtonDown">
         <Image Width="32" Height="32" Source="/Views/Assets/Icons/edit-alt.png" Stretch="Fill" Margin="5,0,0,0" />
         <TextBlock Text="Database" Margin="10,0,0,0" VerticalAlignment="Center" Visibility="Hidden" TextWrapping="Wrap"/>
       </StackPanel>
@@ -54,16 +58,15 @@
         <Image Width="32" Height="32" Source="/Views/Assets/Icons/chart-histogram.png" Stretch="Fill" Margin="5,0,0,0" />
         <TextBlock Text="Graphs" Margin="10,0,0,0" VerticalAlignment="Center" Visibility="Hidden" TextWrapping="Wrap"/>
       </StackPanel>
-      <StackPanel Orientation="Horizontal" Margin="0,10,0,0" Grid.Row="1" VerticalAlignment="Bottom" Background="Transparent">
+      <StackPanel Orientation="Horizontal" Margin="0,10,0,0" VerticalAlignment="Bottom" Background="Transparent" MouseLeftButtonDown="Settings_MouseLeftButtonDown">
         <Image Width="32" Height="32" Source="/Views/Assets/Icons/settings.png" Stretch="Fill" Margin="5,0,0,0" />
         <TextBlock Text="Settings" Margin="10,0,0,0" VerticalAlignment="Center" Visibility="Hidden" TextWrapping="Wrap"/>
       </StackPanel>
     </StackPanel>
     </Border>
-  
-    <StatusBar Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="3" BorderThickness="1" BorderBrush="Gray"/>
+
     <Frame x:Name="ContentPage" Grid.Column="1" Source="/Views/Pages/Home/HomePage.xaml" Grid.Row="1" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" NavigationUIVisibility="Hidden" BorderThickness="1" BorderBrush="Gray"/>
-
-
+    
+    <StatusBar Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="3" BorderThickness="1" BorderBrush="Gray"/>
   </Grid>
 </Window>

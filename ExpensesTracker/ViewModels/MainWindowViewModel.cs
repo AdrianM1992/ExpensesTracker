@@ -21,9 +21,5 @@
       }
       else return _instance;
     }
-    public void Set()
-    {
-      _mainWindow.MinMaxClose.Width = _mainWindow.TopBar.ActualWidth - _mainWindow.Tabs.ActualWidth;
-    }
   }
 }

@@ -15,18 +15,28 @@ namespace ExpensesTracker
   public partial class MainWindow : Window
   {
     MainWindowViewModel _viewModel;
+    /// <summary>
+    /// Stores locations [value] to pages [key]
+    /// </summary>
+    readonly Dictionary<string, Uri> _pages = new Dictionary<string, Uri>();
+    /// <summary>
+    /// Stores names of all pages
+    /// </summary>
+    readonly List<string> _tabNames = new List<string>();
 
     public MainWindow()
     {
       InitializeComponent();
+
       _viewModel = MainWindowViewModel.GetMainWindowViewModel(this);
       DataContext = _viewModel;
+      HomeTab.CustomTabChanged += TabChanged;
+      InitTabs();
     }
 
     private void Menu_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
     {
-      _viewModel.Set();
-      MenuShowHide();
+      MenuShowHide(true);
     }
 
     private void Bar_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -37,6 +47,8 @@ namespace ExpensesTracker
       }
     }
 
+    #region Window Buttons
+    //Methods handling basic interaction events with window (min, max, close)
     private void Exit_MouseDown(object sender, MouseButtonEventArgs e)
     {
       Close();
@@ -49,57 +61,106 @@ namespace ExpensesTracker
     {
       WindowState = WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
     }
+    #endregion
 
     private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
     {
-
     }
 
+    #region Menu Items
+    //Methods handling interaction with menu items
     private void MenuHome_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
-      SwapTab("Home");
-      ContentPage.Source = new Uri("/Views/Pages/Home/HomePage.xaml", UriKind.Relative);
-      MenuShowHide();
+      SwapTab(_tabNames[0]);
+      ContentPage.Source = _pages[_tabNames[0]];
+      MenuShowHide(false);
+    }
+    private void Database_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+    {
+      SwapTab(_tabNames[1]);
+      ContentPage.Source = _pages[_tabNames[1]];
+      MenuShowHide(false);
     }
     private void MenuGraph_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
-      SwapTab("Graphs");
-      ContentPage.Source = new Uri("/Views/Pages/Graphs/DataGraphsPage.xaml", UriKind.Relative);
-      MenuShowHide();
+      SwapTab(_tabNames[2]);
+      ContentPage.Source = _pages[_tabNames[2]];
+      MenuShowHide(false);
+    }
+    private void Settings_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+    {
+      SwapTab(_tabNames[3]);
+      ContentPage.Source = _pages[_tabNames[3]];
+      MenuShowHide(false);
+    }
+    #endregion
+
+    /// <summary>
+    /// Initializes _tabNames and _pages variables
+    /// </summary>
+    private void InitTabs()
+    {
+      _tabNames.Add("Home");
+      _pages.Add(_tabNames[0], new Uri("/Views/Pages/Home/HomePage.xaml", UriKind.Relative));
+      _tabNames.Add("Database");
+      _pages.Add(_tabNames[1], new Uri("/Views/Pages/DatabaseBrowser/DatabaseBrowserPage.xaml", UriKind.Relative));
+      _tabNames.Add("Graphs");
+      _pages.Add(_tabNames[2], new Uri("/Views/Pages/Graphs/DataGraphsPage.xaml", UriKind.Relative));
+      _tabNames.Add("Settings");
+      _pages.Add(_tabNames[3], new Uri("/Views/Pages/Settings/Settings.xaml", UriKind.Relative));
     }
 
-    private void SwapTab(string tabName)
+    /// <summary>
+    /// Swaps active page or create new if not already opened.
+    /// </summary>
+    /// <param name="tabName">Name of tab to add or swap to</param>
+    /// <returns>Refference to created or swapped tab</returns>
+    private CustomTabControl SwapTab(string tabName)
     {
-      //Okementować to
+      //Gets refferences to all opened tabs, then checks if desired tab is already opened
       IEnumerable<CustomTabControl> customTabControls = Tabs.Children.OfType<CustomTabControl>();
       var match = customTabControls.Where(tab => tab.TabName == tabName).Select(tab => tab);
+      //Grays out all opened tabs
       foreach (var customTabControl in customTabControls)
       {
         customTabControl.BackgroundTabColor = SystemColors.ScrollBarBrush;
       }
+      //If tab is already opened highlites it, if not creates new tab
       if (!match.Any())
       {
         var newTab = new CustomTabControl { TabName = tabName, VerticalAlignment = VerticalAlignment.Bottom, BackgroundTabColor = SystemColors.MenuBarBrush };
+        newTab.CustomTabChanged += TabChanged;
         Tabs.Children.Add(newTab);
-      }
-      match.First().BackgroundTabColor = SystemColors.MenuBarBrush;
-    }
-    private void MenuShowHide()
-    {
-      //okomentowac
-      var menuColumn = Layout.ColumnDefinitions.First();
-      Visibility textState;
-      if (menuColumn.ActualWidth == 120)
-      {
-        textState = Visibility.Collapsed;
-        menuColumn.Width = new GridLength(42);
+        return newTab;
       }
       else
+      {
+        match.First().BackgroundTabColor = SystemColors.MenuBarBrush;
+        return match.First();
+      }
+    }
+
+    /// <summary>
+    /// Handles behaviour of wrapped menu
+    /// </summary>
+    /// <param name="menuIcon">Specifies if caller was menu icon </param>
+    private void MenuShowHide(bool menuIcon)
+    {
+      var menuColumn = Layout.ColumnDefinitions.First();
+      Visibility textState = Visibility.Collapsed;
+
+      //If menu is unwrapped, wraps it. If not, if caller is menu icon unwraps menu
+      if (menuColumn.ActualWidth == 120)
+      {
+        menuColumn.Width = new GridLength(42);
+      }
+      else if (menuIcon)
       {
         textState = Visibility.Visible;
         menuColumn.Width = new GridLength(120);
       }
 
+      //Specifies visibility of descriptions of menu items
       foreach (StackPanel stackPanel in MenuSP.Children)
       {
         foreach (var control in stackPanel.Children)
@@ -109,6 +170,29 @@ namespace ExpensesTracker
             textBlock.Visibility = textState;
           }
         }
+      }
+    }
+
+    /// <summary>
+    /// Event handler for CustomTabControl
+    /// </summary>
+    /// <param name="tabName">Name of calling tab</param>
+    /// <param name="tabClose">Specifies if tab is marked for closing</param>
+    private void TabChanged(string tabName, bool tabClose)
+    {
+      //If tab is marked for closing, set 'Home' tab as active tab
+      if (tabClose)
+      {
+        Tabs.Children.Remove(SwapTab(tabName));
+        SwapTab(_tabNames[0]);
+        ContentPage.Source = _pages[_tabNames[0]];
+        MenuShowHide(false);
+      }
+      else
+      {
+        SwapTab(tabName);
+        ContentPage.Source = _pages[tabName];
+        MenuShowHide(false);
       }
     }
   }
