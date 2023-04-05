@@ -3,6 +3,7 @@ using ExpensesTracker.Views.Controls;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -10,7 +11,7 @@ using System.Windows.Input;
 namespace ExpensesTracker
 {
   /// <summary>
-  /// Logika interakcji dla klasy MainWindow.xaml
+  /// Logic for MainWindow.xaml
   /// </summary>
   public partial class MainWindow : Window
   {
@@ -36,7 +37,7 @@ namespace ExpensesTracker
 
     private void Menu_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
     {
-      MenuShowHide(true);
+      MenuShowHide();
     }
 
     private void Bar_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -73,25 +74,21 @@ namespace ExpensesTracker
     {
       SwapTab(_tabNames[0]);
       ContentPage.Source = _pages[_tabNames[0]];
-      MenuShowHide(false);
     }
     private void Database_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
       SwapTab(_tabNames[1]);
       ContentPage.Source = _pages[_tabNames[1]];
-      MenuShowHide(false);
     }
     private void MenuGraph_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
       SwapTab(_tabNames[2]);
       ContentPage.Source = _pages[_tabNames[2]];
-      MenuShowHide(false);
     }
     private void Settings_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
       SwapTab(_tabNames[3]);
       ContentPage.Source = _pages[_tabNames[3]];
-      MenuShowHide(false);
     }
     #endregion
 
@@ -114,7 +111,7 @@ namespace ExpensesTracker
     /// Swaps active page or create new if not already opened.
     /// </summary>
     /// <param name="tabName">Name of tab to add or swap to</param>
-    /// <returns>Refference to created or swapped tab</returns>
+    /// <returns>Reference to created or swapped tab</returns>
     private CustomTabControl SwapTab(string tabName)
     {
       //Gets refferences to all opened tabs, then checks if desired tab is already opened
@@ -141,25 +138,38 @@ namespace ExpensesTracker
     }
 
     /// <summary>
-    /// Handles behaviour of wrapped menu
+    /// Handles behavior of wrapped menu
     /// </summary>
     /// <param name="menuIcon">Specifies if caller was menu icon </param>
-    private void MenuShowHide(bool menuIcon)
+    private void MenuShowHide()
     {
       var menuColumn = Layout.ColumnDefinitions.First();
-      Visibility textState = Visibility.Collapsed;
 
+      Visibility textState = Visibility.Collapsed;
       //If menu is unwrapped, wraps it. If not, if caller is menu icon unwraps menu
       if (menuColumn.ActualWidth == 120)
       {
-        menuColumn.Width = new GridLength(42);
+        Task.Run(() =>
+        {
+          for (int i = 120; i >= 42; i--)
+          {
+            this.Dispatcher.Invoke((Action)delegate { menuColumn.Width = new GridLength(i); });
+            Task.Delay(3).Wait();
+          }
+        });
       }
-      else if (menuIcon)
+      else
       {
         textState = Visibility.Visible;
-        menuColumn.Width = new GridLength(120);
+        Task.Run(() =>
+        {
+          for (int i = 42; i <= 120; i++)
+          {
+            this.Dispatcher.Invoke((Action)delegate { menuColumn.Width = new GridLength(i); });
+            Task.Delay(3).Wait();
+          }
+        });
       }
-
       //Specifies visibility of descriptions of menu items
       foreach (StackPanel stackPanel in MenuSP.Children)
       {
@@ -186,13 +196,11 @@ namespace ExpensesTracker
         Tabs.Children.Remove(SwapTab(tabName));
         SwapTab(_tabNames[0]);
         ContentPage.Source = _pages[_tabNames[0]];
-        MenuShowHide(false);
       }
       else
       {
         SwapTab(tabName);
         ContentPage.Source = _pages[tabName];
-        MenuShowHide(false);
       }
     }
   }
