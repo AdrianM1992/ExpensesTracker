@@ -1,5 +1,9 @@
 ﻿using ExpensesTracker.ViewModels;
 using ExpensesTracker.Views.Controls;
+using ExpensesTracker.Views.Pages.DatabaseBrowser;
+using ExpensesTracker.Views.Pages.Graphs;
+using ExpensesTracker.Views.Pages.Home;
+using ExpensesTracker.Views.Pages.Settings;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,9 +21,9 @@ namespace ExpensesTracker
   {
     MainWindowViewModel _viewModel;
     /// <summary>
-    /// Stores locations [value] to pages [key]
+    /// Stores instances of pages [value] by tab name [key]
     /// </summary>
-    readonly Dictionary<string, Uri> _pages = new Dictionary<string, Uri>();
+    readonly Dictionary<string, Page> _pages = new Dictionary<string, Page>();
     /// <summary>
     /// Stores names of all pages
     /// </summary>
@@ -33,6 +37,7 @@ namespace ExpensesTracker
       DataContext = _viewModel;
       HomeTab.CustomTabChanged += TabChanged;
       InitTabs();
+      ContentPage.Content = _pages[_tabNames[0]];
     }
 
     private void Menu_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -73,22 +78,22 @@ namespace ExpensesTracker
     private void MenuHome_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
       SwapTab(_tabNames[0]);
-      ContentPage.Source = _pages[_tabNames[0]];
+      ContentPage.Navigate(_pages[_tabNames[0]]);
     }
     private void Database_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
       SwapTab(_tabNames[1]);
-      ContentPage.Source = _pages[_tabNames[1]];
+      ContentPage.Navigate(_pages[_tabNames[1]]);
     }
     private void MenuGraph_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
       SwapTab(_tabNames[2]);
-      ContentPage.Source = _pages[_tabNames[2]];
+      ContentPage.Navigate(_pages[_tabNames[2]]);
     }
     private void Settings_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
       SwapTab(_tabNames[3]);
-      ContentPage.Source = _pages[_tabNames[3]];
+      ContentPage.Navigate(_pages[_tabNames[3]]);
     }
     #endregion
 
@@ -98,13 +103,13 @@ namespace ExpensesTracker
     private void InitTabs()
     {
       _tabNames.Add("Home");
-      _pages.Add(_tabNames[0], new Uri("/Views/Pages/Home/HomePage.xaml", UriKind.Relative));
+      _pages.Add(_tabNames.Last(), new HomePage());
       _tabNames.Add("Database");
-      _pages.Add(_tabNames[1], new Uri("/Views/Pages/DatabaseBrowser/DatabaseBrowserPage.xaml", UriKind.Relative));
+      _pages.Add(_tabNames.Last(), new DatabaseBrowserPage());
       _tabNames.Add("Graphs");
-      _pages.Add(_tabNames[2], new Uri("/Views/Pages/Graphs/DataGraphsPage.xaml", UriKind.Relative));
+      _pages.Add(_tabNames.Last(), new GraphsPage());
       _tabNames.Add("Settings");
-      _pages.Add(_tabNames[3], new Uri("/Views/Pages/Settings/Settings.xaml", UriKind.Relative));
+      _pages.Add(_tabNames.Last(), new SettingsPage());
     }
 
     /// <summary>
@@ -114,7 +119,7 @@ namespace ExpensesTracker
     /// <returns>Reference to created or swapped tab</returns>
     private CustomTabControl SwapTab(string tabName)
     {
-      //Gets refferences to all opened tabs, then checks if desired tab is already opened
+      //Gets references to all opened tabs, then checks if desired tab is already opened
       IEnumerable<CustomTabControl> customTabControls = Tabs.Children.OfType<CustomTabControl>();
       var match = customTabControls.Where(tab => tab.TabName == tabName).Select(tab => tab);
       //Grays out all opened tabs
@@ -122,7 +127,7 @@ namespace ExpensesTracker
       {
         customTabControl.BackgroundTabColor = SystemColors.ScrollBarBrush;
       }
-      //If tab is already opened highlites it, if not creates new tab
+      //If tab is already opened highlights it, if not creates new tab
       if (!match.Any())
       {
         var newTab = new CustomTabControl { TabName = tabName, VerticalAlignment = VerticalAlignment.Bottom, BackgroundTabColor = SystemColors.MenuBarBrush };
@@ -195,12 +200,12 @@ namespace ExpensesTracker
       {
         Tabs.Children.Remove(SwapTab(tabName));
         SwapTab(_tabNames[0]);
-        ContentPage.Source = _pages[_tabNames[0]];
+        ContentPage.Navigate(_pages[_tabNames[0]]);
       }
       else
       {
         SwapTab(tabName);
-        ContentPage.Source = _pages[tabName];
+        ContentPage.Navigate(_pages[tabName]);
       }
     }
   }

@@ -1,14 +1,37 @@
-﻿<Page x:Class="ExpensesTracker.Views.Windows.DatabaseBrowser.DatabaseBrowser"
+﻿<Page x:Class="ExpensesTracker.Views.Pages.DatabaseBrowser.DatabaseBrowserPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:ExpensesTracker.Views.Windows.DatabaseBrowser"
-      mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
-      Title="DatabaseBrowser">
+      xmlns:local="clr-namespace:ExpensesTracker.Views.Pages.DatabaseBrowser"
+      xmlns:vm="clr-namespace:ExpensesTracker.ViewModels"
+      mc:Ignorable="d"
+      d:DataContext="{d:DesignInstance vm:DatabaseBrowserPageViewModel}"
+      d:DesignHeight="452" d:DesignWidth="800"
+      Title="DatabaseBrowser" x:Name="DatabaseBrowser">
 
     <Grid>
-        
-    </Grid>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="4*"/>
+      <ColumnDefinition Width="*"/>
+    </Grid.ColumnDefinitions>
+    <DataGrid x:Name ="DatabaseView"  IsReadOnly="True">
+      <DataGrid.Columns>
+        <DataGridTextColumn Header="ID"/>
+        <DataGridTextColumn Header="Name" Binding="{Binding Name}"/>
+        <DataGridTextColumn Header="Price" HeaderStringFormat="{}{0:C2}"/>
+        <DataGridTextColumn Header="Qty"/>
+        <DataGridTextColumn Header="Total" HeaderStringFormat="{}{0:C2}"/>
+        <DataGridTextColumn Header="Category"/>
+        <DataGridTextColumn Header="Subcategory"/>
+        <DataGridCheckBoxColumn Header="Income?"/>
+        <DataGridCheckBoxColumn Header="Recurring?"/>
+        <DataGridTextColumn Header="Description"/>
+        <DataGridTemplateColumn>
+          
+        </DataGridTemplateColumn>
+      </DataGrid.Columns>
+    </DataGrid>
+
+  </Grid>
 </Page>

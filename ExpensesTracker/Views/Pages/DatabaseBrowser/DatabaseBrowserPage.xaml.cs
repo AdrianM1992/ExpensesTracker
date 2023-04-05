@@ -1,28 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using ExpensesTracker.ViewModels;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
-namespace ExpensesTracker.Views.Windows.DatabaseBrowser
+namespace ExpensesTracker.Views.Pages.DatabaseBrowser
 {
   /// <summary>
-  /// Logika interakcji dla klasy DatabaseBrowser.xaml
+  /// Logic for DatabaseBrowserPage.xaml
   /// </summary>
-  public partial class DatabaseBrowser : Page
+  public partial class DatabaseBrowserPage : Page
   {
-    public DatabaseBrowser()
+    DatabaseBrowserPageViewModel _viewModel;
+
+    public DatabaseBrowserPage()
     {
       InitializeComponent();
+      _viewModel = new DatabaseBrowserPageViewModel();
+      DataContext = _viewModel;
     }
   }
 }

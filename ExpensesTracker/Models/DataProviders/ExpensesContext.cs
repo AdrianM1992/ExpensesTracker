@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System.Configuration;
 
 namespace ExpensesTracker.Models.DataProviders;
 
@@ -21,8 +20,8 @@ public partial class ExpensesContext : DbContext
   public virtual DbSet<Recurring> Recurrings { get; set; }
 
   protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        //=> optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=Expenses;Trusted_Connection=True;");
-        => optionsBuilder.UseSqlServer(ConfigurationManager.ConnectionStrings["ExpensesDatabase"].ConnectionString);
+      => optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=Expenses;Trusted_Connection=True;");
+
   protected override void OnModelCreating(ModelBuilder modelBuilder)
   {
     modelBuilder.Entity<Category>(entity =>

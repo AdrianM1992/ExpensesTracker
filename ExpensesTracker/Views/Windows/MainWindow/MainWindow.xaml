@@ -65,8 +65,8 @@
     </StackPanel>
     </Border>
 
-    <Frame x:Name="ContentPage" Grid.Column="1" Source="/Views/Pages/Home/HomePage.xaml" Grid.Row="1" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" NavigationUIVisibility="Hidden" BorderThickness="1" BorderBrush="Gray"/>
-    
+    <Frame x:Name="ContentPage" Grid.Column="1" Grid.Row="1" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" NavigationUIVisibility="Hidden" BorderThickness="1" BorderBrush="Gray" />
+
     <StatusBar Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="3" BorderThickness="1" BorderBrush="Gray"/>
   </Grid>
 </Window>

@@ -6,7 +6,7 @@
       xmlns:local="clr-namespace:ExpensesTracker.Views.Pages.Home"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="HomePage">
+      Title="HomePage" x:Name="Home">
 
     <Grid>
     <Rectangle HorizontalAlignment="Left" Height="245" Margin="240,110,0,0" Stroke="Black" VerticalAlignment="Top" Width="290" Fill="#FF3235FF"/>

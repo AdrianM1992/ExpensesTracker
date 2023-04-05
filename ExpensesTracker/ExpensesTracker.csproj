@@ -9,6 +9,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="DataProviders\**" />
+    <EmbeddedResource Remove="DataProviders\**" />
+    <None Remove="DataProviders\**" />
+    <Page Remove="DataProviders\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="Views\Assets\Icons\add.png" />
     <None Remove="Views\Assets\Icons\chart-histogram.png" />
     <None Remove="Views\Assets\Icons\edit-alt.png" />
