@@ -33,7 +33,7 @@ namespace ExpensesTracker
     {
       InitializeComponent();
 
-      _viewModel = MainWindowViewModel.GetMainWindowViewModel(this);
+      _viewModel = MainWindowViewModel.GetMainWindowViewModel();
       DataContext = _viewModel;
       HomeTab.CustomTabChanged += TabChanged;
       InitTabs();

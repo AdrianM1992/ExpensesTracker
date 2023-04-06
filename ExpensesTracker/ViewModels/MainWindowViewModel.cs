@@ -8,15 +8,16 @@
     /// Singleton pattern implementation
     /// </summary>
     private static MainWindowViewModel _instance;
-    private MainWindowViewModel(MainWindow window)
+    private MainWindowViewModel()
     {
-      _mainWindow = window;
+
     }
-    public static MainWindowViewModel GetMainWindowViewModel(MainWindow window)
+
+    public static MainWindowViewModel GetMainWindowViewModel()
     {
       if (_instance == null)
       {
-        _instance = new MainWindowViewModel(window);
+        _instance = new MainWindowViewModel();
         return _instance;
       }
       else return _instance;

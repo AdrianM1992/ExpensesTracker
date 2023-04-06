@@ -1,12 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 
-namespace ExpensesTracker.Models.DataProviders;
-
-public partial class Expense
+namespace ExpensesTracker.Views.Classes
 {
-    public int Id { get; set; }
-
+  /// <summary>
+  /// Class with properties meant to be displayed in Datagrid
+  /// </summary>
+  public class DatabaseView
+  {
     public string Name { get; set; } = null!;
 
     public decimal Price { get; set; }
@@ -21,7 +21,7 @@ public partial class Expense
 
     public DateTime? Date { get; set; }
 
-    public short CategoryId { get; set; }
+    public string Category { get; set; }
 
     public string? Subcategory { get; set; }
 
@@ -29,9 +29,8 @@ public partial class Expense
 
     public bool Recurring { get; set; }
 
-    public short? RecurringId { get; set; }
+    public string? RecurringId { get; set; }
 
     public string? Description { get; set; }
-
-    public string? Files { get; set; }
+  }
 }

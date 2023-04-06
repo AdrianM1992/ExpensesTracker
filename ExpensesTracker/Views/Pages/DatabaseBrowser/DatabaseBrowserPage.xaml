@@ -9,16 +9,17 @@
       d:DataContext="{d:DesignInstance vm:DatabaseBrowserPageViewModel}"
       d:DesignHeight="452" d:DesignWidth="800"
       Title="DatabaseBrowser" x:Name="DatabaseBrowser">
-
-    <Grid>
+  <Grid>
     <Grid.ColumnDefinitions>
       <ColumnDefinition Width="4*"/>
       <ColumnDefinition Width="*"/>
     </Grid.ColumnDefinitions>
-    <DataGrid x:Name ="DatabaseView"  IsReadOnly="True">
+    <DataGrid x:Name ="DatabaseView" IsReadOnly="True" AutoGeneratingColumn="DatabaseView_AutoGeneratingColumn"/>
+    <!--
+    <DataGrid x:Name ="DatabaseView" IsReadOnly="True">
       <DataGrid.Columns>
         <DataGridTextColumn Header="ID"/>
-        <DataGridTextColumn Header="Name" Binding="{Binding Name}"/>
+        <DataGridTextColumn Header="Name"/>
         <DataGridTextColumn Header="Price" HeaderStringFormat="{}{0:C2}"/>
         <DataGridTextColumn Header="Qty"/>
         <DataGridTextColumn Header="Total" HeaderStringFormat="{}{0:C2}"/>
@@ -28,10 +29,10 @@
         <DataGridCheckBoxColumn Header="Recurring?"/>
         <DataGridTextColumn Header="Description"/>
         <DataGridTemplateColumn>
-          
+
         </DataGridTemplateColumn>
       </DataGrid.Columns>
     </DataGrid>
-
+    -->
   </Grid>
 </Page>

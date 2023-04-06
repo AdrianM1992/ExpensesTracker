@@ -38,6 +38,7 @@ public partial class ExpensesContext : DbContext
       entity.Property(e => e.Description).HasMaxLength(500);
       entity.Property(e => e.Files).HasMaxLength(500);
       entity.Property(e => e.Income).HasColumnName("Income?");
+      entity.Property(e => e.LastUpdate).HasColumnType("date");
       entity.Property(e => e.Name).HasMaxLength(50);
       entity.Property(e => e.Price).HasColumnType("money");
       entity.Property(e => e.Recurring).HasColumnName("Recurring?");
