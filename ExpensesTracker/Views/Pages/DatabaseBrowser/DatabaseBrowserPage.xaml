@@ -9,12 +9,41 @@
       d:DataContext="{d:DesignInstance vm:DatabaseBrowserPageViewModel}"
       d:DesignHeight="452" d:DesignWidth="800"
       Title="DatabaseBrowser" x:Name="DatabaseBrowser">
+  <Page.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/Views/Assets/Styles/Styles.xaml"/>
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+  </Page.Resources>
   <Grid>
     <Grid.ColumnDefinitions>
       <ColumnDefinition Width="4*"/>
       <ColumnDefinition Width="*"/>
     </Grid.ColumnDefinitions>
-    <DataGrid x:Name ="DatabaseView" IsReadOnly="True" AutoGeneratingColumn="DatabaseView_AutoGeneratingColumn"/>
+    <DataGrid x:Name ="DatabaseView" IsReadOnly="True" AutoGeneratingColumn="DatabaseView_AutoGeneratingColumn">
+      <DataGrid.Resources>
+        <Style TargetType="ScrollBar" BasedOn="{StaticResource NarrowScrollBars}"/>
+      </DataGrid.Resources>
+    </DataGrid>
+    <StackPanel  HorizontalAlignment="Left" Margin="10,0,5,10" VerticalAlignment="Bottom" Orientation="Horizontal" Opacity="0.5">
+      <Button x:Name="AddButton" Style="{StaticResource OpacityButtonStyle}" Click="AddButton_Click" BorderBrush="{x:Null}" Foreground="{x:Null}" IsHitTestVisible="True" Width="32" Height="32" Margin="0,0,10,0">
+        <Button.Background>
+          <ImageBrush ImageSource="/Views/Assets/Icons/add.png" Stretch="Uniform"/>
+        </Button.Background>
+      </Button>
+      <Button x:Name="DeleteButton" Style="{StaticResource OpacityButtonStyle}" BorderBrush="{x:Null}" Foreground="{x:Null}" IsHitTestVisible="True" Width="32" Height="32" Margin="0,0,10,0">
+        <Button.Background>
+          <ImageBrush ImageSource="/Views/Assets/Icons/delete.png" Stretch="Uniform"/>
+        </Button.Background>
+      </Button>
+      <Button x:Name="ShowMoreButton" Style="{StaticResource OpacityButtonStyle}" BorderBrush="{x:Null}" Foreground="{x:Null}" IsHitTestVisible="True" Width="32" Height="32" Margin="0,0,10,0">
+        <Button.Background>
+          <ImageBrush ImageSource="/Views/Assets/Icons/loadMore.png" Stretch="Uniform"/>
+        </Button.Background>
+      </Button>
+    </StackPanel>
+
     <!--
     <DataGrid x:Name ="DatabaseView" IsReadOnly="True">
       <DataGrid.Columns>

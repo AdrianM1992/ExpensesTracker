@@ -21,6 +21,9 @@ namespace ExpensesTracker.Views.Pages.DatabaseBrowser
       DatabaseView.ItemsSource = Items;
     }
 
+    /// <summary>
+    /// Intercepts generated column and overwrites properties based on name
+    /// </summary>
     private void DatabaseView_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
     {
       var typeText = e.Column as DataGridTextColumn;
@@ -69,6 +72,11 @@ namespace ExpensesTracker.Views.Pages.DatabaseBrowser
         default:
           break;
       }
+    }
+
+    private void AddButton_Click(object sender, RoutedEventArgs e)
+    {
+
     }
   }
 }

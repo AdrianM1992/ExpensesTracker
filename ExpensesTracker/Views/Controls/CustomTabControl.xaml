@@ -6,7 +6,13 @@
              xmlns:local="clr-namespace:ExpensesTracker.Views.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="24">
-  
+  <UserControl.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/Views/Assets/Styles/Styles.xaml"/>
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+  </UserControl.Resources>
   <Grid Height="24" >
     <Grid.ColumnDefinitions>
       <ColumnDefinition/>
@@ -17,7 +23,7 @@
     
     <TextBlock x:Name="Description" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Bottom" FontSize="16" Text="{Binding Path=TabName, RelativeSource={RelativeSource AncestorType={x:Type local:CustomTabControl}}}" Margin="2,2,2,2" MouseDown="SelectTab_Click"/>
     
-    <Button Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top" Height="8" Width="8" Margin="2,4,2,2" Visibility="{Binding Path=CloseTabVisible, RelativeSource={RelativeSource AncestorType={x:Type local:CustomTabControl}}}" Click="Button_Click">
+    <Button Style="{StaticResource OpacityButtonStyle }" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top" Height="8" Width="8" Margin="2,4,2,2" Visibility="{Binding Path=CloseTabVisible, RelativeSource={RelativeSource AncestorType={x:Type local:CustomTabControl}}}" Click="Button_Click">
       <Button.Background>
         <ImageBrush ImageSource="/Views/Assets/Icons/exit.png" Stretch="Uniform" TileMode="None"/>
       </Button.Background>
