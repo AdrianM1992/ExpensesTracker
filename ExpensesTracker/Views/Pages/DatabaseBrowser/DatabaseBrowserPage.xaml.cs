@@ -3,6 +3,7 @@ using ExpensesTracker.Views.Classes;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace ExpensesTracker.Views.Pages.DatabaseBrowser
 {
@@ -77,6 +78,19 @@ namespace ExpensesTracker.Views.Pages.DatabaseBrowser
     private void AddButton_Click(object sender, RoutedEventArgs e)
     {
 
+    }
+
+    private void SearchBar_GotFocus(object sender, RoutedEventArgs e)
+    {
+      if (sender is TextBox textBox)
+      {
+        if (textBox.Text == "Search database...")
+        {
+          textBox.Foreground = Brushes.Black;
+          textBox.FontStyle = FontStyles.Normal;
+          textBox.Text = "";
+        }
+      }
     }
   }
 }

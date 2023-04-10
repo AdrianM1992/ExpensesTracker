@@ -21,12 +21,19 @@
       <ColumnDefinition Width="4*"/>
       <ColumnDefinition Width="*"/>
     </Grid.ColumnDefinitions>
-    <DataGrid x:Name ="DatabaseView" IsReadOnly="True" AutoGeneratingColumn="DatabaseView_AutoGeneratingColumn">
-      <DataGrid.Resources>
-        <Style TargetType="ScrollBar" BasedOn="{StaticResource NarrowScrollBars}"/>
-      </DataGrid.Resources>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="22"/>
+      <RowDefinition/>
+    </Grid.RowDefinitions>
+
+    <TextBox Text="Search database..." Height="18" Foreground="#FF5F5F5F" FontStyle="Italic" GotFocus="SearchBar_GotFocus"/>
+    <DataGrid Grid.Row="1" x:Name ="DatabaseView" IsReadOnly="True" AutoGeneratingColumn="DatabaseView_AutoGeneratingColumn">
+        <DataGrid.Resources>
+          <Style TargetType="ScrollBar" BasedOn="{StaticResource NarrowScrollBars}"/>
+        </DataGrid.Resources>
     </DataGrid>
-    <StackPanel  HorizontalAlignment="Left" Margin="10,0,5,10" VerticalAlignment="Bottom" Orientation="Horizontal" Opacity="0.5">
+
+    <StackPanel Grid.Row="1" HorizontalAlignment="Left" Margin="10,0,5,10" VerticalAlignment="Bottom" Orientation="Horizontal" Opacity="0.5">
       <Button x:Name="AddButton" Style="{StaticResource OpacityButtonStyle}" Click="AddButton_Click" BorderBrush="{x:Null}" Foreground="{x:Null}" IsHitTestVisible="True" Width="32" Height="32" Margin="0,0,10,0">
         <Button.Background>
           <ImageBrush ImageSource="/Views/Assets/Icons/add.png" Stretch="Uniform"/>
