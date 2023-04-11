@@ -1,16 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
+﻿using System.Windows;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace ExpensesTracker.Views.Windows.AddEditDB
 {
@@ -22,6 +11,28 @@ namespace ExpensesTracker.Views.Windows.AddEditDB
     public AddEditDBWindow()
     {
       InitializeComponent();
+    }
+    private void MinMaxClose_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+    {
+      if (e.LeftButton == MouseButtonState.Pressed)
+      {
+        DragMove();
+      }
+    }
+
+    private void Exit_MouseDown(object sender, MouseButtonEventArgs e)
+    {
+
+    }
+
+    private void Maximize_MouseDown(object sender, MouseButtonEventArgs e)
+    {
+
+    }
+
+    private void Minimize_MouseDown(object sender, MouseButtonEventArgs e)
+    {
+
     }
   }
 }

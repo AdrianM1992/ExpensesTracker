@@ -1,5 +1,6 @@
 ﻿using ExpensesTracker.ViewModels;
 using ExpensesTracker.Views.Classes;
+using ExpensesTracker.Views.Windows.AddEditDB;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
@@ -77,7 +78,8 @@ namespace ExpensesTracker.Views.Pages.DatabaseBrowser
 
     private void AddButton_Click(object sender, RoutedEventArgs e)
     {
-
+      AddEditDBWindow window = new AddEditDBWindow();
+      window.Show();
     }
 
     private void SearchBar_GotFocus(object sender, RoutedEventArgs e)
