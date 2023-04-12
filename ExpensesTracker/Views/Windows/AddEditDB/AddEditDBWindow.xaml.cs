@@ -1,5 +1,8 @@
-﻿using System.Windows;
+﻿using System.Collections.Generic;
+using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 
 namespace ExpensesTracker.Views.Windows.AddEditDB
 {
@@ -8,11 +11,20 @@ namespace ExpensesTracker.Views.Windows.AddEditDB
   /// </summary>
   public partial class AddEditDBWindow : Window
   {
+    private Dictionary<TextBox, bool> _textBoxes;
+
     public AddEditDBWindow()
     {
       InitializeComponent();
+      foreach (var control in this.LogicalChildren.LogicalTreeHelper.GetChildren(this))
+      {
+        if (control is TextBox textBox)
+        {
+          _textBoxes.Add(textBox, false);
+        }
+      }
     }
-    private void MinMaxClose_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+    private void TitleBar_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
     {
       if (e.LeftButton == MouseButtonState.Pressed)
       {
@@ -20,19 +32,16 @@ namespace ExpensesTracker.Views.Windows.AddEditDB
       }
     }
 
-    private void Exit_MouseDown(object sender, MouseButtonEventArgs e)
+    private void TextBox_GotFocus(object sender, RoutedEventArgs e)
     {
-
-    }
-
-    private void Maximize_MouseDown(object sender, MouseButtonEventArgs e)
-    {
-
-    }
-
-    private void Minimize_MouseDown(object sender, MouseButtonEventArgs e)
-    {
-
+      var textBox = sender as TextBox;
+      if (!_textBoxes[textBox])
+      {
+        textBox.Text = string.Empty;
+        textBox.FontStyle = FontStyles.Normal;
+        textBox.Foreground = Brushes.Black;
+        _textBoxes[textBox] = true;
+      }
     }
   }
 }

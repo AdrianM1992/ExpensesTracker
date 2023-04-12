@@ -53,22 +53,6 @@ namespace ExpensesTracker
       }
     }
 
-    #region Window Buttons
-    //Methods handling basic interaction events with window (min, max, close)
-    private void Exit_MouseDown(object sender, MouseButtonEventArgs e)
-    {
-      Close();
-    }
-    private void Minimize_MouseDown(object sender, MouseButtonEventArgs e)
-    {
-      WindowState = WindowState.Minimized;
-    }
-    private void Maximize_MouseDown(object sender, MouseButtonEventArgs e)
-    {
-      WindowState = WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
-    }
-    #endregion
-
     private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
     {
     }

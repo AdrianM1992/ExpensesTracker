@@ -4,21 +4,26 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ExpensesTracker.Views.Windows.AddEditDB"
+        xmlns:ctrls="clr-namespace:ExpensesTracker.Views.Controls"
         mc:Ignorable="d"
-        Title="AddEditDBWindow" Height="400" Width="385" MinWidth="400" MinHeight="385" WindowStyle="None" >
+        Title="AddEditDBWindow" Height="400" Width="385" MinWidth="400" MinHeight="385" WindowStyle="None" ResizeMode="NoResize" Background="{x:Null}">
   <!-- This removes white bar at the top meant for resizing -->
   <WindowChrome.WindowChrome>
-    <WindowChrome CaptionHeight="0"/>
+    <WindowChrome CaptionHeight="0" CornerRadius="10"/>
   </WindowChrome.WindowChrome>
   <Window.Resources>
     <ResourceDictionary>
       <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/Views/Assets/Styles/Styles.xaml"/>
       </ResourceDictionary.MergedDictionaries>
+      <Style TargetType="{x:Type TextBox}">
+        <EventSetter Event="GotFocus" Handler="TextBox_GotFocus"/>
+      </Style>
     </ResourceDictionary>
   </Window.Resources>
-  <Grid>
-    <Grid.ColumnDefinitions>
+  <Border CornerRadius="10" BorderThickness="1" BorderBrush="Black" Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}">
+    <Grid>
+      <Grid.ColumnDefinitions>
       <ColumnDefinition/>
       <ColumnDefinition/>
       <ColumnDefinition/>
@@ -31,29 +36,26 @@
       <RowDefinition/>
       <RowDefinition Height="2*"/>
     </Grid.RowDefinitions>
-    <Label Grid.Column="0" Grid.ColumnSpan="3" />
-    <StackPanel x:Name="MinMaxClose" Orientation="Horizontal" Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Right" >
-      <Image MouseDown="Minimize_MouseDown" Source="/Views/Assets/Icons/minimize.png" Width="12" Height="12" VerticalAlignment="Top" Margin="0,5,10,5" />
-      <Image MouseDown="Maximize_MouseDown" Source="/Views/Assets/Icons/maximize.png" Width="12" Height="12" VerticalAlignment="Top" Margin="0,5,10,5" />
-      <Image MouseDown="Exit_MouseDown" Source="/Views/Assets/Icons/exit.png" Width="12" Height="12" VerticalAlignment="Top" Margin="5,5,10,5" HorizontalAlignment="Right" />
-    </StackPanel>
-
+      <Border CornerRadius="10" Grid.ColumnSpan="3" Background="{DynamicResource {x:Static SystemColors.ScrollBarBrushKey}}" >
+        <Label x:Name="TitleBar" MouseLeftButtonDown="TitleBar_MouseDown" Content="Add / Edit record" Grid.Column="0" Grid.ColumnSpan="3"  Padding="10,0,0,0"/>
+      </Border>
+      <ctrls:CustomMinMaxCloseButtons Grid.Column="2"/>
     <StackPanel Orientation="Vertical" Grid.Row="1" Grid.ColumnSpan="3" Margin="10,0,10,0">
       <Label Content="Name" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-      <TextBox TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top"/>
+        <TextBox TextWrapping="Wrap" Text="ex. Netflix bill" VerticalAlignment="Top" Foreground="#FF5F5F5F" FontStyle="Italic" />
     </StackPanel>
 
     <StackPanel Orientation="Vertical" Grid.Row="2" Grid.ColumnSpan="1" Margin="10,0,10,0">
-      <Label Content="Price" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-      <TextBox TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top"/>
+      <Label Content="Value" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <TextBox TextWrapping="Wrap" Text="43" VerticalAlignment="Top" Foreground="#FF5F5F5F" FontStyle="Italic"/>
     </StackPanel>
     <StackPanel Orientation="Vertical" Grid.Row="2" Grid.ColumnSpan="1" Margin="10,0,10,0" Grid.Column="1">
       <Label Content="Quantity" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-      <TextBox TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top"/>
+      <TextBox TextWrapping="Wrap" Text="1" VerticalAlignment="Top" Foreground="#FF5F5F5F" FontStyle="Italic" />
     </StackPanel>
     <StackPanel Orientation="Vertical" Grid.Row="2" Margin="10,0,10,0" Grid.Column="2">
       <Label  Content="Total" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-      <TextBlock TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top"/>
+        <TextBox TextWrapping="Wrap" Text="43" VerticalAlignment="Top" Foreground="#FF5F5F5F" FontStyle="Italic" IsReadOnly="True" />
     </StackPanel>
 
       <StackPanel Grid.Row="3" Orientation="Vertical" Margin="10,0,10,0" Grid.Column="0">
@@ -64,7 +66,7 @@
     <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Vertical" Margin="10,0,10,0">
       <Label Content="Category" HorizontalAlignment="Left"  VerticalAlignment="Top"/>
       <StackPanel Orientation="Horizontal">
-        <ComboBox VerticalAlignment="Top" Margin="0,0,5,0" />
+        <ComboBox VerticalAlignment="Top" Margin="0,0,5,0" Width="91" />
         <Button x:Name="AddCategoryButton" Style="{StaticResource OpacityButtonStyle}"  BorderBrush="{x:Null}" Foreground="{x:Null}" IsHitTestVisible="True" Width="16" Height="16" VerticalAlignment="Center" HorizontalAlignment="Right" >
           <Button.Background>
             <ImageBrush ImageSource="/Views/Assets/Icons/add.png" Stretch="Uniform"/>
@@ -75,7 +77,7 @@
     <StackPanel Grid.Row="3" Grid.Column="2" Orientation="Vertical" Margin="10,0,10,0" >
       <Label Content="Subcategory" HorizontalAlignment="Left" VerticalAlignment="Top"/>
       <StackPanel Orientation="Horizontal">
-        <ComboBox VerticalAlignment="Top" Margin="0,0,5,0"/>
+        <ComboBox VerticalAlignment="Top" Margin="0,0,5,0" Width="89"/>
         <Button x:Name="AddSubCategoryButton" Style="{StaticResource OpacityButtonStyle}"  BorderBrush="{x:Null}" Foreground="{x:Null}" IsHitTestVisible="True" Width="16" Height="16" VerticalAlignment="Center" HorizontalAlignment="Right">
           <Button.Background>
             <ImageBrush ImageSource="/Views/Assets/Icons/add.png" Stretch="Uniform"/>
@@ -85,22 +87,22 @@
     </StackPanel>
 
     <StackPanel Orientation="Vertical" Grid.Row="4" Grid.ColumnSpan="1" Margin="10,0,10,0">
-      <Label Content="Recurring" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+      <Label Content="Recurring?" HorizontalAlignment="Left" VerticalAlignment="Top"/>
       <CheckBox Content="CheckBox" HorizontalAlignment="Left" VerticalAlignment="Top"/>
     </StackPanel>
     <StackPanel Orientation="Vertical" Grid.Row="4" Grid.ColumnSpan="1" Margin="10,0,10,0" Grid.Column="1">
       <Label Content="Recurring name" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-      <TextBox TextWrapping="Wrap" Text="TextBox"/>
+        <TextBox TextWrapping="Wrap" Text="Netflix" Foreground="#FF5F5F5F" FontStyle="Italic" />
     </StackPanel>
     <StackPanel Orientation="Vertical" Grid.Row="4" Margin="10,0,10,0" Grid.Column="2">
       <Label  Content="Date" HorizontalAlignment="Left" VerticalAlignment="Top"/>
       <DatePicker HorizontalAlignment="Left" VerticalAlignment="Top" FirstDayOfWeek="Monday" SelectedDateFormat="Short" IsTodayHighlighted="True"/>
     </StackPanel>
 
-    <StackPanel Orientation="Vertical" Grid.Row="5" Grid.ColumnSpan="3" Margin="10,0,10,10">
-      <Label Content="Description" HorizontalAlignment="Left" VerticalAlignment="Top" Height="25"/>
-      <TextBox TextWrapping="Wrap" Text="TextBox" MinLines="5"/>
-    </StackPanel>
-
-  </Grid>
+      <StackPanel Orientation="Vertical" Grid.Row="5" Grid.ColumnSpan="3" Margin="10,0,10,10">
+        <Label Content="Description" HorizontalAlignment="Left" VerticalAlignment="Top" Height="25"/>
+        <TextBox TextWrapping="Wrap" Text="Monthly Netflix subscription bill" MinLines="5" Foreground="#FF5F5F5F" FontStyle="Italic" />
+      </StackPanel>
+    </Grid>
+  </Border>
 </Window>

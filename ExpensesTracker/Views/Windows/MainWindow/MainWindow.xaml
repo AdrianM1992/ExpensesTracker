@@ -37,11 +37,7 @@
       <StackPanel x:Name="Tabs" Orientation="Horizontal" Background="#00000000" MouseDown="Bar_MouseDown" >
         <ctrls:CustomTabControl x:Name="HomeTab" HorizontalAlignment="Left" VerticalAlignment="Bottom" TabName="Home" CloseTabVisible="Hidden"/>
       </StackPanel>
-      <StackPanel x:Name="MinMaxClose" Orientation="Horizontal" HorizontalAlignment="Right" Grid.Column="1" Margin="0,0,10,0">
-         <Image MouseDown="Minimize_MouseDown" Source="/Views/Assets/Icons/minimize.png" Margin="10,5,0,5" Width="12" Height="12" VerticalAlignment="Top" />
-         <Image MouseDown="Maximize_MouseDown" Source="/Views/Assets/Icons/maximize.png" Margin="10,5,0,5" Width="12" Height="12" VerticalAlignment="Top" />
-         <Image MouseDown="Exit_MouseDown" Source="/Views/Assets/Icons/exit.png" Margin="10,5,0,5" Width="12" Height="12" VerticalAlignment="Top" />
-       </StackPanel>
+      <ctrls:CustomMinMaxCloseButtons Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center"/>
     </Grid>
     
     <Border Grid.Row="1" BorderThickness="1" BorderBrush="Gray">

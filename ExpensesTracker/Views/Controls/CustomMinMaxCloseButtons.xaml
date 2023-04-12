@@ -1,0 +1,13 @@
+﻿<UserControl x:Class="ExpensesTracker.Views.Controls.CustomMinMaxCloseButtons"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ExpensesTracker.Views.Controls"
+             mc:Ignorable="d" d:Background ="White">
+  <StackPanel x:Name="MinMaxClose" Orientation="Horizontal" HorizontalAlignment="Right" >
+    <Image Source="/Views/Assets/Icons/minimize.png" Width="12" Height="12" VerticalAlignment="Top" Margin="0,5,10,5" MouseLeftButtonDown="Minimize_MouseLeftButtonDown"/>
+    <Image Source="/Views/Assets/Icons/maximize.png" Width="12" Height="12" VerticalAlignment="Top" Margin="0,5,10,5" MouseLeftButtonDown="Maximize_MouseLeftButtonDown"/>
+    <Image Source="/Views/Assets/Icons/exit.png" Width="12" Height="12" VerticalAlignment="Top" Margin="5,5,10,5" HorizontalAlignment="Right" MouseLeftButtonDown="Close_MouseLeftButtonDown"/>
+  </StackPanel>
+</UserControl>
