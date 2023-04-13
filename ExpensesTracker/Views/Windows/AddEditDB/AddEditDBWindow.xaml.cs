@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -11,17 +12,15 @@ namespace ExpensesTracker.Views.Windows.AddEditDB
   /// </summary>
   public partial class AddEditDBWindow : Window
   {
-    private Dictionary<TextBox, bool> _textBoxes;
+    readonly private Dictionary<TextBox, string> _textBoxes;
 
     public AddEditDBWindow()
     {
       InitializeComponent();
-      foreach (var control in this.LogicalChildren.LogicalTreeHelper.GetChildren(this))
+      _textBoxes = new Dictionary<TextBox, string>();
+      foreach (var textBox in GetAllTextboxes(this).OfType<TextBox>())
       {
-        if (control is TextBox textBox)
-        {
-          _textBoxes.Add(textBox, false);
-        }
+        _textBoxes.Add(textBox, textBox.Text);
       }
     }
     private void TitleBar_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -35,13 +34,42 @@ namespace ExpensesTracker.Views.Windows.AddEditDB
     private void TextBox_GotFocus(object sender, RoutedEventArgs e)
     {
       var textBox = sender as TextBox;
-      if (!_textBoxes[textBox])
+      if (_textBoxes[textBox] == textBox.Text)
       {
         textBox.Text = string.Empty;
         textBox.FontStyle = FontStyles.Normal;
         textBox.Foreground = Brushes.Black;
-        _textBoxes[textBox] = true;
       }
     }
+
+    private void TextBox_LostFocus(object sender, RoutedEventArgs e)
+    {
+      var textBox = sender as TextBox;
+      if (textBox.Text == "")
+      {
+        textBox.Text = _textBoxes[textBox];
+        textBox.FontStyle = FontStyles.Italic;
+        textBox.Foreground = new SolidColorBrush(Color.FromArgb(0xFF, 0x5F, 0x5F, 0x5F));
+      }
+    }
+    private List<Control> GetAllTextboxes(DependencyObject parent)
+    {
+      List<Control> controls = new List<Control>();
+
+      foreach (var child in LogicalTreeHelper.GetChildren(parent))
+      {
+        if (child is Control control)
+        {
+          controls.Add(control);
+        }
+
+        if (child is DependencyObject childDependencyObject)
+        {
+          controls.AddRange(GetAllTextboxes(childDependencyObject));
+        }
+      }
+      return controls;
+    }
+
   }
 }

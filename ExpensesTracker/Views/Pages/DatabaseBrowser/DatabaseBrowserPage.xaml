@@ -26,7 +26,7 @@
       <RowDefinition/>
     </Grid.RowDefinitions>
 
-    <TextBox Text="Search database..." Height="18" Foreground="#FF5F5F5F" FontStyle="Italic" GotFocus="SearchBar_GotFocus"/>
+    <TextBox Text="Search database..." Height="18" Foreground="#FF5F5F5F" FontStyle="Italic" GotFocus="SearchBar_GotFocus" LostFocus="SearchBar_LostFocus"/>
     <DataGrid Grid.Row="1" x:Name ="DatabaseView" IsReadOnly="True" AutoGeneratingColumn="DatabaseView_AutoGeneratingColumn">
         <DataGrid.Resources>
           <Style TargetType="ScrollBar" BasedOn="{StaticResource NarrowScrollBars}"/>

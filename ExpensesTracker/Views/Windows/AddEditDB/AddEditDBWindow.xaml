@@ -6,11 +6,12 @@
         xmlns:local="clr-namespace:ExpensesTracker.Views.Windows.AddEditDB"
         xmlns:ctrls="clr-namespace:ExpensesTracker.Views.Controls"
         mc:Ignorable="d"
-        Title="AddEditDBWindow" Height="400" Width="385" MinWidth="400" MinHeight="385" WindowStyle="None" ResizeMode="NoResize" Background="{x:Null}">
+        Title="AddEditDBWindow" Height="470" Width="385" MinWidth="400" MinHeight="385" WindowStyle="None" ResizeMode="NoResize" Background="{x:Null}">
   <!-- This removes white bar at the top meant for resizing -->
   <WindowChrome.WindowChrome>
     <WindowChrome CaptionHeight="0" CornerRadius="10"/>
   </WindowChrome.WindowChrome>
+  
   <Window.Resources>
     <ResourceDictionary>
       <ResourceDictionary.MergedDictionaries>
@@ -18,91 +19,129 @@
       </ResourceDictionary.MergedDictionaries>
       <Style TargetType="{x:Type TextBox}">
         <EventSetter Event="GotFocus" Handler="TextBox_GotFocus"/>
+        <EventSetter Event="LostFocus" Handler="TextBox_LostFocus"/>
+        <Setter Property="FontSize" Value="12"/>
+      </Style>
+      <Style TargetType="Label">
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="Padding" Value="0,0,0,0"/>
       </Style>
     </ResourceDictionary>
   </Window.Resources>
+
   <Border CornerRadius="10" BorderThickness="1" BorderBrush="Black" Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}">
     <Grid>
       <Grid.ColumnDefinitions>
-      <ColumnDefinition/>
-      <ColumnDefinition/>
-      <ColumnDefinition/>
-    </Grid.ColumnDefinitions>
-    <Grid.RowDefinitions>
-      <RowDefinition Height="22"/>
-      <RowDefinition/>
-      <RowDefinition/>
-      <RowDefinition/>
-      <RowDefinition/>
-      <RowDefinition Height="2*"/>
-    </Grid.RowDefinitions>
+        <ColumnDefinition/>
+        <ColumnDefinition/>
+        <ColumnDefinition/>
+      </Grid.ColumnDefinitions>
+      <Grid.RowDefinitions>
+        <RowDefinition Height="22"/>
+        <RowDefinition Height="63"/>
+        <RowDefinition Height="65"/>
+        <RowDefinition Height="80"/>
+        <RowDefinition Height="81"/>
+        <RowDefinition Height="110"/>
+        <RowDefinition/>
+
+      </Grid.RowDefinitions>
+      
       <Border CornerRadius="10" Grid.ColumnSpan="3" Background="{DynamicResource {x:Static SystemColors.ScrollBarBrushKey}}" >
-        <Label x:Name="TitleBar" MouseLeftButtonDown="TitleBar_MouseDown" Content="Add / Edit record" Grid.Column="0" Grid.ColumnSpan="3"  Padding="10,0,0,0"/>
+        <Label x:Name="TitleBar" MouseLeftButtonDown="TitleBar_MouseDown" Content="Add / Edit record" Grid.Column="0" Grid.ColumnSpan="3" FontSize="18" Margin="10,-2,0,0"/>
       </Border>
-      <ctrls:CustomMinMaxCloseButtons Grid.Column="2"/>
-    <StackPanel Orientation="Vertical" Grid.Row="1" Grid.ColumnSpan="3" Margin="10,0,10,0">
-      <Label Content="Name" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-        <TextBox TextWrapping="Wrap" Text="ex. Netflix bill" VerticalAlignment="Top" Foreground="#FF5F5F5F" FontStyle="Italic" />
-    </StackPanel>
+      <ctrls:CustomMinMaxCloseButtons Grid.Column="2" AllowMaximize="False" HighlightBrush="White"/>
 
-    <StackPanel Orientation="Vertical" Grid.Row="2" Grid.ColumnSpan="1" Margin="10,0,10,0">
-      <Label Content="Value" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-        <TextBox TextWrapping="Wrap" Text="43" VerticalAlignment="Top" Foreground="#FF5F5F5F" FontStyle="Italic"/>
-    </StackPanel>
-    <StackPanel Orientation="Vertical" Grid.Row="2" Grid.ColumnSpan="1" Margin="10,0,10,0" Grid.Column="1">
-      <Label Content="Quantity" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-      <TextBox TextWrapping="Wrap" Text="1" VerticalAlignment="Top" Foreground="#FF5F5F5F" FontStyle="Italic" />
-    </StackPanel>
-    <StackPanel Orientation="Vertical" Grid.Row="2" Margin="10,0,10,0" Grid.Column="2">
-      <Label  Content="Total" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-        <TextBox TextWrapping="Wrap" Text="43" VerticalAlignment="Top" Foreground="#FF5F5F5F" FontStyle="Italic" IsReadOnly="True" />
-    </StackPanel>
+      <GroupBox Style="{StaticResource SoftGroupbox}" Grid.Row=" 1" Grid.ColumnSpan="3" Header="Name">
+        <TextBox TextWrapping="Wrap" Text="ex. Netflix bill&#x0A;" VerticalAlignment="Top" Foreground="#FF5F5F5F" FontStyle="Italic" MaxLines="2" MinLines="2" />
+      </GroupBox>
 
-      <StackPanel Grid.Row="3" Orientation="Vertical" Margin="10,0,10,0" Grid.Column="0">
-        <Label Content="Income?" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-        <CheckBox Content="CheckBox" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-      </StackPanel>
+      <GroupBox Style="{StaticResource SoftGroupbox}" Grid.Row="2" Grid.ColumnSpan="3" Header="Amount">
+        <StackPanel Orientation="Horizontal">
+          <StackPanel Orientation="Vertical" Margin="0,0,15,0">
+            <Label Content="Value" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+            <TextBox TextWrapping="Wrap" Text="ex. 43" Foreground="#FF5F5F5F" FontStyle="Italic" MaxLines="1" MaxLength="16" Width="140"/>
+          </StackPanel>
+          <StackPanel Orientation="Vertical" Margin="0,0,15,0">
+            <Label Content="Quantity" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+            <TextBox TextWrapping="Wrap" Text="ex. 1" VerticalAlignment="Top" Foreground="#FF5F5F5F" FontStyle="Italic" MaxLines="1" MaxLength="16" Width="80" />
+          </StackPanel>
+          <StackPanel Orientation="Horizontal">
+            <Label Content="Total: " HorizontalAlignment="Left" ScrollViewer.CanContentScroll="True" VerticalAlignment="Center"/>
+            <TextBlock Width="90" VerticalAlignment="Center"/>
+          </StackPanel>
+        </StackPanel>
+      </GroupBox>
 
-    <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Vertical" Margin="10,0,10,0">
-      <Label Content="Category" HorizontalAlignment="Left"  VerticalAlignment="Top"/>
-      <StackPanel Orientation="Horizontal">
-        <ComboBox VerticalAlignment="Top" Margin="0,0,5,0" Width="91" />
-        <Button x:Name="AddCategoryButton" Style="{StaticResource OpacityButtonStyle}"  BorderBrush="{x:Null}" Foreground="{x:Null}" IsHitTestVisible="True" Width="16" Height="16" VerticalAlignment="Center" HorizontalAlignment="Right" >
-          <Button.Background>
-            <ImageBrush ImageSource="/Views/Assets/Icons/add.png" Stretch="Uniform"/>
-          </Button.Background>
-        </Button>
-      </StackPanel>
-    </StackPanel>
-    <StackPanel Grid.Row="3" Grid.Column="2" Orientation="Vertical" Margin="10,0,10,0" >
-      <Label Content="Subcategory" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-      <StackPanel Orientation="Horizontal">
-        <ComboBox VerticalAlignment="Top" Margin="0,0,5,0" Width="89"/>
-        <Button x:Name="AddSubCategoryButton" Style="{StaticResource OpacityButtonStyle}"  BorderBrush="{x:Null}" Foreground="{x:Null}" IsHitTestVisible="True" Width="16" Height="16" VerticalAlignment="Center" HorizontalAlignment="Right">
-          <Button.Background>
-            <ImageBrush ImageSource="/Views/Assets/Icons/add.png" Stretch="Uniform"/>
-          </Button.Background>
-        </Button>
-      </StackPanel>
-    </StackPanel>
+      <GroupBox Style="{StaticResource SoftGroupbox}" Grid.Row="3" Grid.ColumnSpan="3" Header="Type">
+        <StackPanel Orientation="Horizontal">
+          <CheckBox Content="Income?" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="12" Padding="4,0,0,0"/>
+          <StackPanel Orientation="Vertical" Margin="15,0,0,0">
+            <Label Content="Category" HorizontalAlignment="Left"  VerticalAlignment="Top"/>
+            <StackPanel Orientation="Horizontal">
+              <ComboBox VerticalAlignment="Center" Width="120" Margin="0,0,5,0" />
+              <StackPanel VerticalAlignment="Center">
+                <Button x:Name="AddCategoryButton" Style="{StaticResource OpacityButtonStyle}" BorderBrush="{x:Null}" Foreground="{x:Null}" IsHitTestVisible="True" Width="16" Height="16" VerticalAlignment="Center" HorizontalAlignment="Right" >
+                  <Button.Background>
+                    <ImageBrush ImageSource="/Views/Assets/Icons/add.png" Stretch="Uniform"/>
+                  </Button.Background>
+                </Button>
+                <Button x:Name="DeleteCategoryButton" Style="{StaticResource OpacityButtonStyle}" BorderBrush="{x:Null}" Foreground="{x:Null}" IsHitTestVisible="True" Width="16" Height="16" VerticalAlignment="Center" HorizontalAlignment="Right" >
+                  <Button.Background>
+                    <ImageBrush ImageSource="/Views/Assets/Icons/delete.png" Stretch="Uniform"/>
+                  </Button.Background>
+                </Button>
+              </StackPanel>
+            </StackPanel>
+          </StackPanel>
+          <StackPanel Orientation="Vertical" Margin="15,0,0,0">
+            <Label Content="Subcategory" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+            <StackPanel Orientation="Horizontal">
+              <ComboBox VerticalAlignment="Center" Width="120" Margin="0,0,5,0"/>
+              <StackPanel VerticalAlignment="Center">
+                <Button x:Name="AddSubCategoryButton" Style="{StaticResource OpacityButtonStyle}"  BorderBrush="{x:Null}" Foreground="{x:Null}" IsHitTestVisible="True" Width="16" Height="16" VerticalAlignment="Center" HorizontalAlignment="Right">
+                  <Button.Background>
+                    <ImageBrush ImageSource="/Views/Assets/Icons/add.png" Stretch="Uniform"/>
+                  </Button.Background>
+                </Button>
+                <Button x:Name="DeleteSubCategoryButton" Style="{StaticResource OpacityButtonStyle}"  BorderBrush="{x:Null}" Foreground="{x:Null}" IsHitTestVisible="True" Width="16" Height="16" VerticalAlignment="Center" HorizontalAlignment="Right">
+                  <Button.Background>
+                    <ImageBrush ImageSource="/Views/Assets/Icons/delete.png" Stretch="Uniform"/>
+                  </Button.Background>
+                </Button>
+              </StackPanel>
+            </StackPanel>
+          </StackPanel>
+        </StackPanel>
+      </GroupBox>
 
-    <StackPanel Orientation="Vertical" Grid.Row="4" Grid.ColumnSpan="1" Margin="10,0,10,0">
-      <Label Content="Recurring?" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-      <CheckBox Content="CheckBox" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-    </StackPanel>
-    <StackPanel Orientation="Vertical" Grid.Row="4" Grid.ColumnSpan="1" Margin="10,0,10,0" Grid.Column="1">
-      <Label Content="Recurring name" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-        <TextBox TextWrapping="Wrap" Text="Netflix" Foreground="#FF5F5F5F" FontStyle="Italic" />
-    </StackPanel>
-    <StackPanel Orientation="Vertical" Grid.Row="4" Margin="10,0,10,0" Grid.Column="2">
-      <Label  Content="Date" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-      <DatePicker HorizontalAlignment="Left" VerticalAlignment="Top" FirstDayOfWeek="Monday" SelectedDateFormat="Short" IsTodayHighlighted="True"/>
-    </StackPanel>
+      <GroupBox Style="{StaticResource SoftGroupbox}" Grid.Row="4" Grid.ColumnSpan="3" Header="Recurrence and date">
+        <StackPanel Orientation="Horizontal">
+          <StackPanel Orientation="Vertical" Margin="0,0,15,0">
+            <CheckBox Content="Recurring name" HorizontalAlignment="Left" VerticalAlignment="Top" Padding="3,0,0,0" FontSize="12" Margin="0,3,0,0"/>
+            <TextBox TextWrapping="Wrap" Text="ex. Netflix&#xA;" Foreground="#FF5F5F5F" FontStyle="Italic" MinLines="2" MaxLines="2" VerticalScrollBarVisibility="Auto" Width="248" />
+          </StackPanel>
+          <StackPanel Orientation="Vertical">
+            <Label  Content="Date" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+            <DatePicker FirstDayOfWeek="Monday" SelectedDateFormat="Short" IsTodayHighlighted="True" Height="33" FontSize="12"/>
+          </StackPanel>
+        </StackPanel>
+      </GroupBox>
 
-      <StackPanel Orientation="Vertical" Grid.Row="5" Grid.ColumnSpan="3" Margin="10,0,10,10">
-        <Label Content="Description" HorizontalAlignment="Left" VerticalAlignment="Top" Height="25"/>
-        <TextBox TextWrapping="Wrap" Text="Monthly Netflix subscription bill" MinLines="5" Foreground="#FF5F5F5F" FontStyle="Italic" />
-      </StackPanel>
+      <GroupBox Style="{StaticResource SoftGroupbox}" Grid.Row="5" Grid.ColumnSpan="3" Header="Description">
+        <TextBox TextWrapping="Wrap" Text="ex. Monthly Netflix subscription bill&#x0A; &#x0A; &#x0A; &#x0A;" MinLines="5" Foreground="#FF5F5F5F" FontStyle="Italic" MaxLines="5" VerticalAlignment="Top" />
+      </GroupBox>
+
+      <Button Grid.Row="6" Style="{StaticResource OpacityButtonStyle}" BorderBrush="{x:Null}" Foreground="{x:Null}" IsHitTestVisible="True" Width="36" Height="36" VerticalAlignment="Center"  >
+        <Button.Background>
+          <ImageBrush ImageSource="/Views/Assets/Icons/add.png" Stretch="Uniform"/>
+        </Button.Background>
+      </Button>
+      <Button Grid.Row="6" Grid.Column="2" Style="{StaticResource OpacityButtonStyle}" BorderBrush="{x:Null}" Foreground="{x:Null}" IsHitTestVisible="True" Width="36" Height="36" VerticalAlignment="Center"  >
+        <Button.Background>
+          <ImageBrush ImageSource="/Views/Assets/Icons/delete.png" Stretch="Uniform"/>
+        </Button.Background>
+      </Button>
     </Grid>
   </Border>
 </Window>

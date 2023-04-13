@@ -94,5 +94,18 @@ namespace ExpensesTracker.Views.Pages.DatabaseBrowser
         }
       }
     }
+
+    private void SearchBar_LostFocus(object sender, RoutedEventArgs e)
+    {
+      if (sender is TextBox textBox)
+      {
+        if (textBox.Text == "")
+        {
+          textBox.Foreground = new SolidColorBrush(Color.FromArgb(0xFF, 0x5F, 0x5F, 0x5F));
+          textBox.FontStyle = FontStyles.Italic;
+          textBox.Text = "Search database...";
+        }
+      }
+    }
   }
 }

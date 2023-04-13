@@ -5,9 +5,29 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ExpensesTracker.Views.Controls"
              mc:Ignorable="d" d:Background ="White">
+  
+  <UserControl.Resources>
+    <Style x:Key="ButtonBorder" TargetType="Border">
+      <EventSetter Event="MouseEnter" Handler="Border_MouseEnter"/>
+      <EventSetter Event="MouseLeave" Handler="Border_MouseLeave"/>
+      <Setter Property="CornerRadius" Value="2"/>
+    </Style>
+  </UserControl.Resources>
+  
   <StackPanel x:Name="MinMaxClose" Orientation="Horizontal" HorizontalAlignment="Right" >
-    <Image Source="/Views/Assets/Icons/minimize.png" Width="12" Height="12" VerticalAlignment="Top" Margin="0,5,10,5" MouseLeftButtonDown="Minimize_MouseLeftButtonDown"/>
-    <Image Source="/Views/Assets/Icons/maximize.png" Width="12" Height="12" VerticalAlignment="Top" Margin="0,5,10,5" MouseLeftButtonDown="Maximize_MouseLeftButtonDown"/>
-    <Image Source="/Views/Assets/Icons/exit.png" Width="12" Height="12" VerticalAlignment="Top" Margin="5,5,10,5" HorizontalAlignment="Right" MouseLeftButtonDown="Close_MouseLeftButtonDown"/>
+    
+    <Border x:Name="Min" Margin="3,3,5,3" Style="{StaticResource ButtonBorder}">
+      <Image Source="/Views/Assets/Icons/minimize.png" Margin="2,2,2,2" Width="12" Height="12" VerticalAlignment="Top" MouseLeftButtonDown="Minimize_MouseLeftButtonDown"/>
+    </Border>
+    
+    <Border x:Name="Max" Margin="3,3,5,3" Style="{StaticResource ButtonBorder}">
+      <Image Source="/Views/Assets/Icons/maximize.png" Margin="2,2,2,2" Width="12" Height="12" VerticalAlignment="Top" MouseLeftButtonDown="Maximize_MouseLeftButtonDown"/>
+    </Border>
+    
+    <Border x:Name="Close" Margin="3,3,5,3" Style="{StaticResource ButtonBorder}">
+      <Image Source="/Views/Assets/Icons/exit.png" Margin="2,2,2,2" Width="12" Height="12" VerticalAlignment="Top"  HorizontalAlignment="Right" MouseLeftButtonDown="Close_MouseLeftButtonDown" />
+    </Border>
+    
   </StackPanel>
+  
 </UserControl>

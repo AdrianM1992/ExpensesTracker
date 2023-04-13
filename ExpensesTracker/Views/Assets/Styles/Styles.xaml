@@ -35,4 +35,9 @@
       </Trigger>
     </Style.Triggers>
   </Style>
+
+  <Style x:Key="SoftGroupbox" TargetType="GroupBox">
+    <Setter Property="BorderBrush" Value="#FFABADB3"/>
+    <Setter Property="FontSize" Value="16px"/>
+  </Style>
 </ResourceDictionary>
