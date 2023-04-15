@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using ExpensesTracker.ViewModels;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -13,16 +14,19 @@ namespace ExpensesTracker.Views.Windows.AddEditDB
   public partial class AddEditDBWindow : Window
   {
     readonly private Dictionary<TextBox, string> _textBoxes;
+    readonly private AddEditDBWindowViewModel _viewModel;
 
     public AddEditDBWindow()
     {
       InitializeComponent();
+      _viewModel = new AddEditDBWindowViewModel();
       _textBoxes = new Dictionary<TextBox, string>();
       foreach (var textBox in GetAllTextboxes(this).OfType<TextBox>())
       {
         _textBoxes.Add(textBox, textBox.Text);
       }
     }
+
     private void TitleBar_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
     {
       if (e.LeftButton == MouseButtonState.Pressed)

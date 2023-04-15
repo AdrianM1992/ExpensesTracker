@@ -5,13 +5,16 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ExpensesTracker.Views.Windows.AddEditDB"
         xmlns:ctrls="clr-namespace:ExpensesTracker.Views.Controls"
+        xmlns:vm="clr-namespace:ExpensesTracker.ViewModels"
         mc:Ignorable="d"
         Title="AddEditDBWindow" Height="470" Width="385" MinWidth="400" MinHeight="385" WindowStyle="None" ResizeMode="NoResize" Background="{x:Null}">
   <!-- This removes white bar at the top meant for resizing -->
   <WindowChrome.WindowChrome>
     <WindowChrome CaptionHeight="0" CornerRadius="10"/>
   </WindowChrome.WindowChrome>
-  
+  <Window.DataContext>
+    <vm:AddEditDBWindowViewModel/>
+  </Window.DataContext>
   <Window.Resources>
     <ResourceDictionary>
       <ResourceDictionary.MergedDictionaries>
@@ -53,22 +56,22 @@
       <ctrls:CustomMinMaxCloseButtons Grid.Column="2" AllowMaximize="False" HighlightBrush="White"/>
 
       <GroupBox Style="{StaticResource SoftGroupbox}" Grid.Row=" 1" Grid.ColumnSpan="3" Header="Name">
-        <TextBox TextWrapping="Wrap" Text="ex. Netflix bill&#x0A;" VerticalAlignment="Top" Foreground="#FF5F5F5F" FontStyle="Italic" MaxLines="2" MinLines="2" />
+        <TextBox TextWrapping="Wrap" Text="ex. Netflix bill&#x0A;" VerticalAlignment="Top" Foreground="#FF5F5F5F" FontStyle="Italic" MaxLines="2" MinLines="2" DataContext="{Binding databaseView.Name, Mode=OneWayToSource}" />
       </GroupBox>
 
       <GroupBox Style="{StaticResource SoftGroupbox}" Grid.Row="2" Grid.ColumnSpan="3" Header="Amount">
         <StackPanel Orientation="Horizontal">
           <StackPanel Orientation="Vertical" Margin="0,0,15,0">
             <Label Content="Value" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-            <TextBox TextWrapping="Wrap" Text="ex. 43" Foreground="#FF5F5F5F" FontStyle="Italic" MaxLines="1" MaxLength="16" Width="140"/>
+            <TextBox TextWrapping="Wrap" Text="ex. 43" Foreground="#FF5F5F5F" FontStyle="Italic" MaxLines="1" MaxLength="16" Width="140" DataContext="{Binding databaseView.Price, Mode=OneWayToSource}"/>
           </StackPanel>
           <StackPanel Orientation="Vertical" Margin="0,0,15,0">
             <Label Content="Quantity" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-            <TextBox TextWrapping="Wrap" Text="ex. 1" VerticalAlignment="Top" Foreground="#FF5F5F5F" FontStyle="Italic" MaxLines="1" MaxLength="16" Width="80" />
+            <TextBox TextWrapping="Wrap" Text="ex. 1" VerticalAlignment="Top" Foreground="#FF5F5F5F" FontStyle="Italic" MaxLines="1" MaxLength="16" Width="80" DataContext="{Binding databaseView.Quantity, Mode=OneWayToSource}" />
           </StackPanel>
           <StackPanel Orientation="Horizontal">
             <Label Content="Total: " HorizontalAlignment="Left" ScrollViewer.CanContentScroll="True" VerticalAlignment="Center"/>
-            <TextBlock Width="90" VerticalAlignment="Center"/>
+            <TextBlock Width="90" VerticalAlignment="Center" DataContext="{Binding databaseView.Total, Mode=OneWay}" />
           </StackPanel>
         </StackPanel>
       </GroupBox>
