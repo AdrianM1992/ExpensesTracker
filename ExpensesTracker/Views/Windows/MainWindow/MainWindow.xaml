@@ -47,7 +47,7 @@
         <TextBlock Text="Home" Margin="10,0,0,0" VerticalAlignment="Center" Visibility="Hidden" TextWrapping="Wrap"/>
       </StackPanel>
       <StackPanel Orientation="Horizontal" Margin="0,10,0,0" Background="Transparent" MouseLeftButtonDown="Database_MouseLeftButtonDown">
-        <Image Width="32" Height="32" Source="/Views/Assets/Icons/edit-alt.png" Stretch="Fill" Margin="5,0,0,0" />
+        <Image Width="32" Height="32" Source="/Views/Assets/Icons/dataBase.png" Stretch="Fill" Margin="5,0,0,0" />
         <TextBlock Text="Database" Margin="10,0,0,0" VerticalAlignment="Center" Visibility="Hidden" TextWrapping="Wrap"/>
       </StackPanel>
       <StackPanel Orientation="Horizontal" Margin="0,10,0,0" Background="Transparent" MouseLeftButtonDown="MenuGraph_MouseLeftButtonDown">

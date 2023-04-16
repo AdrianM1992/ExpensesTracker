@@ -3,15 +3,15 @@
 namespace ExpensesTracker.Views.Classes
 {
   /// <summary>
-  /// Class with properties meant to be displayed in Datagrid
+  /// Class with properties meant to be displayed in DataGrid
   /// </summary>
   public class DatabaseView
   {
-    public string Name { get; set; } = null!;
+    public string Name { get; set; }
 
     public decimal Price { get; set; }
 
-    public short Quantity { get; set; }
+    public decimal Quantity { get; set; }
 
     public decimal? Total { get; set; }
 

@@ -1,4 +1,5 @@
-﻿using ExpensesTracker.ViewModels;
+﻿using ExpensesTracker.Models.Interfaces;
+using ExpensesTracker.ViewModels;
 using ExpensesTracker.Views.Classes;
 using ExpensesTracker.Views.Windows.AddEditDB;
 using System.Collections.ObjectModel;
@@ -15,8 +16,12 @@ namespace ExpensesTracker.Views.Pages.DatabaseBrowser
   {
     public ObservableCollection<DatabaseView> Items { get; set; }
     private DatabaseBrowserPageViewModel _viewModel;
-    public DatabaseBrowserPage()
+    private AddEditDBWindow addEditDBWindow;
+    private IMainSettings _mainSettings;
+
+    public DatabaseBrowserPage(IMainSettings mainSettings)
     {
+      _mainSettings = mainSettings;
       InitializeComponent();
       _viewModel = new DatabaseBrowserPageViewModel(this);
       Items = _viewModel.Expenses;
@@ -76,10 +81,19 @@ namespace ExpensesTracker.Views.Pages.DatabaseBrowser
       }
     }
 
+    /// <summary>
+    /// Opens new AddEditDBWindow if reference is null or window is not loaded.
+    /// </summary>
     private void AddButton_Click(object sender, RoutedEventArgs e)
     {
-      AddEditDBWindow window = new AddEditDBWindow();
-      window.Show();
+      if (addEditDBWindow == null || !addEditDBWindow.IsLoaded) addEditDBWindow = new AddEditDBWindow(_mainSettings, Items[2]);
+      else
+      {
+        var action = MessageBox.Show("Another window is already opened.\n\nDo you wish to open new one?", "Warning", button: MessageBoxButton.YesNo);
+        if (action == MessageBoxResult.OK) addEditDBWindow = new AddEditDBWindow(_mainSettings);
+        else addEditDBWindow.Focus();
+      }
+      addEditDBWindow.Show();
     }
 
     private void SearchBar_GotFocus(object sender, RoutedEventArgs e)

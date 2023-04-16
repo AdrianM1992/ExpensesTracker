@@ -18,8 +18,10 @@
   <ItemGroup>
     <None Remove="Views\Assets\Icons\add.png" />
     <None Remove="Views\Assets\Icons\chart-histogram.png" />
+    <None Remove="Views\Assets\Icons\dataBase.png" />
     <None Remove="Views\Assets\Icons\delete.png" />
     <None Remove="Views\Assets\Icons\edit-alt.png" />
+    <None Remove="Views\Assets\Icons\edit.png" />
     <None Remove="Views\Assets\Icons\exit.png" />
     <None Remove="Views\Assets\Icons\home.png" />
     <None Remove="Views\Assets\Icons\loadMore.png" />
@@ -33,10 +35,6 @@
     <Resource Include="Views\Assets\Icons\chart-histogram.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="DataTypes\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -56,10 +54,15 @@
     <Resource Include="Views\Assets\Icons\add.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Views\Assets\Icons\dataBase.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Views\Assets\Icons\delete.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Views\Assets\Icons\edit-alt.png" />
+    <Resource Include="Views\Assets\Icons\edit.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Views\Assets\Icons\exit.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>

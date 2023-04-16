@@ -11,7 +11,7 @@ public partial class Expense
 
     public decimal Price { get; set; }
 
-    public short Quantity { get; set; }
+    public decimal Quantity { get; set; }
 
     public decimal? Total { get; set; }
 
@@ -23,7 +23,7 @@ public partial class Expense
 
     public short CategoryId { get; set; }
 
-    public string? Subcategory { get; set; }
+    public int? SubcategoryId { get; set; }
 
     public bool Income { get; set; }
 

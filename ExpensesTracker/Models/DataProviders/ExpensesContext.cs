@@ -43,9 +43,9 @@ public partial class ExpensesContext : DbContext
       entity.Property(e => e.LastUpdate).HasColumnType("date");
       entity.Property(e => e.Name).HasMaxLength(50);
       entity.Property(e => e.Price).HasColumnType("money");
+      entity.Property(e => e.Quantity).HasColumnType("money");
       entity.Property(e => e.Recurring).HasColumnName("Recurring?");
       entity.Property(e => e.RecurringId).HasColumnName("RecurringID");
-      entity.Property(e => e.Subcategory).HasMaxLength(50);
       entity.Property(e => e.Total)
               .HasComputedColumnSql("([Price]*[Quantity])", false)
               .HasColumnType("money");
@@ -60,8 +60,7 @@ public partial class ExpensesContext : DbContext
 
     modelBuilder.Entity<Subcategory>(entity =>
     {
-      entity.HasNoKey();
-
+      entity.Property(e => e.CategoryId).HasDefaultValueSql("((1))");
       entity.Property(e => e.Name).HasMaxLength(50);
     });
 

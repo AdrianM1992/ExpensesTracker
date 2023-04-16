@@ -1,4 +1,6 @@
-﻿using ExpensesTracker.ViewModels;
+﻿using ExpensesTracker.Models.Interfaces;
+using ExpensesTracker.Models.Settings;
+using ExpensesTracker.ViewModels;
 using ExpensesTracker.Views.Controls;
 using ExpensesTracker.Views.Pages.DatabaseBrowser;
 using ExpensesTracker.Views.Pages.Graphs;
@@ -19,6 +21,7 @@ namespace ExpensesTracker
   /// </summary>
   public partial class MainWindow : Window
   {
+    private readonly IMainSettings _mainSettings;
     MainWindowViewModel _viewModel;
     /// <summary>
     /// Stores instances of pages [value] by tab name [key]
@@ -32,7 +35,7 @@ namespace ExpensesTracker
     public MainWindow()
     {
       InitializeComponent();
-
+      _mainSettings = MainSettings.GetMainSettingsInstance();
       _viewModel = MainWindowViewModel.GetMainWindowViewModel();
       DataContext = _viewModel;
       HomeTab.CustomTabChanged += TabChanged;
@@ -55,6 +58,15 @@ namespace ExpensesTracker
 
     private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
     {
+
+      foreach (Window window in Application.Current.Windows)
+      {
+        if (window != this)
+        {
+          window.Close();
+        }
+
+      }
     }
 
     #region Menu Items
@@ -89,7 +101,7 @@ namespace ExpensesTracker
       _tabNames.Add("Home");
       _pages.Add(_tabNames.Last(), new HomePage());
       _tabNames.Add("Database");
-      _pages.Add(_tabNames.Last(), new DatabaseBrowserPage());
+      _pages.Add(_tabNames.Last(), new DatabaseBrowserPage(_mainSettings));
       _tabNames.Add("Graphs");
       _pages.Add(_tabNames.Last(), new GraphsPage());
       _tabNames.Add("Settings");

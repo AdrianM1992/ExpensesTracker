@@ -1,4 +1,6 @@
-﻿using ExpensesTracker.ViewModels;
+﻿using ExpensesTracker.Models.Interfaces;
+using ExpensesTracker.ViewModels;
+using ExpensesTracker.Views.Classes;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
@@ -13,20 +15,27 @@ namespace ExpensesTracker.Views.Windows.AddEditDB
   /// </summary>
   public partial class AddEditDBWindow : Window
   {
-    readonly private Dictionary<TextBox, string> _textBoxes;
+    public Dictionary<TextBox, string> _textBoxes;
     readonly private AddEditDBWindowViewModel _viewModel;
+    private readonly IMainSettings _mainSettings;
 
-    public AddEditDBWindow()
+    public AddEditDBWindow(IMainSettings mainSettings)
     {
+      _viewModel = new AddEditDBWindowViewModel(_mainSettings, this);
       InitializeComponent();
-      _viewModel = new AddEditDBWindowViewModel();
-      _textBoxes = new Dictionary<TextBox, string>();
-      foreach (var textBox in GetAllTextboxes(this).OfType<TextBox>())
-      {
-        _textBoxes.Add(textBox, textBox.Text);
-      }
-    }
+      CreateTextboxesDictionary();
+      _mainSettings = mainSettings;
 
+    }
+    public AddEditDBWindow(IMainSettings mainSettings, DatabaseView databaseView)
+    {
+      _mainSettings = mainSettings;
+      _viewModel = new AddEditDBWindowViewModel(_mainSettings, databaseView, this);
+      InitializeComponent();
+      CreateTextboxesDictionary();
+      _viewModel.SetControlsValues();
+
+    }
     private void TitleBar_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
     {
       if (e.LeftButton == MouseButtonState.Pressed)
@@ -56,7 +65,37 @@ namespace ExpensesTracker.Views.Windows.AddEditDB
         textBox.Foreground = new SolidColorBrush(Color.FromArgb(0xFF, 0x5F, 0x5F, 0x5F));
       }
     }
-    private List<Control> GetAllTextboxes(DependencyObject parent)
+
+    private void Category_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+      var category = sender as ComboBox;
+      _viewModel.SetCategoryValue(category.SelectedValue.ToString());
+    }
+
+    private void Subcategory_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+      var subcategory = sender as ComboBox;
+      _viewModel.SetSubcategoryValue(subcategory.SelectedValue.ToString());
+    }
+
+    /// <summary>
+    /// Searches controls list and picks TextBoxes to create dictionary keys; values are default text
+    /// </summary>
+    private void CreateTextboxesDictionary()
+    {
+      _textBoxes = new Dictionary<TextBox, string>();
+      foreach (var textBox in GetAllControls(this).OfType<TextBox>())
+      {
+        _textBoxes.Add(textBox, textBox.Text);
+      }
+    }
+
+    /// <summary>
+    /// Creates list of all controls in parent hierarchy tree
+    /// </summary>
+    /// <param name="parent">Reference object to list children"</param>
+    /// <returns>List of all children controls</returns>
+    private List<Control> GetAllControls(DependencyObject parent)
     {
       List<Control> controls = new List<Control>();
 
@@ -69,11 +108,24 @@ namespace ExpensesTracker.Views.Windows.AddEditDB
 
         if (child is DependencyObject childDependencyObject)
         {
-          controls.AddRange(GetAllTextboxes(childDependencyObject));
+          controls.AddRange(GetAllControls(childDependencyObject));
         }
       }
       return controls;
     }
 
+    private void Income_Checked(object sender, RoutedEventArgs e)
+    {
+      var income = sender as RadioButton;
+
+      if (income.Name == "Income") _viewModel.SetIncome(true);
+      else if (income.Name == "Expense") _viewModel.SetIncome(false);
+    }
+
+    private void Date_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
+    {
+      var date = sender as DatePicker;
+      _viewModel.SetDate(date.SelectedDate.Value);
+    }
   }
 }
