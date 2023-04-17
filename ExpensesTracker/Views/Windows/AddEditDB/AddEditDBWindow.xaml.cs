@@ -21,10 +21,11 @@ namespace ExpensesTracker.Views.Windows.AddEditDB
 
     public AddEditDBWindow(IMainSettings mainSettings)
     {
+      _mainSettings = mainSettings;
       _viewModel = new AddEditDBWindowViewModel(_mainSettings, this);
       InitializeComponent();
-      CreateTextboxesDictionary();
-      _mainSettings = mainSettings;
+      _textBoxes = CreateTextboxesDictionary();
+
 
     }
     public AddEditDBWindow(IMainSettings mainSettings, DatabaseView databaseView)
@@ -32,7 +33,7 @@ namespace ExpensesTracker.Views.Windows.AddEditDB
       _mainSettings = mainSettings;
       _viewModel = new AddEditDBWindowViewModel(_mainSettings, databaseView, this);
       InitializeComponent();
-      CreateTextboxesDictionary();
+      _textBoxes = CreateTextboxesDictionary();
       _viewModel.SetControlsValues();
 
     }
@@ -46,7 +47,7 @@ namespace ExpensesTracker.Views.Windows.AddEditDB
 
     private void TextBox_GotFocus(object sender, RoutedEventArgs e)
     {
-      var textBox = sender as TextBox;
+      var textBox = (TextBox)sender;
       if (_textBoxes[textBox] == textBox.Text)
       {
         textBox.Text = string.Empty;
@@ -63,31 +64,21 @@ namespace ExpensesTracker.Views.Windows.AddEditDB
         textBox.Text = _textBoxes[textBox];
         textBox.FontStyle = FontStyles.Italic;
         textBox.Foreground = new SolidColorBrush(Color.FromArgb(0xFF, 0x5F, 0x5F, 0x5F));
+        _viewModel.HandleTextboxInput(textBox);
       }
-    }
-
-    private void Category_SelectionChanged(object sender, SelectionChangedEventArgs e)
-    {
-      var category = sender as ComboBox;
-      _viewModel.SetCategoryValue(category.SelectedValue.ToString());
-    }
-
-    private void Subcategory_SelectionChanged(object sender, SelectionChangedEventArgs e)
-    {
-      var subcategory = sender as ComboBox;
-      _viewModel.SetSubcategoryValue(subcategory.SelectedValue.ToString());
     }
 
     /// <summary>
     /// Searches controls list and picks TextBoxes to create dictionary keys; values are default text
     /// </summary>
-    private void CreateTextboxesDictionary()
+    private Dictionary<TextBox, string> CreateTextboxesDictionary()
     {
-      _textBoxes = new Dictionary<TextBox, string>();
+      var textBoxes = new Dictionary<TextBox, string>();
       foreach (var textBox in GetAllControls(this).OfType<TextBox>())
       {
-        _textBoxes.Add(textBox, textBox.Text);
+        textBoxes.Add(textBox, textBox.Text);
       }
+      return textBoxes;
     }
 
     /// <summary>
@@ -97,19 +88,12 @@ namespace ExpensesTracker.Views.Windows.AddEditDB
     /// <returns>List of all children controls</returns>
     private List<Control> GetAllControls(DependencyObject parent)
     {
-      List<Control> controls = new List<Control>();
+      List<Control> controls = new();
 
       foreach (var child in LogicalTreeHelper.GetChildren(parent))
       {
-        if (child is Control control)
-        {
-          controls.Add(control);
-        }
-
-        if (child is DependencyObject childDependencyObject)
-        {
-          controls.AddRange(GetAllControls(childDependencyObject));
-        }
+        if (child is Control control) controls.Add(control);
+        if (child is DependencyObject childDependencyObject) controls.AddRange(GetAllControls(childDependencyObject));
       }
       return controls;
     }
@@ -117,15 +101,48 @@ namespace ExpensesTracker.Views.Windows.AddEditDB
     private void Income_Checked(object sender, RoutedEventArgs e)
     {
       var income = sender as RadioButton;
-
       if (income.Name == "Income") _viewModel.SetIncome(true);
-      else if (income.Name == "Expense") _viewModel.SetIncome(false);
+      else _viewModel.SetIncome(false);
     }
 
     private void Date_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
     {
-      var date = sender as DatePicker;
-      _viewModel.SetDate(date.SelectedDate.Value);
+      var date = (DatePicker)sender;
+      if (date.SelectedDate.HasValue) _viewModel.SetDate(date.SelectedDate.Value);
+      else _viewModel.SetDate(null);
+
+    }
+
+    /// <summary>
+    /// DropDownClosed is chosen over SelectionChanged, because SelectionChanged fires when viewModel sets SelectedIndex
+    /// </summary>
+    private void Subcategory_DropDownClosed(object sender, System.EventArgs e)
+    {
+      var subcategory = (ComboBox)sender;
+      _viewModel.SetSubcategoryValue(subcategory.SelectedValue.ToString());
+    }
+
+    /// <summary>
+    /// DropDownClosed is chosen over SelectionChanged, because SelectionChanged fires when viewModel sets SelectedIndex
+    /// </summary>
+    private void Category_DropDownClosed(object sender, System.EventArgs e)
+    {
+      var category = (ComboBox)sender;
+      _viewModel.SetCategoryValue(category.SelectedValue.ToString());
+    }
+
+    private void RecurringId_DropDownClosed(object sender, System.EventArgs e)
+    {
+      var recurringId = (ComboBox)sender;
+      _viewModel.SetRecurringId(recurringId.SelectedValue.ToString());
+    }
+
+    private void Recurring_Checked(object sender, RoutedEventArgs e)
+    {
+      var checkBox = (CheckBox)sender;
+      RecurringList.IsEnabled = checkBox.IsChecked == true;
+
+      if (checkBox.IsChecked.HasValue) _viewModel.SetRecurring(checkBox.IsChecked.Value);
     }
   }
 }

@@ -53,7 +53,7 @@
       <ctrls:CustomMinMaxCloseButtons Grid.Column="2" AllowMaximize="False" HighlightBrush="White"/>
 
       <GroupBox Style="{StaticResource SoftGroupbox}" Grid.Row=" 1" Grid.ColumnSpan="3" Header="Name">
-        <TextBox x:Name="Name" TextWrapping="Wrap" Text="ex. Netflix bill&#x0A;" VerticalAlignment="Top" Foreground="#FF5F5F5F" FontStyle="Italic" MaxLines="2" MinLines="2" BorderBrush="{x:Null}" />
+        <TextBox x:Name="RecordName" TextWrapping="Wrap" Text="ex. Netflix bill&#x0A;" VerticalAlignment="Top" Foreground="#FF5F5F5F" FontStyle="Italic" MaxLines="2" MinLines="2" BorderBrush="{x:Null}" />
       </GroupBox>
 
       <GroupBox Style="{StaticResource SoftGroupbox}" Grid.Row="2" Grid.ColumnSpan="3" Header="Amount">
@@ -82,7 +82,7 @@
           <StackPanel Orientation="Vertical" Margin="15,0,0,0">
             <Label Content="Category" HorizontalAlignment="Left"  VerticalAlignment="Top"/>
             <StackPanel Orientation="Horizontal">
-              <ComboBox x:Name="Category" VerticalAlignment="Center" Width="120" Margin="0,0,5,0" SelectionChanged="Category_SelectionChanged" />
+              <ComboBox x:Name="Category" VerticalAlignment="Center" Width="120" Margin="0,0,5,0"  DropDownClosed="Category_DropDownClosed" />
               <StackPanel VerticalAlignment="Center">
                 <Button x:Name="AddCategoryButton" Style="{StaticResource OpacityButtonStyle}" BorderBrush="{x:Null}" Foreground="{x:Null}" IsHitTestVisible="True" Width="16" Height="16" VerticalAlignment="Center" HorizontalAlignment="Right" >
                   <Button.Background>
@@ -100,7 +100,7 @@
           <StackPanel Orientation="Vertical" Margin="15,0,0,0">
             <Label Content="Subcategory" HorizontalAlignment="Left" VerticalAlignment="Top"/>
             <StackPanel Orientation="Horizontal">
-              <ComboBox x:Name="Subcategory" VerticalAlignment="Center" Width="120" Margin="0,0,5,0" SelectionChanged="Subcategory_SelectionChanged"/>
+              <ComboBox x:Name="Subcategory" VerticalAlignment="Center" Width="120" Margin="0,0,5,0"  DropDownClosed="Subcategory_DropDownClosed"/>
               <StackPanel VerticalAlignment="Center">
                 <Button x:Name="AddSubCategoryButton" Style="{StaticResource OpacityButtonStyle}"  BorderBrush="{x:Null}" Foreground="{x:Null}" IsHitTestVisible="True" Width="16" Height="16" VerticalAlignment="Center" HorizontalAlignment="Right">
                   <Button.Background>
@@ -121,8 +121,22 @@
       <GroupBox Style="{StaticResource SoftGroupbox}" Grid.Row="4" Grid.ColumnSpan="3" Header="Recurrence and date">
         <StackPanel Orientation="Horizontal">
           <StackPanel Orientation="Vertical" Margin="0,0,15,0">
-            <CheckBox x:Name="Recurring" Content="Recurring?" HorizontalAlignment="Left" VerticalAlignment="Top" Padding="3,0,0,0" FontSize="12" Margin="0,3,0,0"/>
-            <TextBox x:Name="RecurringId" TextWrapping="Wrap" Text="ex. Netflix&#xA;" Foreground="#FF5F5F5F" FontStyle="Italic" MinLines="2" MaxLines="2" VerticalScrollBarVisibility="Auto" Width="248" BorderBrush="{x:Null}" />
+            <CheckBox x:Name="Recurring" Content="Recurring?" HorizontalAlignment="Left" VerticalAlignment="Top" Padding="3,0,0,0" FontSize="12" Margin="0,3,0,0" Checked="Recurring_Checked" Unchecked="Recurring_Checked"/>
+            <StackPanel x:Name="RecurringList" Orientation="Horizontal">
+              <ComboBox x:Name="RecurringId" VerticalAlignment="Center" Width="197" Margin="0,0,5,0"  DropDownClosed="RecurringId_DropDownClosed" />
+              <StackPanel VerticalAlignment="Center">
+                <Button x:Name="AddRecurringButton" Style="{StaticResource OpacityButtonStyle}" BorderBrush="{x:Null}" Foreground="{x:Null}" IsHitTestVisible="True" Width="16" Height="16" VerticalAlignment="Center" HorizontalAlignment="Right" >
+                  <Button.Background>
+                    <ImageBrush ImageSource="/Views/Assets/Icons/add.png" Stretch="Uniform"/>
+                  </Button.Background>
+                </Button>
+                <Button x:Name="DeleteRecurringButton" Style="{StaticResource OpacityButtonStyle}" BorderBrush="{x:Null}" Foreground="{x:Null}" IsHitTestVisible="True" Width="16" Height="16" VerticalAlignment="Center" HorizontalAlignment="Right" >
+                  <Button.Background>
+                    <ImageBrush ImageSource="/Views/Assets/Icons/delete.png" Stretch="Uniform"/>
+                  </Button.Background>
+                </Button>
+              </StackPanel>
+            </StackPanel>
           </StackPanel>
           <StackPanel Orientation="Vertical">
             <Label  Content="Date" HorizontalAlignment="Left" VerticalAlignment="Top"/>

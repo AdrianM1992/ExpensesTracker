@@ -15,9 +15,9 @@ namespace ExpensesTracker.Views.Pages.DatabaseBrowser
   public partial class DatabaseBrowserPage : Page
   {
     public ObservableCollection<DatabaseView> Items { get; set; }
-    private DatabaseBrowserPageViewModel _viewModel;
-    private AddEditDBWindow addEditDBWindow;
-    private IMainSettings _mainSettings;
+    private readonly DatabaseBrowserPageViewModel _viewModel;
+    private AddEditDBWindow? addEditDBWindow;
+    private readonly IMainSettings _mainSettings;
 
     public DatabaseBrowserPage(IMainSettings mainSettings)
     {
@@ -86,7 +86,7 @@ namespace ExpensesTracker.Views.Pages.DatabaseBrowser
     /// </summary>
     private void AddButton_Click(object sender, RoutedEventArgs e)
     {
-      if (addEditDBWindow == null || !addEditDBWindow.IsLoaded) addEditDBWindow = new AddEditDBWindow(_mainSettings, Items[2]);
+      if (addEditDBWindow == null || !addEditDBWindow.IsLoaded) addEditDBWindow = new AddEditDBWindow(_mainSettings); //Items[2]
       else
       {
         var action = MessageBox.Show("Another window is already opened.\n\nDo you wish to open new one?", "Warning", button: MessageBoxButton.YesNo);

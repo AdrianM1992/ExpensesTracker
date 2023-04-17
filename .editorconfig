@@ -1,0 +1,4 @@
+﻿[*.cs]
+
+# CS8602: Wyłuskanie odwołania, które może mieć wartość null.
+dotnet_diagnostic.CS8602.severity = none

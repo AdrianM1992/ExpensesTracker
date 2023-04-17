@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Windows.Controls;
 
 namespace ExpensesTracker.ViewModels
 {
@@ -33,7 +34,7 @@ namespace ExpensesTracker.ViewModels
     /// </summary>
     public void SetControlsValues()
     {
-      _myWindow.Name.Text = databaseView.Name;
+      _myWindow.RecordName.Text = databaseView.Name;
       _myWindow.Price.Text = databaseView.Price.ToString("C", new CultureInfo(_mainSettings.Currency));
       _myWindow.Quantity.Text = databaseView.Quantity.ToString("0.0");
       _myWindow.Total.Text = (databaseView.Price * databaseView.Quantity).ToString("C", new CultureInfo(_mainSettings.Currency));
@@ -55,20 +56,21 @@ namespace ExpensesTracker.ViewModels
       if (newCategory != null) databaseView.Category = newCategory;
       else
       {
-        using (var db = new ExpensesContext())
+        //Populate drop down menu with available categories
+        using var db = new ExpensesContext();
+        var categories = from c in db.Categories.ToList()
+                         select c.Name;
+        _myWindow.Category.ItemsSource = categories;
+        //Find index of databaseView.Subcategory in drop down menu.
+        var index = 0;
+        foreach (var category in categories)
         {
-          var categories = from c in db.Categories.ToList()
-                           select c.Name;
-          _myWindow.Category.ItemsSource = categories;
-          var index = 0;
-          foreach (var category in categories)
-          {
-            if (category == databaseView.Category) break;
-            index++;
-          }
-          _myWindow.Category.SelectedIndex = index;
+          if (category == databaseView.Category) break;
+          index++;
         }
+        _myWindow.Category.SelectedIndex = index;
       }
+      //Always update subcategory ComboBox when category is changed
       SetSubcategoryValue(null);
     }
 
@@ -81,36 +83,60 @@ namespace ExpensesTracker.ViewModels
       if (newSubcategory != null) databaseView.Subcategory = newSubcategory;
       else
       {
-        using (var db = new ExpensesContext())
+        //Search DB for all subcategories of selected category
+        using var db = new ExpensesContext();
+        var subcategories = from c in db.Categories
+                            where c.Name == databaseView.Category
+                            join s in db.Subcategories on c.Id equals s.CategoryId
+                            select s.Name;
+
+        List<string> temp = subcategories.ToList();
+        temp.Insert(0, "None");
+        _myWindow.Subcategory.ItemsSource = temp;
+        //Index must be always defined (not null)
+        _myWindow.Subcategory.SelectedIndex = 0;
+
+        //Find index of databaseView.Subcategory in drop down menu.
+        var index = 0;
+        foreach (var subcategory in temp)
         {
-          var subcategories = from c in db.Categories
-                              where c.Name == databaseView.Category
-                              join s in db.Subcategories on c.Id equals s.CategoryId
-                              select s.Name;
-
-          List<string> temp = subcategories.ToList();
-          temp.Insert(0, "None");
-          _myWindow.Subcategory.ItemsSource = temp;
-
-          var index = 0;
-          foreach (var subcategory in temp)
-          {
-            if (subcategory == databaseView.Subcategory) break;
-            index++;
-          }
-          _myWindow.Subcategory.SelectedIndex = index;
+          if (subcategory == databaseView.Subcategory) break;
+          index++;
         }
+        _myWindow.Subcategory.SelectedIndex = index;
       }
     }
 
+    public void SetRecurring(bool recurring)
+    {
+      databaseView.Recurring = recurring;
+    }
+    public void SetRecurringId(string? recurringId)
+    {
+
+    }
+
+    /// <summary>
+    /// Sets Income property of current databaseView
+    /// </summary>
+    /// <param name="income">Specifies if record is income or expense</param>
     public void SetIncome(bool income)
     {
       databaseView.Income = income;
     }
 
-    public void SetDate(DateTime dateTime)
+    /// <summary>
+    /// Sets Date property of current databaseView
+    /// </summary>
+    /// <param name="dateTime">Specifies date when record occurred</param>
+    public void SetDate(DateTime? dateTime)
     {
       databaseView.Date = dateTime;
+    }
+
+    public void HandleTextboxInput(TextBox textBox)
+    {
+
     }
   }
 }
