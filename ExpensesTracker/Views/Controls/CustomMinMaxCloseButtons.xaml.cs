@@ -62,8 +62,7 @@ namespace ExpensesTracker.Views.Controls
       var borderToHighlight = sender as Border;
       if (borderToHighlight != null)
       {
-        if (!AllowMaximize && borderToHighlight.Name == "Max") ;
-        else borderToHighlight.Background = HighlightBrush;
+        if (borderToHighlight.Name != "Max" || AllowMaximize) borderToHighlight.Background = HighlightBrush;
       }
     }
     private void Border_MouseLeave(object sender, MouseEventArgs e)

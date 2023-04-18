@@ -27,19 +27,19 @@
     </Grid.RowDefinitions>
 
     <TextBox Text="Search database..." Height="18" Foreground="#FF5F5F5F" FontStyle="Italic" GotFocus="SearchBar_GotFocus" LostFocus="SearchBar_LostFocus"/>
-    <DataGrid Grid.Row="1" x:Name ="DatabaseView" IsReadOnly="True" AutoGeneratingColumn="DatabaseView_AutoGeneratingColumn">
+    <DataGrid Grid.Row="1" x:Name ="DatabaseView" IsReadOnly="True" AutoGeneratingColumn="DatabaseView_AutoGeneratingColumn" MouseDoubleClick="DatabaseView_MouseDoubleClick">
         <DataGrid.Resources>
           <Style TargetType="ScrollBar" BasedOn="{StaticResource NarrowScrollBars}"/>
         </DataGrid.Resources>
     </DataGrid>
 
     <StackPanel Grid.Row="1" HorizontalAlignment="Left" Margin="10,0,5,10" VerticalAlignment="Bottom" Orientation="Horizontal" Opacity="0.5">
-      <Button x:Name="AddButton" Style="{StaticResource OpacityButtonStyle}" Click="AddButton_Click" BorderBrush="{x:Null}" Foreground="{x:Null}" IsHitTestVisible="True" Width="32" Height="32" Margin="0,0,10,0">
+      <Button x:Name="AddButton" Style="{StaticResource OpacityButtonStyle}" Click="AddEditButton_Click" BorderBrush="{x:Null}" Foreground="{x:Null}" IsHitTestVisible="True" Width="32" Height="32" Margin="0,0,10,0">
         <Button.Background>
           <ImageBrush ImageSource="/Views/Assets/Icons/add.png" Stretch="Uniform"/>
         </Button.Background>
       </Button>
-      <Button x:Name="EditButton" Style="{StaticResource OpacityButtonStyle}" BorderBrush="{x:Null}" Foreground="{x:Null}" IsHitTestVisible="True" Width="32" Height="32" Margin="0,0,10,0">
+      <Button x:Name="EditButton" Style="{StaticResource OpacityButtonStyle}" Click="AddEditButton_Click" BorderBrush="{x:Null}" Foreground="{x:Null}" IsHitTestVisible="True" Width="32" Height="32" Margin="0,0,10,0">
         <Button.Background>
           <ImageBrush ImageSource="/Views/Assets/Icons/edit.png" Stretch="Uniform"/>
         </Button.Background>

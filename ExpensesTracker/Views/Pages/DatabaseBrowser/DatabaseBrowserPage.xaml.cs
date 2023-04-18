@@ -84,13 +84,27 @@ namespace ExpensesTracker.Views.Pages.DatabaseBrowser
     /// <summary>
     /// Opens new AddEditDBWindow if reference is null or window is not loaded.
     /// </summary>
-    private void AddButton_Click(object sender, RoutedEventArgs e)
+    private void AddEditButton_Click(object sender, RoutedEventArgs e)
     {
-      if (addEditDBWindow == null || !addEditDBWindow.IsLoaded) addEditDBWindow = new AddEditDBWindow(_mainSettings); //Items[2]
+      var button = (Button)sender;
+      OpenAddEditWindow(button.Name == "AddButton");
+    }
+    private void OpenAddEditWindow(bool openAdd)
+    {
+      if (addEditDBWindow == null || !addEditDBWindow.IsLoaded)
+      {
+        if (openAdd) addEditDBWindow = new AddEditDBWindow(_mainSettings);
+        else addEditDBWindow = new AddEditDBWindow(_mainSettings, (DatabaseView)DatabaseView.SelectedItem);
+      }
       else
       {
         var action = MessageBox.Show("Another window is already opened.\n\nDo you wish to open new one?", "Warning", button: MessageBoxButton.YesNo);
-        if (action == MessageBoxResult.OK) addEditDBWindow = new AddEditDBWindow(_mainSettings);
+        if (action == MessageBoxResult.Yes)
+        {
+          addEditDBWindow.Close();
+          if (openAdd) addEditDBWindow = new AddEditDBWindow(_mainSettings);
+          else addEditDBWindow = new AddEditDBWindow(_mainSettings, (DatabaseView)DatabaseView.SelectedItem);
+        }
         else addEditDBWindow.Focus();
       }
       addEditDBWindow.Show();
@@ -120,6 +134,11 @@ namespace ExpensesTracker.Views.Pages.DatabaseBrowser
           textBox.Text = "Search database...";
         }
       }
+    }
+
+    private void DatabaseView_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+    {
+      OpenAddEditWindow(false);
     }
   }
 }

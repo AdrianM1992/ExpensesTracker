@@ -11,7 +11,7 @@ using System.Windows.Media;
 namespace ExpensesTracker.Views.Windows.AddEditDB
 {
   /// <summary>
-  /// Logika interakcji dla klasy AddEditDBWindow.xaml
+  /// Logic for AddEditDBWindow.xaml
   /// </summary>
   public partial class AddEditDBWindow : Window
   {
@@ -19,53 +19,39 @@ namespace ExpensesTracker.Views.Windows.AddEditDB
     readonly private AddEditDBWindowViewModel _viewModel;
     private readonly IMainSettings _mainSettings;
 
-    public AddEditDBWindow(IMainSettings mainSettings)
+    public AddEditDBWindow(IMainSettings mainSettings, DatabaseView? databaseView = null)
     {
       _mainSettings = mainSettings;
-      _viewModel = new AddEditDBWindowViewModel(_mainSettings, this);
-      InitializeComponent();
-      _textBoxes = CreateTextboxesDictionary();
-
-
-    }
-    public AddEditDBWindow(IMainSettings mainSettings, DatabaseView databaseView)
-    {
-      _mainSettings = mainSettings;
-      _viewModel = new AddEditDBWindowViewModel(_mainSettings, databaseView, this);
+      if (databaseView == null) _viewModel = new AddEditDBWindowViewModel(_mainSettings, this);
+      else _viewModel = new AddEditDBWindowViewModel(_mainSettings, this, databaseView);
       InitializeComponent();
       _textBoxes = CreateTextboxesDictionary();
       _viewModel.SetControlsValues();
-
     }
+
     private void TitleBar_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
     {
-      if (e.LeftButton == MouseButtonState.Pressed)
-      {
-        DragMove();
-      }
+      if (e.LeftButton == MouseButtonState.Pressed) DragMove();
     }
 
     private void TextBox_GotFocus(object sender, RoutedEventArgs e)
     {
       var textBox = (TextBox)sender;
-      if (_textBoxes[textBox] == textBox.Text)
-      {
-        textBox.Text = string.Empty;
-        textBox.FontStyle = FontStyles.Normal;
-        textBox.Foreground = Brushes.Black;
-      }
+      if (_textBoxes[textBox] == textBox.Text) textBox.Text = string.Empty;
+      textBox.FontStyle = FontStyles.Normal;
+      textBox.Foreground = Brushes.Black;
     }
 
     private void TextBox_LostFocus(object sender, RoutedEventArgs e)
     {
-      var textBox = sender as TextBox;
+      var textBox = (TextBox)sender;
       if (textBox.Text == "")
       {
         textBox.Text = _textBoxes[textBox];
         textBox.FontStyle = FontStyles.Italic;
         textBox.Foreground = new SolidColorBrush(Color.FromArgb(0xFF, 0x5F, 0x5F, 0x5F));
-        _viewModel.HandleTextboxInput(textBox);
       }
+      else _viewModel.HandleTextboxInput(textBox);
     }
 
     /// <summary>
@@ -98,13 +84,6 @@ namespace ExpensesTracker.Views.Windows.AddEditDB
       return controls;
     }
 
-    private void Income_Checked(object sender, RoutedEventArgs e)
-    {
-      var income = sender as RadioButton;
-      if (income.Name == "Income") _viewModel.SetIncome(true);
-      else _viewModel.SetIncome(false);
-    }
-
     private void Date_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
     {
       var date = (DatePicker)sender;
@@ -116,15 +95,13 @@ namespace ExpensesTracker.Views.Windows.AddEditDB
     /// <summary>
     /// DropDownClosed is chosen over SelectionChanged, because SelectionChanged fires when viewModel sets SelectedIndex
     /// </summary>
+    #region ComboBox events
     private void Subcategory_DropDownClosed(object sender, System.EventArgs e)
     {
       var subcategory = (ComboBox)sender;
       _viewModel.SetSubcategoryValue(subcategory.SelectedValue.ToString());
     }
 
-    /// <summary>
-    /// DropDownClosed is chosen over SelectionChanged, because SelectionChanged fires when viewModel sets SelectedIndex
-    /// </summary>
     private void Category_DropDownClosed(object sender, System.EventArgs e)
     {
       var category = (ComboBox)sender;
@@ -136,13 +113,20 @@ namespace ExpensesTracker.Views.Windows.AddEditDB
       var recurringId = (ComboBox)sender;
       _viewModel.SetRecurringId(recurringId.SelectedValue.ToString());
     }
+    #endregion
 
     private void Recurring_Checked(object sender, RoutedEventArgs e)
     {
       var checkBox = (CheckBox)sender;
       RecurringList.IsEnabled = checkBox.IsChecked == true;
-
+      RecurringId.ItemsSource = null;
       if (checkBox.IsChecked.HasValue) _viewModel.SetRecurring(checkBox.IsChecked.Value);
+    }
+    private void Income_Checked(object sender, RoutedEventArgs e)
+    {
+      var income = sender as RadioButton;
+      if (income.Name == "Income") _viewModel.SetIncome(true);
+      else _viewModel.SetIncome(false);
     }
   }
 }

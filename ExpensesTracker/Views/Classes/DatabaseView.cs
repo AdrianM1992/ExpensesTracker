@@ -15,9 +15,9 @@ namespace ExpensesTracker.Views.Classes
     private bool _recurring;
 
     public string Name { get; set; } = "";
-    public decimal Price { get => _price; private set { Total = value * Quantity; _price = value; } }
-    public decimal Quantity { get => _quantity; private set { Total = Price * value; _quantity = value; } }
-    public decimal? Total { get; private set; } = 0M;
+    public decimal Price { get => _price; set { Total = value * Quantity; _price = value; } }
+    public decimal Quantity { get => _quantity; set { Total = Price * value; _quantity = value; } }
+    public decimal? Total { get; private set; } = 1M;
     public DateTime DateOfEntry { get; private set; }
     public DateTime LastUpdate { get; private set; }
     public DateTime? Date { get; set; } = null;
@@ -32,8 +32,8 @@ namespace ExpensesTracker.Views.Classes
     {
       DateOfEntry = DateTime.Now;
       LastUpdate = DateTime.Now;
-      Price = 0M;
-      Quantity = 0M;
+      Price = 1M;
+      Quantity = 1M;
       Recurring = false;
     }
     public DatabaseView(Expense expense)
@@ -52,6 +52,7 @@ namespace ExpensesTracker.Views.Classes
       Category = GetCategoryName(expense);
       RecurringId = GetRecurringName(expense);
     }
+
     /// <summary>
     /// Converts this instance to Expanse instance
     /// </summary>
@@ -75,6 +76,7 @@ namespace ExpensesTracker.Views.Classes
         RecurringId = GetRecurringId()
       };
     }
+
     /// <summary>
     /// Gets category name of expense or income
     /// </summary>
@@ -167,5 +169,6 @@ namespace ExpensesTracker.Views.Classes
       }
       else return null;
     }
+
   }
 }

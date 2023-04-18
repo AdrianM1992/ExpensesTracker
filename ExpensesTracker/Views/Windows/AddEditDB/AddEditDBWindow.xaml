@@ -53,14 +53,14 @@
       <ctrls:CustomMinMaxCloseButtons Grid.Column="2" AllowMaximize="False" HighlightBrush="White"/>
 
       <GroupBox Style="{StaticResource SoftGroupbox}" Grid.Row=" 1" Grid.ColumnSpan="3" Header="Name">
-        <TextBox x:Name="RecordName" TextWrapping="Wrap" Text="ex. Netflix bill&#x0A;" VerticalAlignment="Top" Foreground="#FF5F5F5F" FontStyle="Italic" MaxLines="2" MinLines="2" BorderBrush="{x:Null}" />
+        <TextBox x:Name="RecordName" TextWrapping="Wrap" Text="ex. Netflix bill&#x0A;" VerticalAlignment="Top" Foreground="#FF5F5F5F" FontStyle="Italic" MaxLines="2" MinLines="2" BorderBrush="{x:Null}" MaxLength="50" />
       </GroupBox>
 
       <GroupBox Style="{StaticResource SoftGroupbox}" Grid.Row="2" Grid.ColumnSpan="3" Header="Amount">
         <StackPanel Orientation="Horizontal">
           <StackPanel Orientation="Vertical" Margin="0,0,15,0">
             <Label Content="Value" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-            <TextBox x:Name="Price" TextWrapping="Wrap" Text="ex. 43" Foreground="#FF5F5F5F" FontStyle="Italic" MaxLines="1" MaxLength="16" Width="140"/>
+            <TextBox x:Name="Price" TextWrapping="Wrap" Text="ex. 12,5" Foreground="#FF5F5F5F" FontStyle="Italic" MaxLines="1" MaxLength="16" Width="140"/>
           </StackPanel>
           <StackPanel Orientation="Vertical" Margin="0,0,15,0">
             <Label Content="Quantity" HorizontalAlignment="Left" VerticalAlignment="Top"/>
@@ -68,7 +68,7 @@
           </StackPanel>
           <StackPanel Orientation="Horizontal">
             <Label Content="Total: " HorizontalAlignment="Left" ScrollViewer.CanContentScroll="True" VerticalAlignment="Center"/>
-            <TextBlock x:Name="Total" Text="43" Width="90" VerticalAlignment="Center" />
+            <TextBlock x:Name="Total" Width="90" VerticalAlignment="Center" ><Run Language="pl-pl" Text="12,5"/></TextBlock>
           </StackPanel>
         </StackPanel>
       </GroupBox>
@@ -122,8 +122,8 @@
         <StackPanel Orientation="Horizontal">
           <StackPanel Orientation="Vertical" Margin="0,0,15,0">
             <CheckBox x:Name="Recurring" Content="Recurring?" HorizontalAlignment="Left" VerticalAlignment="Top" Padding="3,0,0,0" FontSize="12" Margin="0,3,0,0" Checked="Recurring_Checked" Unchecked="Recurring_Checked"/>
-            <StackPanel x:Name="RecurringList" Orientation="Horizontal">
-              <ComboBox x:Name="RecurringId" VerticalAlignment="Center" Width="197" Margin="0,0,5,0"  DropDownClosed="RecurringId_DropDownClosed" />
+            <StackPanel x:Name="RecurringList" Orientation="Horizontal" IsEnabled="False">
+              <ComboBox x:Name="RecurringId" VerticalAlignment="Center" Width="197" Margin="0,0,5,0"  DropDownClosed="RecurringId_DropDownClosed"/>
               <StackPanel VerticalAlignment="Center">
                 <Button x:Name="AddRecurringButton" Style="{StaticResource OpacityButtonStyle}" BorderBrush="{x:Null}" Foreground="{x:Null}" IsHitTestVisible="True" Width="16" Height="16" VerticalAlignment="Center" HorizontalAlignment="Right" >
                   <Button.Background>
@@ -146,7 +146,7 @@
       </GroupBox>
 
       <GroupBox Style="{StaticResource SoftGroupbox}" Grid.Row="5" Grid.ColumnSpan="3" Header="Description">
-        <TextBox x:Name="Description" TextWrapping="Wrap" Text="ex. Monthly Netflix subscription bill&#x0A; &#x0A; &#x0A; &#x0A;" MinLines="5" Foreground="#FF5F5F5F" FontStyle="Italic" MaxLines="5" VerticalAlignment="Top" BorderBrush="{x:Null}" />
+        <TextBox x:Name="Description" TextWrapping="Wrap" Text="ex. Monthly Netflix subscription bill&#x0A; &#x0A; &#x0A; &#x0A;" MinLines="5" Foreground="#FF5F5F5F" FontStyle="Italic" MaxLines="5" VerticalAlignment="Top" BorderBrush="{x:Null}" MaxLength="500" />
       </GroupBox>
 
       <Button x:Name="AddRecord" Grid.Row="6" Style="{StaticResource OpacityButtonStyle}" BorderBrush="{x:Null}" Foreground="{x:Null}" IsHitTestVisible="True" Width="36" Height="36" VerticalAlignment="Center" AutomationProperties.HelpText="Save"  >
