@@ -7,7 +7,7 @@
         xmlns:ctrls="clr-namespace:ExpensesTracker.Views.Controls"
         xmlns:vm="clr-namespace:ExpensesTracker.ViewModels"
         mc:Ignorable="d"
-        Title="AddEditDBWindow" Height="470" Width="385" MinWidth="400" MinHeight="385" WindowStyle="None" ResizeMode="NoResize" Background="{x:Null}">
+        Title="AddEditDBWindow" Height="470" Width="385" MinWidth="400" MinHeight="385" WindowStyle="None" ResizeMode="NoResize" Background="{x:Null}" Closing="AddEditWindow_Closing">
   <!-- This removes white bar at the top meant for resizing -->
   <WindowChrome.WindowChrome>
     <WindowChrome CaptionHeight="0" CornerRadius="10"/>
@@ -149,12 +149,12 @@
         <TextBox x:Name="Description" TextWrapping="Wrap" Text="ex. Monthly Netflix subscription bill&#x0A; &#x0A; &#x0A; &#x0A;" MinLines="5" Foreground="#FF5F5F5F" FontStyle="Italic" MaxLines="5" VerticalAlignment="Top" BorderBrush="{x:Null}" MaxLength="500" />
       </GroupBox>
 
-      <Button x:Name="AddRecord" Grid.Row="6" Style="{StaticResource OpacityButtonStyle}" BorderBrush="{x:Null}" Foreground="{x:Null}" IsHitTestVisible="True" Width="36" Height="36" VerticalAlignment="Center" AutomationProperties.HelpText="Save"  >
+      <Button x:Name="AddRecord" Grid.Row="6" Style="{StaticResource OpacityButtonStyle}" BorderBrush="{x:Null}" Foreground="{x:Null}" IsHitTestVisible="True" Width="36" Height="36" VerticalAlignment="Center" AutomationProperties.HelpText="Save" Click="AddRecord_Click" >
         <Button.Background>
           <ImageBrush ImageSource="/Views/Assets/Icons/add.png" Stretch="Uniform"/>
         </Button.Background>
       </Button>
-      <Button x:Name="Cancel" Grid.Row="6" Grid.Column="2" Style="{StaticResource OpacityButtonStyle}" BorderBrush="{x:Null}" Foreground="{x:Null}" IsHitTestVisible="True" Width="36" Height="36" VerticalAlignment="Center" AutomationProperties.HelpText="Cancel"  >
+      <Button x:Name="Cancel" Grid.Row="6" Grid.Column="2" Style="{StaticResource OpacityButtonStyle}" BorderBrush="{x:Null}" Foreground="{x:Null}" IsHitTestVisible="True" Width="36" Height="36" VerticalAlignment="Center" AutomationProperties.HelpText="Cancel" Click="Cancel_Click" >
         <Button.Background>
           <ImageBrush ImageSource="/Views/Assets/Icons/delete.png" Stretch="Uniform"/>
         </Button.Background>

@@ -1,4 +1,5 @@
-﻿using ExpensesTracker.Models.DataProviders;
+﻿using ExpensesTracker.Models.DataControllers;
+using ExpensesTracker.Models.DataProviders;
 using ExpensesTracker.Models.Interfaces;
 using ExpensesTracker.Views.Classes;
 using ExpensesTracker.Views.Windows.AddEditDB;
@@ -15,7 +16,7 @@ namespace ExpensesTracker.ViewModels
   {
     private readonly IMainSettings _mainSettings;
     private readonly AddEditDBWindow _myWindow;
-    public DatabaseView databaseView;
+    private DatabaseView databaseView;
 
     public AddEditDBWindowViewModel(IMainSettings mainSettings, AddEditDBWindow addEditDBWindow, DatabaseView? databaseView = null)
     {
@@ -23,6 +24,11 @@ namespace ExpensesTracker.ViewModels
       _mainSettings = mainSettings;
       if (databaseView == null) this.databaseView = new DatabaseView();
       else this.databaseView = databaseView;
+    }
+
+    public void CommitChanges(bool editMode)
+    {
+      DatabaseModel.AddEditDBRecord(databaseView.ReturnExpense(), editMode);
     }
 
     /// <summary>
@@ -81,7 +87,7 @@ namespace ExpensesTracker.ViewModels
       }
       else
       {
-        MessageBox.Show("Quantity field value is 0 or does not contain any number at all!\nDefault value of 1 will be used instead.", "Warning");
+        MessageBox.Show("Quantity field value is 0 or does not contain any number at all!\nDefault value of 1 will be used instead.", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
         databaseView.Quantity = 1M;
         _myWindow.Quantity.Text = string.Format("{0}", 1M);
       }
@@ -103,7 +109,7 @@ namespace ExpensesTracker.ViewModels
       }
       else
       {
-        MessageBox.Show("Value field value is 0 or does not contain any number at all!\nDefault value of 1 will be used instead.", "Warning");
+        MessageBox.Show("Value field value is 0 or does not contain any number at all!\nDefault value of 1 will be used instead.", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
         databaseView.Price = 1M;
         _myWindow.Price.Text = string.Format("{0:C}", 1M);
       }
@@ -119,7 +125,7 @@ namespace ExpensesTracker.ViewModels
     {
       bool decimalPointFlag = false;
       List<char> inputChars = input.ToList();
-      List<char> numberChars = new List<char>();
+      List<char> numberChars = new();
       foreach (var c in inputChars)
       {
         if (char.IsNumber(c)) numberChars.Add(c);

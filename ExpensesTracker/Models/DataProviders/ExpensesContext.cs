@@ -36,11 +36,11 @@ public partial class ExpensesContext : DbContext
     {
       entity.Property(e => e.CategoryId).HasDefaultValueSql("((1))");
       entity.Property(e => e.Date).HasColumnType("date");
-      entity.Property(e => e.DateOfEntry).HasColumnType("date");
+      entity.Property(e => e.DateOfEntry).HasColumnType("datetime");
       entity.Property(e => e.Description).HasMaxLength(500);
       entity.Property(e => e.Files).HasMaxLength(500);
       entity.Property(e => e.Income).HasColumnName("Income?");
-      entity.Property(e => e.LastUpdate).HasColumnType("date");
+      entity.Property(e => e.LastUpdate).HasColumnType("datetime");
       entity.Property(e => e.Name).HasMaxLength(50);
       entity.Property(e => e.Price).HasColumnType("money");
       entity.Property(e => e.Quantity).HasColumnType("money");

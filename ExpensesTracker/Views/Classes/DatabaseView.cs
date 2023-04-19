@@ -13,7 +13,9 @@ namespace ExpensesTracker.Views.Classes
     private decimal _price;
     private decimal _quantity;
     private bool _recurring;
+    private Expense? _expense = null;
 
+    public int ID { get; private set; }
     public string Name { get; set; } = "";
     public decimal Price { get => _price; set { Total = value * Quantity; _price = value; } }
     public decimal Quantity { get => _quantity; set { Total = Price * value; _quantity = value; } }
@@ -28,6 +30,7 @@ namespace ExpensesTracker.Views.Classes
     public string? RecurringId { get; set; } = null;
     public string? Description { get; set; } = null;
 
+
     public DatabaseView()
     {
       DateOfEntry = DateTime.Now;
@@ -38,6 +41,8 @@ namespace ExpensesTracker.Views.Classes
     }
     public DatabaseView(Expense expense)
     {
+      _expense = expense;
+      ID = expense.Id;
       Name = expense.Name;
       Price = expense.Price;
       Quantity = expense.Quantity;
@@ -59,22 +64,42 @@ namespace ExpensesTracker.Views.Classes
     /// <returns>Expanse instance</returns>
     public Expense ReturnExpense()
     {
-      return new Expense()
+      if (_expense != null)
       {
-        Name = Name,
-        Price = Price,
-        Quantity = Quantity,
-        Total = Total,
-        DateOfEntry = DateOfEntry,
-        LastUpdate = DateTime.Now,
-        Date = Date,
-        SubcategoryId = GetSubategoryId(),
-        Income = Income,
-        Recurring = Recurring,
-        Description = Description,
-        CategoryId = GetCategoryId(),
-        RecurringId = GetRecurringId()
-      };
+        _expense.Name = Name;
+        _expense.Price = Price;
+        _expense.Quantity = Quantity;
+        _expense.Total = Total;
+        _expense.DateOfEntry = DateOfEntry;
+        _expense.LastUpdate = DateTime.Now;
+        _expense.Date = Date;
+        _expense.SubcategoryId = GetSubategoryId();
+        _expense.Income = Income;
+        _expense.Recurring = Recurring;
+        _expense.Description = Description;
+        _expense.CategoryId = GetCategoryId();
+        _expense.RecurringId = GetRecurringId();
+        return _expense;
+      }
+      else
+      {
+        return new Expense()
+        {
+          Name = Name,
+          Price = Price,
+          Quantity = Quantity,
+          Total = Total,
+          DateOfEntry = DateOfEntry,
+          LastUpdate = DateTime.Now,
+          Date = Date,
+          SubcategoryId = GetSubategoryId(),
+          Income = Income,
+          Recurring = Recurring,
+          Description = Description,
+          CategoryId = GetCategoryId(),
+          RecurringId = GetRecurringId()
+        };
+      }
     }
 
     /// <summary>

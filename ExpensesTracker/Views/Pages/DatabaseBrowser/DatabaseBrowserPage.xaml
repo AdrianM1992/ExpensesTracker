@@ -34,22 +34,22 @@
     </DataGrid>
 
     <StackPanel Grid.Row="1" HorizontalAlignment="Left" Margin="10,0,5,10" VerticalAlignment="Bottom" Orientation="Horizontal" Opacity="0.5">
-      <Button x:Name="AddButton" Style="{StaticResource OpacityButtonStyle}" Click="AddEditButton_Click" BorderBrush="{x:Null}" Foreground="{x:Null}" IsHitTestVisible="True" Width="32" Height="32" Margin="0,0,10,0">
+      <Button x:Name="AddButton" Style="{StaticResource OpacityButtonStyle}" Click="AddEditButton_Click" BorderBrush="{x:Null}" Foreground="{x:Null}" IsHitTestVisible="True" Width="36" Height="36" Margin="0,0,10,0">
         <Button.Background>
           <ImageBrush ImageSource="/Views/Assets/Icons/add.png" Stretch="Uniform"/>
         </Button.Background>
       </Button>
-      <Button x:Name="EditButton" Style="{StaticResource OpacityButtonStyle}" Click="AddEditButton_Click" BorderBrush="{x:Null}" Foreground="{x:Null}" IsHitTestVisible="True" Width="32" Height="32" Margin="0,0,10,0">
+      <Button x:Name="EditButton" Style="{StaticResource OpacityButtonStyle}" Click="AddEditButton_Click" BorderBrush="{x:Null}" Foreground="{x:Null}" IsHitTestVisible="True" Width="36" Height="36" Margin="0,0,10,0">
         <Button.Background>
           <ImageBrush ImageSource="/Views/Assets/Icons/edit.png" Stretch="Uniform"/>
         </Button.Background>
       </Button>
-      <Button x:Name="DeleteButton" Style="{StaticResource OpacityButtonStyle}" BorderBrush="{x:Null}" Foreground="{x:Null}" IsHitTestVisible="True" Width="32" Height="32" Margin="0,0,10,0">
+      <Button x:Name="DeleteButton" Style="{StaticResource OpacityButtonStyle}" BorderBrush="{x:Null}" Foreground="{x:Null}" IsHitTestVisible="True" Width="36" Height="36" Margin="0,0,10,0" Click="DeleteButton_Click">
         <Button.Background>
           <ImageBrush ImageSource="/Views/Assets/Icons/delete.png" Stretch="Uniform"/>
         </Button.Background>
       </Button>
-      <Button x:Name="ShowMoreButton" Style="{StaticResource OpacityButtonStyle}" BorderBrush="{x:Null}" Foreground="{x:Null}" IsHitTestVisible="True" Width="32" Height="32" Margin="0,0,10,0">
+      <Button x:Name="ShowMoreButton" Style="{StaticResource OpacityButtonStyle}" BorderBrush="{x:Null}" Foreground="{x:Null}" IsHitTestVisible="True" Width="36" Height="36" Margin="0,0,10,0">
         <Button.Background>
           <ImageBrush ImageSource="/Views/Assets/Icons/loadMore.png" Stretch="Uniform"/>
         </Button.Background>

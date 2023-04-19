@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using static ExpensesTracker.Views.Delegates.ViewDelegates;
 
 namespace ExpensesTracker.Views.Windows.AddEditDB
 {
@@ -15,11 +16,15 @@ namespace ExpensesTracker.Views.Windows.AddEditDB
   /// </summary>
   public partial class AddEditDBWindow : Window
   {
-    public Dictionary<TextBox, string> _textBoxes;
-    readonly private AddEditDBWindowViewModel _viewModel;
+    private readonly AddEditDBWindowViewModel _viewModel;
     private readonly IMainSettings _mainSettings;
+    private bool _savedFlag = false;
+    private readonly bool editMode;
+    private event AddEditRecordHandler? AddEditRecordEvent;
 
-    public AddEditDBWindow(IMainSettings mainSettings, DatabaseView? databaseView = null)
+    public Dictionary<TextBox, string> _textBoxes;
+
+    public AddEditDBWindow(IMainSettings mainSettings, DatabaseView? databaseView = null, bool editMode = true)
     {
       _mainSettings = mainSettings;
       if (databaseView == null) _viewModel = new AddEditDBWindowViewModel(_mainSettings, this);
@@ -27,6 +32,12 @@ namespace ExpensesTracker.Views.Windows.AddEditDB
       InitializeComponent();
       _textBoxes = CreateTextboxesDictionary();
       _viewModel.SetControlsValues();
+      this.editMode = editMode;
+    }
+
+    public void AddListenerToAddEditRecordEvent(AddEditRecordHandler onAddEditRecordHandler)
+    {
+      AddEditRecordEvent += onAddEditRecordHandler;
     }
 
     private void TitleBar_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -127,6 +138,28 @@ namespace ExpensesTracker.Views.Windows.AddEditDB
       var income = sender as RadioButton;
       if (income.Name == "Income") _viewModel.SetIncome(true);
       else _viewModel.SetIncome(false);
+    }
+
+    private void AddRecord_Click(object sender, RoutedEventArgs e)
+    {
+      _savedFlag = true;
+      _viewModel.CommitChanges(editMode);
+      AddEditRecordEvent?.Invoke();
+      Close();
+    }
+
+    private void Cancel_Click(object sender, RoutedEventArgs e)
+    {
+      Close();
+    }
+
+    private void AddEditWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      if (!_savedFlag)
+      {
+        MessageBoxResult result = MessageBox.Show("Changes are not saved. \nExit anyway?", "Warning", MessageBoxButton.YesNo, MessageBoxImage.Question);
+        if (result == MessageBoxResult.No) e.Cancel = true;
+      }
     }
   }
 }

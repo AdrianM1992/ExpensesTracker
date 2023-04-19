@@ -1,4 +1,5 @@
-﻿using ExpensesTracker.Models.DataProviders;
+﻿using ExpensesTracker.Models.DataControllers;
+using ExpensesTracker.Models.DataProviders;
 using ExpensesTracker.Views.Classes;
 using ExpensesTracker.Views.Pages.DatabaseBrowser;
 using System.Collections.ObjectModel;
@@ -10,30 +11,37 @@ namespace ExpensesTracker.ViewModels
   class DatabaseBrowserPageViewModel
   {
     private readonly DatabaseBrowserPage _databaseBrowserPage;
-    public ObservableCollection<DatabaseView> Expenses { get; set; }
+
+    public ObservableCollection<DatabaseView> ExpensesItems { get; private set; }
+
 
     public DatabaseBrowserPageViewModel(Page page)
     {
       _databaseBrowserPage = (DatabaseBrowserPage)page;
-      using var db = new ExpensesContext();
-      var count = db.Expenses.Count();
-      var databaseViews = new ObservableCollection<DatabaseView>();
-      if (count >= 100)
-      {
-        foreach (var expense in db.Expenses.TakeLast(100).ToList())
-        {
-          databaseViews.Add(new DatabaseView(expense));
-        }
-      }
-      else
-      {
-        foreach (var expense in db.Expenses)
-        {
-          databaseViews.Add(new DatabaseView(expense));
-        }
-      }
+      ExpensesItems = GenerateListOfDataviews(false, 100);
+    }
 
-      Expenses = databaseViews;
+    public void RemoveRecord(DatabaseView itemToDelete)
+    {
+      DatabaseModel.DeleteDBRecord(itemToDelete.ReturnExpense());
+    }
+
+    private ObservableCollection<DatabaseView> GenerateListOfDataviews(bool wholeDB, int numberOfItems = 1)
+    {
+      var listToReturn = new ObservableCollection<DatabaseView>();
+      using var db = new ExpensesContext();
+
+      if (wholeDB || db.Expenses.Count() < numberOfItems) numberOfItems = db.Expenses.Count();
+
+      for (int i = 0; i < numberOfItems; i++) listToReturn.Add(new DatabaseView(db.Expenses.ToArray()[i]));
+
+      return listToReturn;
+    }
+
+    public void RefreshView()
+    {
+      ExpensesItems = GenerateListOfDataviews(false, 100);
+      _databaseBrowserPage.DatabaseView.ItemsSource = ExpensesItems;
     }
   }
 }

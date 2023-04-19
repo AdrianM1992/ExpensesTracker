@@ -2,7 +2,6 @@
 using ExpensesTracker.ViewModels;
 using ExpensesTracker.Views.Classes;
 using ExpensesTracker.Views.Windows.AddEditDB;
-using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -14,18 +13,17 @@ namespace ExpensesTracker.Views.Pages.DatabaseBrowser
   /// </summary>
   public partial class DatabaseBrowserPage : Page
   {
-    public ObservableCollection<DatabaseView> Items { get; set; }
     private readonly DatabaseBrowserPageViewModel _viewModel;
     private AddEditDBWindow? addEditDBWindow;
     private readonly IMainSettings _mainSettings;
+    private bool _deleteInfoNotShown = true;
 
     public DatabaseBrowserPage(IMainSettings mainSettings)
     {
       _mainSettings = mainSettings;
       InitializeComponent();
       _viewModel = new DatabaseBrowserPageViewModel(this);
-      Items = _viewModel.Expenses;
-      DatabaseView.ItemsSource = Items;
+      DatabaseView.ItemsSource = _viewModel.ExpensesItems;
     }
 
     /// <summary>
@@ -54,9 +52,11 @@ namespace ExpensesTracker.Views.Pages.DatabaseBrowser
           break;
         case "DateOfEntry":
           typeText.Header = "Submit date";
+          typeText.Binding.StringFormat = "dd/MM//yyyy HH:mm";
           break;
         case "LastUpdate":
           typeText.Header = "Last updated";
+          typeText.Binding.StringFormat = "dd/MM//yyyy HH:mm";
           break;
         case "Date":
           typeText.Binding.StringFormat = "d";
@@ -87,23 +87,25 @@ namespace ExpensesTracker.Views.Pages.DatabaseBrowser
     private void AddEditButton_Click(object sender, RoutedEventArgs e)
     {
       var button = (Button)sender;
-      OpenAddEditWindow(button.Name == "AddButton");
+      OpenAddEditWindow(button.Name == "EditButton");
     }
-    private void OpenAddEditWindow(bool openAdd)
+    private void OpenAddEditWindow(bool editMode)
     {
       if (addEditDBWindow == null || !addEditDBWindow.IsLoaded)
       {
-        if (openAdd) addEditDBWindow = new AddEditDBWindow(_mainSettings);
+        if (!editMode) addEditDBWindow = new AddEditDBWindow(_mainSettings, editMode: editMode);
         else addEditDBWindow = new AddEditDBWindow(_mainSettings, (DatabaseView)DatabaseView.SelectedItem);
+        addEditDBWindow.AddListenerToAddEditRecordEvent(OnAddEditHandler);
       }
       else
       {
-        var action = MessageBox.Show("Another window is already opened.\n\nDo you wish to open new one?", "Warning", button: MessageBoxButton.YesNo);
+        var action = MessageBox.Show("Another window is already opened.\n\nDo you wish to open new one?", "Warning", MessageBoxButton.YesNo, MessageBoxImage.Warning);
         if (action == MessageBoxResult.Yes)
         {
           addEditDBWindow.Close();
-          if (openAdd) addEditDBWindow = new AddEditDBWindow(_mainSettings);
+          if (!editMode) addEditDBWindow = new AddEditDBWindow(_mainSettings, editMode: editMode);
           else addEditDBWindow = new AddEditDBWindow(_mainSettings, (DatabaseView)DatabaseView.SelectedItem);
+          addEditDBWindow.AddListenerToAddEditRecordEvent(OnAddEditHandler);
         }
         else addEditDBWindow.Focus();
       }
@@ -138,7 +140,31 @@ namespace ExpensesTracker.Views.Pages.DatabaseBrowser
 
     private void DatabaseView_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
     {
-      OpenAddEditWindow(false);
+      OpenAddEditWindow(true);
+    }
+
+    private void OnAddEditHandler()
+    {
+      _viewModel.RefreshView();
+    }
+    private void DeleteButton_Click(object sender, RoutedEventArgs e)
+    {
+      if (DatabaseView.Items.Count <= 0) MessageBox.Show("Nothing to delete.", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+      else
+      {
+        if (DatabaseView.SelectedIndex == -1 && _deleteInfoNotShown)
+        {
+          _deleteInfoNotShown = false;
+          MessageBoxResult result = MessageBox.Show("One time message.\n If no row is selected, first element will be deleted.\nContinue?", "Warning", MessageBoxButton.YesNo, MessageBoxImage.Information);
+
+          if (result == MessageBoxResult.No) return;
+          DatabaseView.SelectedIndex = 0;
+        }
+        else if (DatabaseView.SelectedIndex == -1) DatabaseView.SelectedIndex = 0;
+
+        _viewModel.RemoveRecord((DatabaseView)DatabaseView.SelectedItem);
+        _viewModel.RefreshView();
+      }
     }
   }
 }

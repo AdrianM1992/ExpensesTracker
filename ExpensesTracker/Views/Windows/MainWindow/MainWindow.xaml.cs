@@ -26,11 +26,11 @@ namespace ExpensesTracker
     /// <summary>
     /// Stores instances of pages [value] by tab name [key]
     /// </summary>
-    readonly Dictionary<string, Page> _pages = new Dictionary<string, Page>();
+    readonly Dictionary<string, Page> _pages = new();
     /// <summary>
     /// Stores names of all pages
     /// </summary>
-    readonly List<string> _tabNames = new List<string>();
+    readonly List<string> _tabNames = new();
 
     public MainWindow()
     {
@@ -38,7 +38,7 @@ namespace ExpensesTracker
       _mainSettings = MainSettings.GetMainSettingsInstance();
       _viewModel = MainWindowViewModel.GetMainWindowViewModel();
       DataContext = _viewModel;
-      HomeTab.CustomTabChanged += TabChanged;
+      HomeTab.CustomTabChanged += OnTabChangedHandler;
       InitTabs();
       ContentPage.Content = _pages[_tabNames[0]];
     }
@@ -50,22 +50,14 @@ namespace ExpensesTracker
 
     private void Bar_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
     {
-      if (e.LeftButton == MouseButtonState.Pressed)
-      {
-        DragMove();
-      }
+      if (e.LeftButton == MouseButtonState.Pressed) DragMove();
     }
 
     private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
     {
-
       foreach (Window window in Application.Current.Windows)
       {
-        if (window != this)
-        {
-          window.Close();
-        }
-
+        if (window != this) window.Close();
       }
     }
 
@@ -127,7 +119,7 @@ namespace ExpensesTracker
       if (!match.Any())
       {
         var newTab = new CustomTabControl { TabName = tabName, VerticalAlignment = VerticalAlignment.Bottom, BackgroundTabColor = SystemColors.MenuBarBrush };
-        newTab.CustomTabChanged += TabChanged;
+        newTab.CustomTabChanged += OnTabChangedHandler;
         Tabs.Children.Add(newTab);
         return newTab;
       }
@@ -189,7 +181,7 @@ namespace ExpensesTracker
     /// </summary>
     /// <param name="tabName">Name of calling tab</param>
     /// <param name="tabClose">Specifies if tab is marked for closing</param>
-    private void TabChanged(string tabName, bool tabClose)
+    private void OnTabChangedHandler(string tabName, bool tabClose)
     {
       //If tab is marked for closing, set 'Home' tab as active tab
       if (tabClose)
