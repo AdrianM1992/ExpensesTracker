@@ -11,37 +11,41 @@ namespace ExpensesTracker.ViewModels
   class DatabaseBrowserPageViewModel
   {
     private readonly DatabaseBrowserPage _databaseBrowserPage;
-
+    private int _itemsToShow = 10;
     public ObservableCollection<DatabaseView> ExpensesItems { get; private set; }
 
 
     public DatabaseBrowserPageViewModel(Page page)
     {
       _databaseBrowserPage = (DatabaseBrowserPage)page;
-      ExpensesItems = GenerateListOfDataviews(false, 100);
+      RefreshView(false, 10);
     }
 
-    public void RemoveRecord(DatabaseView itemToDelete)
-    {
-      DatabaseModel.DeleteDBRecord(itemToDelete.ReturnExpense());
-    }
+    public void RemoveRecord(DatabaseView itemToDelete) => DatabaseModel.DeleteDBRecord(itemToDelete.ReturnExpense());
 
-    private ObservableCollection<DatabaseView> GenerateListOfDataviews(bool wholeDB, int numberOfItems = 1)
+    public void RefreshView(bool wholeDB = false, int numberOfItems = 1)
     {
       var listToReturn = new ObservableCollection<DatabaseView>();
       using var db = new ExpensesContext();
 
       if (wholeDB || db.Expenses.Count() < numberOfItems) numberOfItems = db.Expenses.Count();
+      var lastItems = db.Expenses.ToList().TakeLast(numberOfItems).Reverse();
+      foreach (var item in lastItems) listToReturn.Add(new DatabaseView(item));
 
-      for (int i = 0; i < numberOfItems; i++) listToReturn.Add(new DatabaseView(db.Expenses.ToArray()[i]));
-
-      return listToReturn;
+      ExpensesItems = listToReturn;
+      _databaseBrowserPage.DatabaseView.ItemsSource = ExpensesItems;
     }
 
-    public void RefreshView()
+    public void LoadMoreRecords()
     {
-      ExpensesItems = GenerateListOfDataviews(false, 100);
-      _databaseBrowserPage.DatabaseView.ItemsSource = ExpensesItems;
+      _itemsToShow *= 10;
+      if (_itemsToShow > 1000)
+      {
+        RefreshView(true);
+        _itemsToShow = 1;
+        return;
+      }
+      RefreshView(false, _itemsToShow);
     }
   }
 }

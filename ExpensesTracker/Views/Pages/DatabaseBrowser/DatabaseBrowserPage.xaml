@@ -49,7 +49,7 @@
           <ImageBrush ImageSource="/Views/Assets/Icons/delete.png" Stretch="Uniform"/>
         </Button.Background>
       </Button>
-      <Button x:Name="ShowMoreButton" Style="{StaticResource OpacityButtonStyle}" BorderBrush="{x:Null}" Foreground="{x:Null}" IsHitTestVisible="True" Width="36" Height="36" Margin="0,0,10,0">
+      <Button x:Name="ShowMoreButton" Style="{StaticResource OpacityButtonStyle}" BorderBrush="{x:Null}" Foreground="{x:Null}" IsHitTestVisible="True" Width="36" Height="36" Margin="0,0,10,0" Click="ShowMoreButton_Click">
         <Button.Background>
           <ImageBrush ImageSource="/Views/Assets/Icons/loadMore.png" Stretch="Uniform"/>
         </Button.Background>

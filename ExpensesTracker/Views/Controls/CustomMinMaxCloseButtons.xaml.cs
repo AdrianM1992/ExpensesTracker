@@ -36,9 +36,8 @@ namespace ExpensesTracker.Views.Controls
 
     #region Methods handling basic interaction events with window (min, max, close)
     private void Minimize_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-    {
-      Window.GetWindow(this).WindowState = WindowState.Minimized;
-    }
+      => Window.GetWindow(this).WindowState = WindowState.Minimized;
+
     private void Maximize_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
       //Some windows are meant to be fixed size, therefore maximizing is forbidden
@@ -48,10 +47,9 @@ namespace ExpensesTracker.Views.Controls
         parentWindow.WindowState = parentWindow.WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
       }
     }
-    private void Close_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-    {
-      Window.GetWindow(this)?.Close();
-    }
+
+    private void Close_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) => Window.GetWindow(this)?.Close();
+
     #endregion
 
 

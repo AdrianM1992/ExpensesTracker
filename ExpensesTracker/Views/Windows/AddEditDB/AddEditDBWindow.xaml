@@ -84,12 +84,12 @@
             <StackPanel Orientation="Horizontal">
               <ComboBox x:Name="Category" VerticalAlignment="Center" Width="120" Margin="0,0,5,0"  DropDownClosed="Category_DropDownClosed" />
               <StackPanel VerticalAlignment="Center">
-                <Button x:Name="AddCategoryButton" Style="{StaticResource OpacityButtonStyle}" BorderBrush="{x:Null}" Foreground="{x:Null}" IsHitTestVisible="True" Width="16" Height="16" VerticalAlignment="Center" HorizontalAlignment="Right" >
+                <Button x:Name="AddCategoryButton" Style="{StaticResource OpacityButtonStyle}" BorderBrush="{x:Null}" Foreground="{x:Null}" IsHitTestVisible="True" Width="16" Height="16" VerticalAlignment="Center" HorizontalAlignment="Right" Click="AddCategoryButton_Click" >
                   <Button.Background>
                     <ImageBrush ImageSource="/Views/Assets/Icons/add.png" Stretch="Uniform"/>
                   </Button.Background>
                 </Button>
-                <Button x:Name="DeleteCategoryButton" Style="{StaticResource OpacityButtonStyle}" BorderBrush="{x:Null}" Foreground="{x:Null}" IsHitTestVisible="True" Width="16" Height="16" VerticalAlignment="Center" HorizontalAlignment="Right" >
+                <Button x:Name="DeleteCategoryButton" Style="{StaticResource OpacityButtonStyle}" BorderBrush="{x:Null}" Foreground="{x:Null}" IsHitTestVisible="True" Width="16" Height="16" VerticalAlignment="Center" HorizontalAlignment="Right" Click="DeleteCategoryButton_Click">
                   <Button.Background>
                     <ImageBrush ImageSource="/Views/Assets/Icons/delete.png" Stretch="Uniform"/>
                   </Button.Background>
@@ -102,12 +102,12 @@
             <StackPanel Orientation="Horizontal">
               <ComboBox x:Name="Subcategory" VerticalAlignment="Center" Width="120" Margin="0,0,5,0"  DropDownClosed="Subcategory_DropDownClosed"/>
               <StackPanel VerticalAlignment="Center">
-                <Button x:Name="AddSubCategoryButton" Style="{StaticResource OpacityButtonStyle}"  BorderBrush="{x:Null}" Foreground="{x:Null}" IsHitTestVisible="True" Width="16" Height="16" VerticalAlignment="Center" HorizontalAlignment="Right">
+                <Button x:Name="AddSubCategoryButton" Style="{StaticResource OpacityButtonStyle}"  BorderBrush="{x:Null}" Foreground="{x:Null}" IsHitTestVisible="True" Width="16" Height="16" VerticalAlignment="Center" HorizontalAlignment="Right" Click="AddSubCategoryButton_Click">
                   <Button.Background>
                     <ImageBrush ImageSource="/Views/Assets/Icons/add.png" Stretch="Uniform"/>
                   </Button.Background>
                 </Button>
-                <Button x:Name="DeleteSubCategoryButton" Style="{StaticResource OpacityButtonStyle}"  BorderBrush="{x:Null}" Foreground="{x:Null}" IsHitTestVisible="True" Width="16" Height="16" VerticalAlignment="Center" HorizontalAlignment="Right">
+                <Button x:Name="DeleteSubCategoryButton" Style="{StaticResource OpacityButtonStyle}"  BorderBrush="{x:Null}" Foreground="{x:Null}" IsHitTestVisible="True" Width="16" Height="16" VerticalAlignment="Center" HorizontalAlignment="Right" Click="DeleteSubCategoryButton_Click">
                   <Button.Background>
                     <ImageBrush ImageSource="/Views/Assets/Icons/delete.png" Stretch="Uniform"/>
                   </Button.Background>
@@ -125,12 +125,12 @@
             <StackPanel x:Name="RecurringList" Orientation="Horizontal" IsEnabled="False">
               <ComboBox x:Name="RecurringId" VerticalAlignment="Center" Width="197" Margin="0,0,5,0"  DropDownClosed="RecurringId_DropDownClosed"/>
               <StackPanel VerticalAlignment="Center">
-                <Button x:Name="AddRecurringButton" Style="{StaticResource OpacityButtonStyle}" BorderBrush="{x:Null}" Foreground="{x:Null}" IsHitTestVisible="True" Width="16" Height="16" VerticalAlignment="Center" HorizontalAlignment="Right" >
+                <Button x:Name="AddRecurringButton" Style="{StaticResource OpacityButtonStyle}" BorderBrush="{x:Null}" Foreground="{x:Null}" IsHitTestVisible="True" Width="16" Height="16" VerticalAlignment="Center" HorizontalAlignment="Right" Click="AddRecurringButton_Click" >
                   <Button.Background>
                     <ImageBrush ImageSource="/Views/Assets/Icons/add.png" Stretch="Uniform"/>
                   </Button.Background>
                 </Button>
-                <Button x:Name="DeleteRecurringButton" Style="{StaticResource OpacityButtonStyle}" BorderBrush="{x:Null}" Foreground="{x:Null}" IsHitTestVisible="True" Width="16" Height="16" VerticalAlignment="Center" HorizontalAlignment="Right" >
+                <Button x:Name="DeleteRecurringButton" Style="{StaticResource OpacityButtonStyle}" BorderBrush="{x:Null}" Foreground="{x:Null}" IsHitTestVisible="True" Width="16" Height="16" VerticalAlignment="Center" HorizontalAlignment="Right" Click="DeleteRecurringButton_Click">
                   <Button.Background>
                     <ImageBrush ImageSource="/Views/Assets/Icons/delete.png" Stretch="Uniform"/>
                   </Button.Background>

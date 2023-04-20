@@ -166,5 +166,10 @@ namespace ExpensesTracker.Views.Pages.DatabaseBrowser
         _viewModel.RefreshView();
       }
     }
+
+    private void ShowMoreButton_Click(object sender, RoutedEventArgs e)
+    {
+      _viewModel.LoadMoreRecords();
+    }
   }
 }

@@ -1,18 +1,18 @@
 ﻿using ExpensesTracker.Models.Interfaces;
 using ExpensesTracker.ViewModels;
 using ExpensesTracker.Views.Classes;
+using ExpensesTracker.Views.Windows.NewElementWindowInput;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
 using System.Windows.Media;
 using static ExpensesTracker.Views.Delegates.ViewDelegates;
 
 namespace ExpensesTracker.Views.Windows.AddEditDB
 {
   /// <summary>
-  /// Logic for AddEditDBWindow.xaml
+  /// Window for adding new records to database or editing existing ones
   /// </summary>
   public partial class AddEditDBWindow : Window
   {
@@ -21,8 +21,7 @@ namespace ExpensesTracker.Views.Windows.AddEditDB
     private bool _savedFlag = false;
     private readonly bool editMode;
     private event AddEditRecordHandler? AddEditRecordEvent;
-
-    public Dictionary<TextBox, string> _textBoxes;
+    private Dictionary<TextBox, string> _textBoxes;
 
     public AddEditDBWindow(IMainSettings mainSettings, DatabaseView? databaseView = null, bool editMode = true)
     {
@@ -35,15 +34,9 @@ namespace ExpensesTracker.Views.Windows.AddEditDB
       this.editMode = editMode;
     }
 
-    public void AddListenerToAddEditRecordEvent(AddEditRecordHandler onAddEditRecordHandler)
-    {
-      AddEditRecordEvent += onAddEditRecordHandler;
-    }
+    public void AddListenerToAddEditRecordEvent(AddEditRecordHandler onAddEditRecordHandler) => AddEditRecordEvent += onAddEditRecordHandler;
 
-    private void TitleBar_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
-    {
-      if (e.LeftButton == MouseButtonState.Pressed) DragMove();
-    }
+    private void TitleBar_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e) => DragMove();
 
     private void TextBox_GotFocus(object sender, RoutedEventArgs e)
     {
@@ -100,7 +93,6 @@ namespace ExpensesTracker.Views.Windows.AddEditDB
       var date = (DatePicker)sender;
       if (date.SelectedDate.HasValue) _viewModel.SetDate(date.SelectedDate.Value);
       else _viewModel.SetDate(null);
-
     }
 
     /// <summary>
@@ -140,6 +132,7 @@ namespace ExpensesTracker.Views.Windows.AddEditDB
       else _viewModel.SetIncome(false);
     }
 
+    #region Click events
     private void AddRecord_Click(object sender, RoutedEventArgs e)
     {
       _savedFlag = true;
@@ -147,11 +140,63 @@ namespace ExpensesTracker.Views.Windows.AddEditDB
       AddEditRecordEvent?.Invoke();
       Close();
     }
-
-    private void Cancel_Click(object sender, RoutedEventArgs e)
+    private void AddCategoryButton_Click(object sender, RoutedEventArgs e)
     {
-      Close();
+      var dialog = new NewElementWindow { Header = "Name new category:" };
+      bool? result = dialog.ShowDialog();
+      if (result == true)
+      {
+        _viewModel.AddNewCategory(dialog.NewElementName);
+      }
+      dialog.Close();
     }
+    private void DeleteCategoryButton_Click(object sender, RoutedEventArgs e)
+    {
+      var result = MessageBox.Show("Are you sure?\nThis cannot be undone.", "Warning", MessageBoxButton.YesNo, MessageBoxImage.Question);
+      if (result == MessageBoxResult.Yes)
+      {
+        _viewModel.RemoveCategory(Category.SelectedItem.ToString());
+      }
+    }
+    private void AddSubCategoryButton_Click(object sender, RoutedEventArgs e)
+    {
+      var dialog = new NewElementWindow { Header = "Name new subcategory:" };
+      bool? result = dialog.ShowDialog();
+      if (result == true)
+      {
+        _viewModel.AddNewSubcategory(dialog.NewElementName);
+      }
+      dialog.Close();
+    }
+    private void DeleteSubCategoryButton_Click(object sender, RoutedEventArgs e)
+    {
+      var result = MessageBox.Show("Are you sure?\nThis cannot be undone.", "Warning", MessageBoxButton.YesNo, MessageBoxImage.Question);
+      if (result == MessageBoxResult.Yes && Subcategory.SelectedItem.ToString() != "None")
+      {
+        _viewModel.RemoveSubcategory(Subcategory.SelectedItem.ToString());
+      }
+    }
+    private void AddRecurringButton_Click(object sender, RoutedEventArgs e)
+    {
+      var dialog = new NewElementWindow { Header = "Name new recurrence:" };
+      bool? result = dialog.ShowDialog();
+      if (result == true)
+      {
+        _viewModel.AddNewRecurrence(dialog.NewElementName);
+      }
+      dialog.Close();
+    }
+    private void DeleteRecurringButton_Click(object sender, RoutedEventArgs e)
+    {
+      var result = MessageBox.Show("Are you sure?\nThis cannot be undone.", "Warning", MessageBoxButton.YesNo, MessageBoxImage.Question);
+      if (result == MessageBoxResult.Yes && RecurringId.SelectedItem.ToString() != "None")
+      {
+        _viewModel.RemoveRecurrence(RecurringId.SelectedItem.ToString());
+      }
+    }
+
+    private void Cancel_Click(object sender, RoutedEventArgs e) => Close();
+    #endregion
 
     private void AddEditWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
     {

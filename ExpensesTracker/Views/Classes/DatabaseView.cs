@@ -194,6 +194,5 @@ namespace ExpensesTracker.Views.Classes
       }
       else return null;
     }
-
   }
 }

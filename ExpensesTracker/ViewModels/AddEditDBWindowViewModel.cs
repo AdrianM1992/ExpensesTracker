@@ -16,19 +16,23 @@ namespace ExpensesTracker.ViewModels
   {
     private readonly IMainSettings _mainSettings;
     private readonly AddEditDBWindow _myWindow;
-    private DatabaseView databaseView;
+    private DatabaseView _databaseView;
 
     public AddEditDBWindowViewModel(IMainSettings mainSettings, AddEditDBWindow addEditDBWindow, DatabaseView? databaseView = null)
     {
       _myWindow = addEditDBWindow;
       _mainSettings = mainSettings;
-      if (databaseView == null) this.databaseView = new DatabaseView();
-      else this.databaseView = databaseView;
+      if (databaseView == null) this._databaseView = new DatabaseView();
+      else this._databaseView = databaseView;
     }
 
+    /// <summary>
+    /// Convert _databaseView to Expense and pass database
+    /// </summary>
+    /// <param name="editMode">Specifies if record is edited or new</param>
     public void CommitChanges(bool editMode)
     {
-      DatabaseModel.AddEditDBRecord(databaseView.ReturnExpense(), editMode);
+      DatabaseModel.AddEditDBRecord(_databaseView.ReturnExpense(), editMode);
     }
 
     /// <summary>
@@ -36,19 +40,20 @@ namespace ExpensesTracker.ViewModels
     /// </summary>
     public void SetControlsValues()
     {
-      _myWindow.RecordName.Text = databaseView.Name;
-      _myWindow.Price.Text = databaseView.Price.ToString("C", new CultureInfo(_mainSettings.Currency));
-      _myWindow.Quantity.Text = databaseView.Quantity.ToString("0.0");
-      _myWindow.Total.Text = (databaseView.Price * databaseView.Quantity).ToString("C", new CultureInfo(_mainSettings.Currency));
-      _myWindow.RecurringId.Text = databaseView.RecurringId;
-      _myWindow.Description.Text = databaseView.Description;
-      _myWindow.Date.Text = databaseView.Date.ToString();
-      _myWindow.Recurring.IsChecked = databaseView.Recurring;
-      if (databaseView.Income) _myWindow.Income.IsChecked = true;
+      _myWindow.RecordName.Text = _databaseView.Name;
+      _myWindow.Price.Text = _databaseView.Price.ToString("C", new CultureInfo(_mainSettings.Currency));
+      _myWindow.Quantity.Text = _databaseView.Quantity.ToString("0.0");
+      _myWindow.Total.Text = (_databaseView.Price * _databaseView.Quantity).ToString("C", new CultureInfo(_mainSettings.Currency));
+      _myWindow.RecurringId.Text = _databaseView.RecurringId;
+      _myWindow.Description.Text = _databaseView.Description;
+      _myWindow.Date.Text = _databaseView.Date.ToString();
+      _myWindow.Recurring.IsChecked = _databaseView.Recurring;
+      if (_databaseView.Income) _myWindow.Income.IsChecked = true;
       else _myWindow.Expense.IsChecked = true;
       SetCategoryValue(null);
     }
 
+    #region Setting properties
     /// <summary>
     /// Sets properties related to input of various TextBoxes
     /// </summary>
@@ -57,7 +62,7 @@ namespace ExpensesTracker.ViewModels
       switch (textBox.Name)
       {
         case "RecordName":
-          databaseView.Name = textBox.Text;
+          _databaseView.Name = textBox.Text;
           break;
         case "Price":
           SetPriceValue(textBox.Text);
@@ -66,7 +71,7 @@ namespace ExpensesTracker.ViewModels
           SetQuantityValue(textBox.Text);
           break;
         case "Description":
-          databaseView.Description = textBox.Text;
+          _databaseView.Description = textBox.Text;
           break;
         default: break;
       }
@@ -81,18 +86,18 @@ namespace ExpensesTracker.ViewModels
       decimal? number = ExtractNumberFromString(quantity);
       if (number != null && number != 0)
       {
-        databaseView.Quantity = (decimal)number;
+        _databaseView.Quantity = (decimal)number;
         _myWindow.Quantity.Text = string.Format("{0}", number);
 
       }
       else
       {
         MessageBox.Show("Quantity field value is 0 or does not contain any number at all!\nDefault value of 1 will be used instead.", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
-        databaseView.Quantity = 1M;
+        _databaseView.Quantity = 1M;
         _myWindow.Quantity.Text = string.Format("{0}", 1M);
       }
 
-      _myWindow.Total.Text = string.Format("{0:C}", databaseView.Total);
+      _myWindow.Total.Text = string.Format("{0:C}", _databaseView.Total);
     }
 
     /// <summary>
@@ -104,16 +109,16 @@ namespace ExpensesTracker.ViewModels
       decimal? number = ExtractNumberFromString(price);
       if (number != null && number != 0)
       {
-        databaseView.Price = (decimal)number;
+        _databaseView.Price = (decimal)number;
         _myWindow.Price.Text = string.Format("{0:C}", number);
       }
       else
       {
         MessageBox.Show("Value field value is 0 or does not contain any number at all!\nDefault value of 1 will be used instead.", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
-        databaseView.Price = 1M;
+        _databaseView.Price = 1M;
         _myWindow.Price.Text = string.Format("{0:C}", 1M);
       }
-      _myWindow.Total.Text = string.Format("{0:C}", databaseView.Total);
+      _myWindow.Total.Text = string.Format("{0:C}", _databaseView.Total);
     }
 
     /// <summary>
@@ -145,7 +150,7 @@ namespace ExpensesTracker.ViewModels
     /// <param name="newCategory">New value of Category property</param>
     public void SetCategoryValue(string? newCategory)
     {
-      if (newCategory != null) databaseView.Category = newCategory;
+      if (newCategory != null) _databaseView.Category = newCategory;
       else
       {
         //Populate drop down menu with available categories
@@ -157,7 +162,7 @@ namespace ExpensesTracker.ViewModels
         var index = 0;
         foreach (var category in categories)
         {
-          if (category == databaseView.Category) break;
+          if (category == _databaseView.Category) break;
           index++;
         }
         _myWindow.Category.SelectedIndex = index;
@@ -172,13 +177,13 @@ namespace ExpensesTracker.ViewModels
     /// <param name="newSubcategory">New value of Subcategory property</param>
     public void SetSubcategoryValue(string? newSubcategory)
     {
-      if (newSubcategory != null) databaseView.Subcategory = newSubcategory;
+      if (newSubcategory != null) _databaseView.Subcategory = newSubcategory;
       else
       {
         //Search DB for all subcategories of selected category
         using var db = new ExpensesContext();
         var subcategories = from c in db.Categories
-                            where c.Name == databaseView.Category
+                            where c.Name == _databaseView.Category
                             join s in db.Subcategories on c.Id equals s.CategoryId
                             select s.Name;
 
@@ -192,7 +197,7 @@ namespace ExpensesTracker.ViewModels
         var index = 0;
         foreach (var subcategory in temp)
         {
-          if (subcategory == databaseView.Subcategory) break;
+          if (subcategory == _databaseView.Subcategory) break;
           index++;
         }
         _myWindow.Subcategory.SelectedIndex = index;
@@ -205,7 +210,7 @@ namespace ExpensesTracker.ViewModels
     /// <param name="recurring">Specifies if record is recurring</param>
     public void SetRecurring(bool recurring)
     {
-      databaseView.Recurring = recurring;
+      _databaseView.Recurring = recurring;
       if (recurring) SetRecurringId(null);
     }
 
@@ -215,7 +220,7 @@ namespace ExpensesTracker.ViewModels
     /// <param name="newRecurringId">New value of RecurringId property</param>
     public void SetRecurringId(string? newRecurringId)
     {
-      if (newRecurringId != null) databaseView.RecurringId = newRecurringId;
+      if (newRecurringId != null) _databaseView.RecurringId = newRecurringId;
       else
       {
         //Populate drop down menu with available recurring names
@@ -232,7 +237,7 @@ namespace ExpensesTracker.ViewModels
         var index = 0;
         foreach (var recurring in recurrings)
         {
-          if (recurring == databaseView.RecurringId) break;
+          if (recurring == _databaseView.RecurringId) break;
           index++;
         }
         _myWindow.RecurringId.SelectedIndex = index;
@@ -245,7 +250,7 @@ namespace ExpensesTracker.ViewModels
     /// <param name="income">Specifies if record is income or expense</param>
     public void SetIncome(bool income)
     {
-      databaseView.Income = income;
+      _databaseView.Income = income;
     }
 
     /// <summary>
@@ -254,7 +259,83 @@ namespace ExpensesTracker.ViewModels
     /// <param name="dateTime">Specifies date when record occurred</param>
     public void SetDate(DateTime? dateTime)
     {
-      databaseView.Date = dateTime;
+      _databaseView.Date = dateTime;
     }
+    #endregion
+
+    #region Adding entries in subtables
+    /// <summary>
+    /// Adds new category to database
+    /// </summary>
+    /// <param name="categoryName">Name of category to add</param>
+    public void AddNewCategory(string categoryName)
+    {
+      DatabaseModel.AddCategory(categoryName);
+      _databaseView.Category = categoryName;
+      SetCategoryValue(null);
+    }
+    /// <summary>
+    /// Adds new subcategory to database
+    /// </summary>
+    /// <param name="subcategoryName">Name of subcategory to add</param>
+    public void AddNewSubcategory(string subcategoryName)
+    {
+      DatabaseModel.AddSubcategory(subcategoryName, _databaseView.ReturnExpense().CategoryId);
+      _databaseView.Subcategory = subcategoryName;
+      SetSubcategoryValue(null);
+    }
+    /// <summary>
+    /// Adds new recurrence to database
+    /// </summary>
+    /// <param name="recurringName">Recurrence to add</param>
+    public void AddNewRecurrence(string recurringName)
+    {
+      DatabaseModel.AddRecurrence(recurringName);
+      _databaseView.RecurringId = recurringName;
+      SetRecurringId(null);
+    }
+    #endregion
+
+    #region Deleting entries in subtables
+    /// <summary>
+    /// Removes category from database
+    /// </summary>
+    /// <param name="categoryToDelete">Name of category to delete</param>
+    public void RemoveCategory(string categoryToDelete)
+    {
+      var deleted = DatabaseModel.DeleteCategory(categoryToDelete);
+      if (deleted)
+      {
+        _databaseView.Category = "None";
+        SetCategoryValue(null);
+      }
+    }
+    /// <summary>
+    /// Removes subcategory from database
+    /// </summary>
+    /// <param name="subcategoryToDelete">Name of subcategory to delete</param>
+    public void RemoveSubcategory(string subcategoryToDelete)
+    {
+      var deleted = DatabaseModel.DeleteSubcategory(subcategoryToDelete);
+      if (deleted)
+      {
+        _databaseView.Subcategory = null;
+        SetSubcategoryValue(null);
+      }
+    }
+    /// <summary>
+    /// Removes recurrence from database
+    /// </summary>
+    /// <param name="recurrenceToDelete">Recurrence to delete</param>
+    public void RemoveRecurrence(string recurrenceToDelete)
+    {
+      var deleted = DatabaseModel.DeleteRecurring(recurrenceToDelete);
+      if (deleted)
+      {
+        _databaseView.RecurringId = null;
+        SetRecurringId(null);
+      }
+    }
+    #endregion
   }
 }
