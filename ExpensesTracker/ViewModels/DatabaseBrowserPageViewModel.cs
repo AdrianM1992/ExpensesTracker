@@ -1,9 +1,7 @@
 ﻿using ExpensesTracker.Models.DataControllers;
-using ExpensesTracker.Models.DataProviders;
 using ExpensesTracker.Views.Classes;
 using ExpensesTracker.Views.Pages.DatabaseBrowser;
 using System.Collections.ObjectModel;
-using System.Linq;
 using System.Windows.Controls;
 
 namespace ExpensesTracker.ViewModels
@@ -18,21 +16,18 @@ namespace ExpensesTracker.ViewModels
     public DatabaseBrowserPageViewModel(Page page)
     {
       _databaseBrowserPage = (DatabaseBrowserPage)page;
-      RefreshView(false, 10);
+      RefreshView(10);
     }
 
     public void RemoveRecord(DatabaseView itemToDelete) => DatabaseModel.DeleteDBRecord(itemToDelete.ReturnExpense());
 
-    public void RefreshView(bool wholeDB = false, int numberOfItems = 1)
+    public void RefreshView(int numberOfItems = 1)
     {
-      var listToReturn = new ObservableCollection<DatabaseView>();
-      using var db = new ExpensesContext();
+      var listOfItems = new ObservableCollection<DatabaseView>();
+      ;
+      foreach (var item in DatabaseModel.ShowRange(null, true, numberOfItems)) listOfItems.Add(new DatabaseView(item));
 
-      if (wholeDB || db.Expenses.Count() < numberOfItems) numberOfItems = db.Expenses.Count();
-      var lastItems = db.Expenses.ToList().TakeLast(numberOfItems).Reverse();
-      foreach (var item in lastItems) listToReturn.Add(new DatabaseView(item));
-
-      ExpensesItems = listToReturn;
+      ExpensesItems = listOfItems;
       _databaseBrowserPage.DatabaseView.ItemsSource = ExpensesItems;
     }
 
@@ -41,11 +36,16 @@ namespace ExpensesTracker.ViewModels
       _itemsToShow *= 10;
       if (_itemsToShow > 1000)
       {
-        RefreshView(true);
+        RefreshView(-1);
         _itemsToShow = 1;
         return;
       }
-      RefreshView(false, _itemsToShow);
+      RefreshView(_itemsToShow);
+    }
+
+    public void SearchRecord(string? name)
+    {
+
     }
   }
 }

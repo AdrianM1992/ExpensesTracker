@@ -1,5 +1,6 @@
 ﻿using ExpensesTracker.Models.DataProviders;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 
@@ -155,6 +156,33 @@ namespace ExpensesTracker.Models.DataControllers
       }
       else MessageBox.Show("No recurrence to delete.", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
       return false;
+    }
+
+    public static List<Expense> ShowRange(List<Expense>? expenses, bool first, int count = 0)
+    {
+      List<Expense> listToReturn;
+      using var db = new ExpensesContext();
+      if (expenses == null)
+      {
+        if (count == -1 || db.Expenses.Count() < count) count = db.Expenses.Count();
+        listToReturn = first ? db.Expenses.Take(count).ToList() : db.Expenses.TakeLast(count).Reverse().ToList();
+        return listToReturn;
+      }
+      else
+      {
+        if (count == -1 || expenses.Count() < count) count = expenses.Count();
+        listToReturn = first ? expenses.Take(count).ToList() : expenses.TakeLast(count).Reverse().ToList();
+        return listToReturn;
+      }
+    }
+
+    public static List<Expense> FilterByDateOfEntry(List<Expense>? expenses)
+    {
+      if (expenses != null)
+      {
+
+      }
+      return null;
     }
   }
 }

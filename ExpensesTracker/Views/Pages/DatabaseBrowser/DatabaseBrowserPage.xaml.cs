@@ -171,5 +171,11 @@ namespace ExpensesTracker.Views.Pages.DatabaseBrowser
     {
       _viewModel.LoadMoreRecords();
     }
+
+    private void SearchBox_TextChanged(object sender, TextChangedEventArgs e)
+    {
+      var searchPhrase = (TextBox)sender;
+      //_viewModel.SearchRecord((searchPhrase.Text));
+    }
   }
 }
