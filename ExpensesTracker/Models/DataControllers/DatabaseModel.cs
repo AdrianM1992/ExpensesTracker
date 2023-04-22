@@ -158,7 +158,7 @@ namespace ExpensesTracker.Models.DataControllers
       return false;
     }
 
-    public static List<Expense> ShowRange(List<Expense>? expenses, bool first, int count = 0)
+    public static List<Expense> SearchByRange(List<Expense>? expenses, bool first, int count = 0)
     {
       List<Expense> listToReturn;
       using var db = new ExpensesContext();
@@ -170,8 +170,28 @@ namespace ExpensesTracker.Models.DataControllers
       }
       else
       {
-        if (count == -1 || expenses.Count() < count) count = expenses.Count();
+        if (count == -1 || expenses.Count < count) count = expenses.Count;
         listToReturn = first ? expenses.Take(count).ToList() : expenses.TakeLast(count).Reverse().ToList();
+        return listToReturn;
+      }
+    }
+
+    public static List<Expense> SearchByName(List<Expense>? expenses, string name)
+    {
+      List<Expense> listToReturn;
+      using var db = new ExpensesContext();
+      if (expenses == null)
+      {
+        listToReturn = (from expense in db.Expenses.ToList()
+                        where expense.Name.Contains(name)
+                        select expense).ToList();
+        return listToReturn;
+      }
+      else
+      {
+        listToReturn = (from expense in expenses
+                        where expense.Name.Contains(name)
+                        select expense).ToList();
         return listToReturn;
       }
     }

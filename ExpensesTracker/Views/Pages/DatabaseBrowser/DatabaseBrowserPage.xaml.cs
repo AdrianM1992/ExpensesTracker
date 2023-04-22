@@ -23,7 +23,7 @@ namespace ExpensesTracker.Views.Pages.DatabaseBrowser
       _mainSettings = mainSettings;
       InitializeComponent();
       _viewModel = new DatabaseBrowserPageViewModel(this);
-      DatabaseView.ItemsSource = _viewModel.ExpensesItems;
+      DatabaseView.ItemsSource = _viewModel.DatabaseViewItems;
     }
 
     /// <summary>
@@ -145,7 +145,7 @@ namespace ExpensesTracker.Views.Pages.DatabaseBrowser
 
     private void OnAddEditHandler()
     {
-      _viewModel.RefreshView();
+      _viewModel.AddedRecord();
     }
     private void DeleteButton_Click(object sender, RoutedEventArgs e)
     {
@@ -163,7 +163,6 @@ namespace ExpensesTracker.Views.Pages.DatabaseBrowser
         else if (DatabaseView.SelectedIndex == -1) DatabaseView.SelectedIndex = 0;
 
         _viewModel.RemoveRecord((DatabaseView)DatabaseView.SelectedItem);
-        _viewModel.RefreshView();
       }
     }
 
@@ -174,8 +173,10 @@ namespace ExpensesTracker.Views.Pages.DatabaseBrowser
 
     private void SearchBox_TextChanged(object sender, TextChangedEventArgs e)
     {
-      var searchPhrase = (TextBox)sender;
-      //_viewModel.SearchRecord((searchPhrase.Text));
+      if (sender is TextBox searchPhrase)
+      {
+        if (searchPhrase.Text != "Search database...") _viewModel.SearchRecord((searchPhrase.Text));
+      }
     }
   }
 }
