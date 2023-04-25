@@ -1,4 +1,5 @@
-﻿using ExpensesTracker.Models.DataProviders;
+﻿using ExpensesTracker.DataTypes;
+using ExpensesTracker.Models.DataProviders;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
@@ -158,7 +159,7 @@ namespace ExpensesTracker.Models.DataControllers
       return false;
     }
 
-    public static List<Expense> SearchByRange(List<Expense>? expenses, bool first, int count = 0)
+    public static List<Expense> FilterByRange(List<Expense>? expenses, bool first, int count = 0)
     {
       List<Expense> listToReturn;
       using var db = new ExpensesContext();
@@ -175,8 +176,7 @@ namespace ExpensesTracker.Models.DataControllers
         return listToReturn;
       }
     }
-
-    public static List<Expense> SearchByName(List<Expense>? expenses, string name)
+    public static List<Expense> FilterByName(List<Expense>? expenses, string name)
     {
       List<Expense> listToReturn;
       using var db = new ExpensesContext();
@@ -195,14 +195,238 @@ namespace ExpensesTracker.Models.DataControllers
         return listToReturn;
       }
     }
-
-    public static List<Expense> FilterByDateOfEntry(List<Expense>? expenses)
+    public static List<Expense> FilterByIncome(List<Expense>? expenses, bool income)
     {
-      if (expenses != null)
+      List<Expense> listToReturn;
+      using var db = new ExpensesContext();
+      if (expenses == null)
       {
-
+        listToReturn = (from expense in db.Expenses.ToList()
+                        where expense.Income == income
+                        select expense).ToList();
+        return listToReturn;
       }
-      return null;
+      else
+      {
+        listToReturn = (from expense in expenses
+                        where expense.Income == income
+                        select expense).ToList();
+        return listToReturn;
+      }
+    }
+    public static List<Expense> FilterByRecurrance(List<Expense>? expenses, bool recurring)
+    {
+      List<Expense> listToReturn;
+      using var db = new ExpensesContext();
+      if (expenses == null)
+      {
+        listToReturn = (from expense in db.Expenses.ToList()
+                        where expense.Recurring == recurring
+                        select expense).ToList();
+        return listToReturn;
+      }
+      else
+      {
+        listToReturn = (from expense in expenses
+                        where expense.Income == recurring
+                        select expense).ToList();
+        return listToReturn;
+      }
+    }
+    public static List<Expense> FilterByPrice(List<Expense>? expenses, DecimalRange priceRange)
+    {
+      List<Expense> listToReturn;
+      using var db = new ExpensesContext();
+      if (expenses == null)
+      {
+        listToReturn = (from expense in db.Expenses.ToList()
+                        where expense.Price > priceRange.NumberMin && expense.Price < priceRange.NumberMax
+                        select expense).ToList();
+        return listToReturn;
+      }
+      else
+      {
+        listToReturn = (from expense in expenses
+                        where expense.Price > priceRange.NumberMin && expense.Price < priceRange.NumberMax
+                        select expense).ToList();
+        return listToReturn;
+      }
+    }
+    public static List<Expense> FilterByQuantity(List<Expense>? expenses, DecimalRange quantityRange)
+    {
+      List<Expense> listToReturn;
+      using var db = new ExpensesContext();
+      if (expenses == null)
+      {
+        listToReturn = (from expense in db.Expenses.ToList()
+                        where expense.Quantity > quantityRange.NumberMin && expense.Quantity < quantityRange.NumberMax
+                        select expense).ToList();
+        return listToReturn;
+      }
+      else
+      {
+        listToReturn = (from expense in expenses
+                        where expense.Quantity > quantityRange.NumberMin && expense.Quantity < quantityRange.NumberMax
+                        select expense).ToList();
+        return listToReturn;
+      }
+    }
+    public static List<Expense> FilterByTotal(List<Expense>? expenses, DecimalRange totalRange)
+    {
+      List<Expense> listToReturn;
+      using var db = new ExpensesContext();
+      if (expenses == null)
+      {
+        listToReturn = (from expense in db.Expenses.ToList()
+                        where expense.Total > totalRange.NumberMin && expense.Price < totalRange.NumberMax
+                        select expense).ToList();
+        return listToReturn;
+      }
+      else
+      {
+        listToReturn = (from expense in expenses
+                        where expense.Total > totalRange.NumberMin && expense.Price < totalRange.NumberMax
+                        select expense).ToList();
+        return listToReturn;
+      }
+    }
+    public static List<Expense> FilterBySubmitDate(List<Expense>? expenses, DateRange submitDateRange)
+    {
+      List<Expense> listToReturn;
+      using var db = new ExpensesContext();
+      if (expenses == null)
+      {
+        listToReturn = (from expense in db.Expenses.ToList()
+                        where expense.DateOfEntry > submitDateRange.StartDate && expense.DateOfEntry < submitDateRange.EndDate
+                        select expense).ToList();
+        return listToReturn;
+      }
+      else
+      {
+        listToReturn = (from expense in expenses
+                        where expense.DateOfEntry > submitDateRange.StartDate && expense.DateOfEntry < submitDateRange.EndDate
+                        select expense).ToList();
+        return listToReturn;
+      }
+    }
+    public static List<Expense> FilterByUpdateDate(List<Expense>? expenses, DateRange updateDateRange)
+    {
+      List<Expense> listToReturn;
+      using var db = new ExpensesContext();
+      if (expenses == null)
+      {
+        listToReturn = (from expense in db.Expenses.ToList()
+                        where expense.LastUpdate > updateDateRange.StartDate && expense.DateOfEntry < updateDateRange.EndDate
+                        select expense).ToList();
+        return listToReturn;
+      }
+      else
+      {
+        listToReturn = (from expense in expenses
+                        where expense.LastUpdate > updateDateRange.StartDate && expense.DateOfEntry < updateDateRange.EndDate
+                        select expense).ToList();
+        return listToReturn;
+      }
+    }
+    public static List<Expense> FilterByUserDate(List<Expense>? expenses, DateRange userDateRange)
+    {
+      List<Expense> listToReturn;
+      using var db = new ExpensesContext();
+      if (expenses == null)
+      {
+        listToReturn = (from expense in db.Expenses.ToList()
+                        where expense.Date > userDateRange.StartDate && expense.DateOfEntry < userDateRange.EndDate
+                        select expense).ToList();
+        return listToReturn;
+      }
+      else
+      {
+        listToReturn = (from expense in expenses
+                        where expense.Date > userDateRange.StartDate && expense.DateOfEntry < userDateRange.EndDate
+                        select expense).ToList();
+        return listToReturn;
+      }
+    }
+    public static List<Expense> FilterByCategories(List<Expense>? expenses, List<int> categories)
+    {
+      List<Expense> listToReturn = new();
+      using var db = new ExpensesContext();
+      if (expenses == null)
+      {
+        foreach (var category in categories)
+        {
+          var categoryRecords = (from expense in db.Expenses.ToList()
+                                 where expense.CategoryId == category
+                                 select expense).ToList();
+          listToReturn.AddRange(categoryRecords);
+        }
+        return listToReturn;
+      }
+      else
+      {
+        foreach (var category in categories)
+        {
+          var categoryRecords = (from expense in expenses
+                                 where expense.CategoryId == category
+                                 select expense).ToList();
+          listToReturn.AddRange(categoryRecords);
+        }
+        return listToReturn;
+      }
+    }
+    public static List<Expense> FilterBySubcategories(List<Expense>? expenses, List<int> subcategories)
+    {
+      List<Expense> listToReturn = new();
+      using var db = new ExpensesContext();
+      if (expenses == null)
+      {
+        foreach (var subcategory in subcategories)
+        {
+          var subcategoryRecords = (from expense in db.Expenses.ToList()
+                                    where expense.SubcategoryId == subcategory
+                                    select expense).ToList();
+          listToReturn.AddRange(subcategoryRecords);
+        }
+        return listToReturn;
+      }
+      else
+      {
+        foreach (var subcategory in subcategories)
+        {
+          var subcategoryRecords = (from expense in expenses
+                                    where expense.SubcategoryId == subcategory
+                                    select expense).ToList();
+          listToReturn.AddRange(subcategoryRecords);
+        }
+        return listToReturn;
+      }
+    }
+    public static List<Expense> FilterByRecurranceNames(List<Expense>? expenses, List<int> recurringNames)
+    {
+      List<Expense> listToReturn = new();
+      using var db = new ExpensesContext();
+      if (expenses == null)
+      {
+        foreach (var recurring in recurringNames)
+        {
+          var recurringRecords = (from expense in db.Expenses.ToList()
+                                  where expense.RecurringId == recurring
+                                  select expense).ToList();
+          listToReturn.AddRange(recurringRecords);
+        }
+        return listToReturn;
+      }
+      else
+      {
+        foreach (var recurring in recurringNames)
+        {
+          var recurringRecords = (from expense in expenses
+                                  where expense.RecurringId == recurring
+                                  select expense).ToList();
+          listToReturn.AddRange(recurringRecords);
+        }
+        return listToReturn;
+      }
     }
   }
 }

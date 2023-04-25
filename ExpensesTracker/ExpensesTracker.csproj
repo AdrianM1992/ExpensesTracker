@@ -17,6 +17,10 @@
 
   <ItemGroup>
     <None Remove="Views\Assets\Icons\add.png" />
+    <None Remove="Views\Assets\Icons\arrowdown.png" />
+    <None Remove="Views\Assets\Icons\arrowdown.svg" />
+    <None Remove="Views\Assets\Icons\arrowup.png" />
+    <None Remove="Views\Assets\Icons\arrowup.svg" />
     <None Remove="Views\Assets\Icons\chart-histogram.png" />
     <None Remove="Views\Assets\Icons\dataBase.png" />
     <None Remove="Views\Assets\Icons\delete.png" />
@@ -36,22 +40,29 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Views\Assets\Icons\arrowdown.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Views\Assets\Icons\arrowup.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Views\Assets\Icons\chart-histogram.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.4" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.4">
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.5" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.5">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.4" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.4">
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.5" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.5">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="SharpVectors.Wpf" Version="1.8.1" />
   </ItemGroup>
 
   <ItemGroup>

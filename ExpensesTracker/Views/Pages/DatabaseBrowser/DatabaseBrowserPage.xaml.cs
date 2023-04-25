@@ -72,7 +72,7 @@ namespace ExpensesTracker.Views.Pages.DatabaseBrowser
           typeText.Header = "Recurring Name";
           break;
         case "Description":
-          typeText.MaxWidth = 200;
+          typeText.MaxWidth = 300;
           typeText.ElementStyle = new Style(typeof(TextBlock));
           typeText.ElementStyle.Setters.Add(new Setter(TextBlock.TextWrappingProperty, TextWrapping.Wrap));
           break;

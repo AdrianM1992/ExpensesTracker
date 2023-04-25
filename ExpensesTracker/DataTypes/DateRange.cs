@@ -7,7 +7,7 @@ namespace ExpensesTracker.DataTypes
     public DateTime? StartDate { get; private set; }
     public DateTime? EndDate { get; private set; }
 
-    public DateRange(DateTime? startDate, DateTime? endDate)
+    public DateRange(DateTime? startDate = null, DateTime? endDate = null)
     {
       if (startDate != null && endDate != null)
       {

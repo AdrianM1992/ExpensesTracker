@@ -4,6 +4,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:ExpensesTracker.Views.Pages.DatabaseBrowser"
+      xmlns:ctrls="clr-namespace:ExpensesTracker.Views.Controls"
       xmlns:vm="clr-namespace:ExpensesTracker.ViewModels"
       mc:Ignorable="d"
       d:DataContext="{d:DesignInstance vm:DatabaseBrowserPageViewModel}"
@@ -18,8 +19,8 @@
   </Page.Resources>
   <Grid>
     <Grid.ColumnDefinitions>
-      <ColumnDefinition Width="4*"/>
-      <ColumnDefinition Width="*"/>
+      <ColumnDefinition/>
+      <ColumnDefinition Width="200"/>
     </Grid.ColumnDefinitions>
     <Grid.RowDefinitions>
       <RowDefinition Height="22"/>
@@ -28,11 +29,20 @@
 
     <TextBox x:Name="SearchBox" Text="Search database..." Height="18" Foreground="#FF5F5F5F" FontStyle="Italic" GotFocus="SearchBar_GotFocus" LostFocus="SearchBar_LostFocus" TextChanged="SearchBox_TextChanged"/>
     <DataGrid Grid.Row="1" x:Name ="DatabaseView" IsReadOnly="True" AutoGeneratingColumn="DatabaseView_AutoGeneratingColumn" MouseDoubleClick="DatabaseView_MouseDoubleClick">
-        <DataGrid.Resources>
-          <Style TargetType="ScrollBar" BasedOn="{StaticResource NarrowScrollBars}"/>
-        </DataGrid.Resources>
+      <DataGrid.Resources>
+        <Style TargetType="ScrollBar" BasedOn="{StaticResource NarrowScrollBars}"/>
+      </DataGrid.Resources>
     </DataGrid>
-
+    <Grid Grid.Row="1" Grid.Column="1">
+      <Grid.RowDefinitions>
+        <RowDefinition/>
+        <RowDefinition/>
+        <RowDefinition/>
+        <RowDefinition/>
+      </Grid.RowDefinitions>
+      <ctrls:NumericUpDown Grid.Row="1"/>
+    </Grid>
+    <!--Function buttons-->
     <StackPanel Grid.Row="1" HorizontalAlignment="Left" Margin="10,0,5,10" VerticalAlignment="Bottom" Orientation="Horizontal" Opacity="0.5">
       <Button x:Name="AddButton" Style="{StaticResource OpacityButtonStyle}" Click="AddEditButton_Click" BorderBrush="{x:Null}" Foreground="{x:Null}" IsHitTestVisible="True" Width="36" Height="36" Margin="0,0,10,0">
         <Button.Background>
@@ -70,7 +80,6 @@
         <DataGridCheckBoxColumn Header="Recurring?"/>
         <DataGridTextColumn Header="Description"/>
         <DataGridTemplateColumn>
-
         </DataGridTemplateColumn>
       </DataGrid.Columns>
     </DataGrid>
