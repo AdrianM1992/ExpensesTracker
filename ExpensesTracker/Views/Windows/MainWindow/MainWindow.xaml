@@ -8,7 +8,7 @@
         xmlns:vm="clr-namespace:ExpensesTracker.ViewModels"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance vm:MainWindowViewModel}"
-        Title="Expenses tracker" Height="500" Width="800" MinWidth="800" MinHeight="500" ScrollViewer.HorizontalScrollBarVisibility="Auto" FontFamily="Comic Sans MS" WindowStyle="None" Closing="Window_Closing">
+        Title="Expenses tracker" Height="800" Width="1200" MinWidth="1200" MinHeight="800" ScrollViewer.HorizontalScrollBarVisibility="Auto" FontFamily="Comic Sans MS" WindowStyle="None" Closing="Window_Closing">
 
   <!-- This removes white bar at the top meant for resizing -->
   <WindowChrome.WindowChrome>

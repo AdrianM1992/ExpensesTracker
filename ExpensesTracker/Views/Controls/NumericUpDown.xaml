@@ -6,10 +6,10 @@
              xmlns:local="clr-namespace:ExpensesTracker.Views.Controls"
              xmlns:svg="http://sharpvectors.codeplex.com/svgc/"
              mc:Ignorable="d" 
-             d:DesignHeight="40" d:DesignWidth="100">
-  <Grid x:Name="grid">
+             d:DesignHeight="20" d:DesignWidth="80">
+  <Grid>
     <Grid.ColumnDefinitions>
-      <ColumnDefinition Width="4*"/>
+      <ColumnDefinition Width="7*"/>
       <ColumnDefinition/>
     </Grid.ColumnDefinitions>
     <Grid.RowDefinitions>

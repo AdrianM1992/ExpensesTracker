@@ -4,7 +4,6 @@ using ExpensesTracker.Views.Classes;
 using ExpensesTracker.Views.Windows.AddEditDB;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media;
 
 namespace ExpensesTracker.Views.Pages.DatabaseBrowser
 {
@@ -112,41 +111,11 @@ namespace ExpensesTracker.Views.Pages.DatabaseBrowser
       addEditDBWindow.Show();
     }
 
-    private void SearchBar_GotFocus(object sender, RoutedEventArgs e)
-    {
-      if (sender is TextBox textBox)
-      {
-        if (textBox.Text == "Search database...")
-        {
-          textBox.Foreground = Brushes.Black;
-          textBox.FontStyle = FontStyles.Normal;
-          textBox.Text = "";
-        }
-      }
-    }
+    private void DatabaseView_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e) => OpenAddEditWindow(true);
 
-    private void SearchBar_LostFocus(object sender, RoutedEventArgs e)
-    {
-      if (sender is TextBox textBox)
-      {
-        if (textBox.Text == "")
-        {
-          textBox.Foreground = new SolidColorBrush(Color.FromArgb(0xFF, 0x5F, 0x5F, 0x5F));
-          textBox.FontStyle = FontStyles.Italic;
-          textBox.Text = "Search database...";
-        }
-      }
-    }
 
-    private void DatabaseView_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
-    {
-      OpenAddEditWindow(true);
-    }
+    private void OnAddEditHandler() => _viewModel.AddedRecord();
 
-    private void OnAddEditHandler()
-    {
-      _viewModel.AddedRecord();
-    }
     private void DeleteButton_Click(object sender, RoutedEventArgs e)
     {
       if (DatabaseView.Items.Count <= 0) MessageBox.Show("Nothing to delete.", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
@@ -166,17 +135,7 @@ namespace ExpensesTracker.Views.Pages.DatabaseBrowser
       }
     }
 
-    private void ShowMoreButton_Click(object sender, RoutedEventArgs e)
-    {
-      _viewModel.LoadMoreRecords();
-    }
+    private void ShowMoreButton_Click(object sender, RoutedEventArgs e) => _viewModel.LoadMoreRecords();
 
-    private void SearchBox_TextChanged(object sender, TextChangedEventArgs e)
-    {
-      if (sender is TextBox searchPhrase)
-      {
-        if (searchPhrase.Text != "Search database...") _viewModel.SearchRecord((searchPhrase.Text));
-      }
-    }
   }
 }

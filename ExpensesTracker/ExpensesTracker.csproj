@@ -22,6 +22,7 @@
     <None Remove="Views\Assets\Icons\arrowup.png" />
     <None Remove="Views\Assets\Icons\arrowup.svg" />
     <None Remove="Views\Assets\Icons\chart-histogram.png" />
+    <None Remove="Views\Assets\Icons\clear.svg" />
     <None Remove="Views\Assets\Icons\dataBase.png" />
     <None Remove="Views\Assets\Icons\delete.png" />
     <None Remove="Views\Assets\Icons\edit-alt.png" />
@@ -44,6 +45,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Views\Assets\Icons\arrowup.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Views\Assets\Icons\clear.svg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Views\Assets\Icons\chart-histogram.png">

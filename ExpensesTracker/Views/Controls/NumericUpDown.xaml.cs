@@ -4,7 +4,7 @@ using System.Windows.Controls;
 namespace ExpensesTracker.Views.Controls
 {
   /// <summary>
-  /// Logika interakcji dla klasy NumericUpDown.xaml
+  /// Control used to display and modify only decimal values
   /// </summary>
   public partial class NumericUpDown : UserControl
   {
@@ -35,6 +35,7 @@ namespace ExpensesTracker.Views.Controls
     private void ValueTextBox_TextChanged(object sender, TextChangedEventArgs e)
     {
       var input = (TextBox)sender;
+      //Check if textbox contains number, if not paste last correct value.
       if (decimal.TryParse(input.Text, out decimal inputNumber))
       {
         NumericValue = inputNumber;
