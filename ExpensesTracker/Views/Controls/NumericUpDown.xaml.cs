@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace ExpensesTracker.Views.Controls
@@ -27,6 +28,8 @@ namespace ExpensesTracker.Views.Controls
     public static readonly DependencyProperty IncrementStepProperty =
         DependencyProperty.Register("IncrementStep", typeof(decimal), typeof(NumericUpDown), new PropertyMetadata(1M));
 
+    public event EventHandler? NumericValueChanged;
+
     public NumericUpDown()
     {
       InitializeComponent();
@@ -40,6 +43,7 @@ namespace ExpensesTracker.Views.Controls
       {
         NumericValue = inputNumber;
         _lastValue = inputNumber;
+        NumericValueChanged?.Invoke(this, EventArgs.Empty);
       }
       else
       {

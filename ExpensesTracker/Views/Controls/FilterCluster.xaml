@@ -31,7 +31,7 @@
 
     <!--Filter options-->
     <!--#region Basic filters-->
-    <GroupBox Header="Basic" Grid.Row="1">
+    <GroupBox x:Name="BasicGroup" Header="Basic" Grid.Row="1">
       <Grid>
         <Grid.ColumnDefinitions>
           <ColumnDefinition/>
@@ -41,6 +41,7 @@
           <RowDefinition Height="45"/>
           <RowDefinition/>
         </Grid.RowDefinitions>
+        
         <StackPanel Orientation="Vertical" Grid.ColumnSpan="2">
           <Label Content="Name" Padding="0,5,5,5"/>
           <TextBox x:Name="SearchBox" Text="Search database..." Height="18" Foreground="#FF5F5F5F" FontStyle="Italic" GotFocus="SearchBar_GotFocus" LostFocus="SearchBar_LostFocus" TextChanged="SearchBox_TextChanged" />
@@ -51,8 +52,8 @@
             <Label Content="Type" Padding="0,5,5,5"/>
             <ctrls:ClearButton x:Name="ClearType" Grid.Row="0" Margin="0,5,0,0" Height="8" Width="8"/>
           </StackPanel>
-          <RadioButton GroupName="Income" Content="Income" Margin="0,0,0,5"/>
-          <RadioButton GroupName="Income" Content="Expense" IsThreeState="True" />
+          <RadioButton GroupName="Income" Content="Income" Margin="0,0,0,5" Checked="RadioButton_Checked"/>
+          <RadioButton GroupName="Income" Content="Expense" IsThreeState="True" Checked="RadioButton_Checked"/>
         </StackPanel>
 
         <StackPanel Grid.Column="1" Grid.Row="1">
@@ -60,8 +61,8 @@
             <Label Content="Recurrence" Padding="0,5,5,5"/>
             <ctrls:ClearButton x:Name="ClearRecurrence" Grid.Row="0" Margin="0,5,0,0" Height="8" Width="8"/>
           </StackPanel>
-          <RadioButton GroupName="Recurring" Content="Recurring" Margin="0,0,0,5"/>
-          <RadioButton GroupName="Recurring" Content="Nonrecurring" IsThreeState="True"/>
+          <RadioButton GroupName="Recurring" Content="Recurring" Margin="0,0,0,5" Checked="RadioButton_Checked"/>
+          <RadioButton GroupName="Recurring" Content="Nonrecurring" IsThreeState="True" Checked="RadioButton_Checked"/>
         </StackPanel>
       </Grid>
     </GroupBox>
@@ -69,7 +70,7 @@
     <!--#endregion-->
 
     <!--#region Prices filters-->
-    <GroupBox Header="Prices" Grid.Row="2">
+    <GroupBox x:Name="PriceGroup" Header="Prices" Grid.Row="2">
       <Grid>
         <Grid.ColumnDefinitions>
           <ColumnDefinition/>
@@ -81,26 +82,26 @@
             <Label Content="Amount" Padding="0,5,5,5"/>
             <ctrls:ClearButton x:Name="ClearPrice" Grid.Row="0" Margin="0,5,0,0" Height="8" Width="8"/>
           </StackPanel>
-          <ctrls:NumericUpDown Height="20 " Width="80" HorizontalAlignment="Left"/>
+          <ctrls:NumericUpDown x:Name="PriceMin" Height="20 " Width="80" HorizontalAlignment="Left" NumericValueChanged="NumericUpDown_NumericValueChanged" />
           <StackPanel Orientation="Horizontal">
             <Label Content="Quantity" Padding="0,5,5,5"/>
             <ctrls:ClearButton x:Name="ClearQuantity" Grid.Row="0" Margin="0,5,0,0" Height="8" Width="8"/>
           </StackPanel>
-          <ctrls:NumericUpDown Height="20 " Width="80" IncrementStep="0.1" HorizontalAlignment="Left"/>
+          <ctrls:NumericUpDown x:Name="QuantityMin" Height="20 " Width="80" IncrementStep="0.1" HorizontalAlignment="Left" NumericValueChanged="NumericUpDown_NumericValueChanged" />
           <StackPanel Orientation="Horizontal">
             <Label Content="Total amount" Padding="0,5,5,5"/>
             <ctrls:ClearButton x:Name="ClearTotal" Grid.Row="0" Margin="0,5,0,0" Height="8" Width="8"/>
           </StackPanel>
-          <ctrls:NumericUpDown Height="20 " Width="80" HorizontalAlignment="Left"/>
+          <ctrls:NumericUpDown x:Name="TotalMin" Height="20 " Width="80" HorizontalAlignment="Left" NumericValueChanged="NumericUpDown_NumericValueChanged" />
         </StackPanel>
 
         <StackPanel Grid.Column="1">
           <Label Content="" Padding="0,5,5,5"/>
-          <ctrls:NumericUpDown Height="20 " Width="80" HorizontalAlignment="Left"/>
+          <ctrls:NumericUpDown x:Name="PriceMax" Height="20 " Width="80" HorizontalAlignment="Left" NumericValueChanged="NumericUpDown_NumericValueChanged" />
           <Label Content="" Padding="0,5,5,5"/>
-          <ctrls:NumericUpDown Height="20 " Width="80" IncrementStep="0.1" HorizontalAlignment="Left"/>
+          <ctrls:NumericUpDown x:Name="QuantityMax" Height="20 " Width="80" IncrementStep="0.1" HorizontalAlignment="Left" NumericValueChanged="NumericUpDown_NumericValueChanged" />
           <Label Content="" Padding="0,5,5,5"/>
-          <ctrls:NumericUpDown Height="20 " Width="80" HorizontalAlignment="Left"/>
+          <ctrls:NumericUpDown x:Name="TotaleMax" Height="20 " Width="80" HorizontalAlignment="Left" NumericValueChanged="NumericUpDown_NumericValueChanged" />
         </StackPanel>
       </Grid>
     </GroupBox>
@@ -108,7 +109,7 @@
     <!--#endregion-->
 
     <!--#region Dates filters-->
-    <GroupBox Header="Dates" Grid.Row="3">
+    <GroupBox x:Name="DateGroup" Header="Dates" Grid.Row="3">
       <Grid>
         <Grid.ColumnDefinitions>
           <ColumnDefinition/>
@@ -120,26 +121,26 @@
             <Label Content="Date added" Padding="0,5,5,5"/>
             <ctrls:ClearButton x:Name="ClearDateAdded" Grid.Row="0" Margin="0,5,0,0" Height="8" Width="8"/>
           </StackPanel>
-          <DatePicker  VerticalAlignment="Top" HorizontalAlignment="Left" Width="80"/>
+          <DatePicker x:Name="SubmitDateMin" VerticalAlignment="Top" HorizontalAlignment="Left" Width="80" SelectedDateChanged="DatePicker_SelectedDateChanged"/>
           <StackPanel Orientation="Horizontal">
             <Label Content="Last updated" Padding="0,0,5,5"/>
             <ctrls:ClearButton x:Name="ClearDateUpdated" Grid.Row="0" Margin="0,5,0,0" Height="8" Width="8"/>
           </StackPanel>
-          <DatePicker  VerticalAlignment="Top" HorizontalAlignment="Left" Width="80"/>
+          <DatePicker x:Name="UpdateDateMin" VerticalAlignment="Top" HorizontalAlignment="Left" Width="80" SelectedDateChanged="DatePicker_SelectedDateChanged"/>
           <StackPanel Orientation="Horizontal">
             <Label Content="Date occurred" Padding="0,0,5,5"/>
             <ctrls:ClearButton x:Name="ClearDateOccurred" Grid.Row="0" Margin="0,5,0,0" Height="8" Width="8"/>
           </StackPanel>
-          <DatePicker  VerticalAlignment="Top" HorizontalAlignment="Left" Width="80"/>
+          <DatePicker x:Name="UserDateMin" VerticalAlignment="Top" HorizontalAlignment="Left" Width="80" SelectedDateChanged="DatePicker_SelectedDateChanged"/>
         </StackPanel>
 
         <StackPanel Grid.Column="1">
           <Label Content="" Padding="10,5,0,5"/>
-          <DatePicker VerticalAlignment="Top" HorizontalAlignment="Left" Width="80"/>
+          <DatePicker x:Name="SubmitDateMax" VerticalAlignment="Top" HorizontalAlignment="Left" Width="80" SelectedDateChanged="DatePicker_SelectedDateChanged"/>
           <Label Content="" Padding="10,0,0,5"/>
-          <DatePicker VerticalAlignment="Top" HorizontalAlignment="Left" Width="80"/>
+          <DatePicker x:Name="UpdateDateMax" VerticalAlignment="Top" HorizontalAlignment="Left" Width="80" SelectedDateChanged="DatePicker_SelectedDateChanged"/>
           <Label Content="" Padding="10,0,0,5"/>
-          <DatePicker  VerticalAlignment="Top" HorizontalAlignment="Left" Width="80"/>
+          <DatePicker x:Name="UserDateMax"  VerticalAlignment="Top" HorizontalAlignment="Left" Width="80" SelectedDateChanged="DatePicker_SelectedDateChanged"/>
         </StackPanel>
       </Grid>
     </GroupBox>
@@ -147,13 +148,13 @@
     <!--#endregion-->
 
     <!--#region List filters-->
-    <GroupBox Header="Lists" Grid.Row="4">
+    <GroupBox x:Name="ListGroup" Header="Lists" Grid.Row="4" >
       <StackPanel>
         <Expander>
           <Expander.Header>
             <StackPanel Orientation="Horizontal">
               <TextBlock Text="Category"/>
-              <ctrls:ClearButton x:Name="ClearCategory" Height="8" Width="8" Margin="5,0,0,0" MouseLeftButtonDown="ClearCategory_MouseLeftButtonDown"/>
+              <ctrls:ClearButton x:Name="ClearCategory" Height="8" Width="8" Margin="5,0,0,0"/>
             </StackPanel>
           </Expander.Header>
           <ListBox  SelectionMode="Extended" Height="125"/>
@@ -184,7 +185,7 @@
     <!--#endregion-->
     
     <StackPanel x:Name="ClearAll" Orientation="Horizontal" Grid.Row="5" HorizontalAlignment="Center" Visibility="Hidden">
-      <ctrls:ClearButton VerticalAlignment="Center" Width="24" Height="24"/>
+      <ctrls:ClearButton VerticalAlignment="Center" Width="24" Height="24" Visibility="Visible"/>
       <Label Content="CLEAR ALL FILTERS" VerticalAlignment="Center" Foreground="Red" FontSize="16"/>
     </StackPanel>
 
