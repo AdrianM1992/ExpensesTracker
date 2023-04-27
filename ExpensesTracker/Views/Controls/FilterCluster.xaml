@@ -6,21 +6,31 @@
              xmlns:local="clr-namespace:ExpensesTracker.Views.Controls"
              xmlns:ctrls="clr-namespace:ExpensesTracker.Views.Controls"
              mc:Ignorable="d" 
-             d:DesignHeight="800" d:DesignWidth="220" d:Background="Aqua">
-  <!--Filter options-->
+             d:DesignHeight="752" d:DesignWidth="220" d:Background="Aqua">
+  <UserControl.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/Views/Assets/Styles/Styles.xaml"/>
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+  </UserControl.Resources>
   <Grid>
+    <Grid.Resources>
+      <Style TargetType="ScrollBar" BasedOn="{StaticResource NarrowScrollBars}"/>
+    </Grid.Resources>
     <Grid.RowDefinitions>
       <RowDefinition Height="28"/>
       <RowDefinition Height="130"/>
       <RowDefinition Height="165"/>
       <RowDefinition Height="165"/>
-      <RowDefinition/>
-      <RowDefinition/>
+      <RowDefinition Height="220"/>
+      <RowDefinition Height="44"/>
     </Grid.RowDefinitions>
 
     <Label Content="FILTERS" Grid.Row="0" FontSize="16" HorizontalContentAlignment="Center" BorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}" BorderThickness="1,1,1,1" Padding="0,0,0,0" Margin="2,2,2,2"/>
-    <!--#region Basic filters-->
 
+    <!--Filter options-->
+    <!--#region Basic filters-->
     <GroupBox Header="Basic" Grid.Row="1">
       <Grid>
         <Grid.ColumnDefinitions>
@@ -39,7 +49,7 @@
         <StackPanel  Grid.Column="0" Grid.Row="1">
           <StackPanel Orientation="Horizontal" VerticalAlignment="Top">
             <Label Content="Type" Padding="0,5,5,5"/>
-            <ctrls:ClearButton x:Name="ClearType" Grid.Row="0" Margin="0,5,0,0" Height="8" Width="8" Visibility="Hidden"/>
+            <ctrls:ClearButton x:Name="ClearType" Grid.Row="0" Margin="0,5,0,0" Height="8" Width="8"/>
           </StackPanel>
           <RadioButton GroupName="Income" Content="Income" Margin="0,0,0,5"/>
           <RadioButton GroupName="Income" Content="Expense" IsThreeState="True" />
@@ -48,7 +58,7 @@
         <StackPanel Grid.Column="1" Grid.Row="1">
           <StackPanel Orientation="Horizontal" VerticalAlignment="Top">
             <Label Content="Recurrence" Padding="0,5,5,5"/>
-            <ctrls:ClearButton x:Name="ClearRecurrence" Grid.Row="0" Margin="0,5,0,0" Height="8" Width="8" Visibility="Hidden"/>
+            <ctrls:ClearButton x:Name="ClearRecurrence" Grid.Row="0" Margin="0,5,0,0" Height="8" Width="8"/>
           </StackPanel>
           <RadioButton GroupName="Recurring" Content="Recurring" Margin="0,0,0,5"/>
           <RadioButton GroupName="Recurring" Content="Nonrecurring" IsThreeState="True"/>
@@ -59,7 +69,6 @@
     <!--#endregion-->
 
     <!--#region Prices filters-->
-    <ctrls:ClearButton x:Name="ClearPrices" Grid.Row="2" Margin="0,15,5,0"/>
     <GroupBox Header="Prices" Grid.Row="2">
       <Grid>
         <Grid.ColumnDefinitions>
@@ -70,17 +79,17 @@
         <StackPanel>
           <StackPanel Orientation="Horizontal">
             <Label Content="Amount" Padding="0,5,5,5"/>
-            <ctrls:ClearButton x:Name="ClearPrice" Grid.Row="0" Margin="0,5,0,0" Height="8" Width="8" Visibility="Hidden"/>
+            <ctrls:ClearButton x:Name="ClearPrice" Grid.Row="0" Margin="0,5,0,0" Height="8" Width="8"/>
           </StackPanel>
           <ctrls:NumericUpDown Height="20 " Width="80" HorizontalAlignment="Left"/>
           <StackPanel Orientation="Horizontal">
             <Label Content="Quantity" Padding="0,5,5,5"/>
-            <ctrls:ClearButton x:Name="ClearQuantity" Grid.Row="0" Margin="0,5,0,0" Height="8" Width="8" Visibility="Hidden"/>
+            <ctrls:ClearButton x:Name="ClearQuantity" Grid.Row="0" Margin="0,5,0,0" Height="8" Width="8"/>
           </StackPanel>
           <ctrls:NumericUpDown Height="20 " Width="80" IncrementStep="0.1" HorizontalAlignment="Left"/>
           <StackPanel Orientation="Horizontal">
             <Label Content="Total amount" Padding="0,5,5,5"/>
-            <ctrls:ClearButton x:Name="ClearTotal" Grid.Row="0" Margin="0,5,0,0" Height="8" Width="8" Visibility="Hidden"/>
+            <ctrls:ClearButton x:Name="ClearTotal" Grid.Row="0" Margin="0,5,0,0" Height="8" Width="8"/>
           </StackPanel>
           <ctrls:NumericUpDown Height="20 " Width="80" HorizontalAlignment="Left"/>
         </StackPanel>
@@ -93,13 +102,12 @@
           <Label Content="" Padding="0,5,5,5"/>
           <ctrls:NumericUpDown Height="20 " Width="80" HorizontalAlignment="Left"/>
         </StackPanel>
-
       </Grid>
     </GroupBox>
+    <ctrls:ClearButton x:Name="ClearPrices" Grid.Row="2" Margin="0,15,5,0"/>
     <!--#endregion-->
 
     <!--#region Dates filters-->
-    <ctrls:ClearButton x:Name="ClearDates" Grid.Row="3" Margin="0,15,5,0"/>
     <GroupBox Header="Dates" Grid.Row="3">
       <Grid>
         <Grid.ColumnDefinitions>
@@ -110,17 +118,17 @@
         <StackPanel>
           <StackPanel Orientation="Horizontal">
             <Label Content="Date added" Padding="0,5,5,5"/>
-            <ctrls:ClearButton x:Name="ClearDateAdded" Grid.Row="0" Margin="0,5,0,0" Height="8" Width="8" Visibility="Hidden"/>
+            <ctrls:ClearButton x:Name="ClearDateAdded" Grid.Row="0" Margin="0,5,0,0" Height="8" Width="8"/>
           </StackPanel>
           <DatePicker  VerticalAlignment="Top" HorizontalAlignment="Left" Width="80"/>
           <StackPanel Orientation="Horizontal">
             <Label Content="Last updated" Padding="0,0,5,5"/>
-            <ctrls:ClearButton x:Name="ClearDateUpdated" Grid.Row="0" Margin="0,5,0,0" Height="8" Width="8" Visibility="Hidden"/>
+            <ctrls:ClearButton x:Name="ClearDateUpdated" Grid.Row="0" Margin="0,5,0,0" Height="8" Width="8"/>
           </StackPanel>
           <DatePicker  VerticalAlignment="Top" HorizontalAlignment="Left" Width="80"/>
           <StackPanel Orientation="Horizontal">
             <Label Content="Date occurred" Padding="0,0,5,5"/>
-            <ctrls:ClearButton x:Name="ClearDateOccurred" Grid.Row="0" Margin="0,5,0,0" Height="8" Width="8" Visibility="Hidden"/>
+            <ctrls:ClearButton x:Name="ClearDateOccurred" Grid.Row="0" Margin="0,5,0,0" Height="8" Width="8"/>
           </StackPanel>
           <DatePicker  VerticalAlignment="Top" HorizontalAlignment="Left" Width="80"/>
         </StackPanel>
@@ -133,29 +141,52 @@
           <Label Content="" Padding="10,0,0,5"/>
           <DatePicker  VerticalAlignment="Top" HorizontalAlignment="Left" Width="80"/>
         </StackPanel>
-
       </Grid>
     </GroupBox>
+    <ctrls:ClearButton x:Name="ClearDates" Grid.Row="3" Margin="0,15,5,0"/>
     <!--#endregion-->
-    <ctrls:ClearButton x:Name="ClearLists" Grid.Row="4" Margin="0,15,5,0"/>
+
+    <!--#region List filters-->
     <GroupBox Header="Lists" Grid.Row="4">
       <StackPanel>
-        <Label Content="Category" Padding="10,5,0,0"/>
-        <ListBox x:Name="multiComboBox" SelectionMode="Multiple">
+        <Expander>
+          <Expander.Header>
+            <StackPanel Orientation="Horizontal">
+              <TextBlock Text="Category"/>
+              <ctrls:ClearButton x:Name="ClearCategory" Height="8" Width="8" Margin="5,0,0,0" MouseLeftButtonDown="ClearCategory_MouseLeftButtonDown"/>
+            </StackPanel>
+          </Expander.Header>
+          <ListBox  SelectionMode="Extended" Height="125"/>
+          </Expander>
 
-          <ListBoxItem Content="Item 1"/>
-          <ListBoxItem Content="Item 2"/>
-          <ListBoxItem Content="Item 3"/>
-          <ListBoxItem Content="Item 4"/>
-          <ListBoxItem Content="Item 5"/>
-        </ListBox>
-        <Label Content="Subcategory" Padding="10,0,0,0"/>
-        <ComboBox/>
-        <Label Content="Recurrence" Padding="10,0,0,0"/>
-        <ComboBox/>
+        <Expander>
+          <Expander.Header>
+            <StackPanel Orientation="Horizontal">
+              <TextBlock Text="Subcategory"/>
+              <ctrls:ClearButton x:Name="ClearSubcategory" Height="8" Width="8" Margin="5,0,0,0"/>
+            </StackPanel>
+          </Expander.Header>
+          <ListBox  SelectionMode="Extended" Height="125"/>
+        </Expander>
+
+        <Expander>
+          <Expander.Header>
+            <StackPanel Orientation="Horizontal">
+              <TextBlock Text="Recurrence"/>
+              <ctrls:ClearButton x:Name="ClearRecurrenceList" Height="8" Width="8" Margin="5,0,0,0"/>
+            </StackPanel>
+          </Expander.Header>
+          <ListBox  SelectionMode="Extended" Height="125"/>
+        </Expander>
       </StackPanel>
     </GroupBox>
-
+    <ctrls:ClearButton x:Name="ClearLists" Grid.Row="4" Margin="0,15,5,0"/>
+    <!--#endregion-->
+    
+    <StackPanel x:Name="ClearAll" Orientation="Horizontal" Grid.Row="5" HorizontalAlignment="Center" Visibility="Hidden">
+      <ctrls:ClearButton VerticalAlignment="Center" Width="24" Height="24"/>
+      <Label Content="CLEAR ALL FILTERS" VerticalAlignment="Center" Foreground="Red" FontSize="16"/>
+    </StackPanel>
 
   </Grid>
 </UserControl>

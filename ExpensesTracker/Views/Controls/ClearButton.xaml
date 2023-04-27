@@ -8,7 +8,8 @@
              mc:Ignorable="d" 
              d:DesignHeight="16" d:DesignWidth="16"
              Height="16" Width="16" Margin="5"
-             VerticalAlignment="Top" HorizontalAlignment="Right" Opacity="0.5">
+             VerticalAlignment="Top" HorizontalAlignment="Right" Opacity="0.5" 
+             IsHitTestVisible="True" Visibility="Hidden">
   <UserControl.Resources>
     <Style TargetType="svg:SvgViewbox">
       <Style.Triggers>
@@ -21,7 +22,7 @@
       </Style.Triggers>
     </Style>
   </UserControl.Resources>
-  <Grid IsHitTestVisible="True">
+  <Grid>
     <svg:SvgViewbox Source="/Views/Assets/Icons/clear.svg"/>
   </Grid>
 </UserControl>
