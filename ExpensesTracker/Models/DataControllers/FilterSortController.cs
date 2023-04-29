@@ -5,8 +5,10 @@ using System.ComponentModel;
 
 namespace ExpensesTracker.Models.DataControllers
 {
-  class FilterSortController : INotifyPropertyChanged
+  public class FilterSortController : INotifyPropertyChanged
   {
+    private bool _newFlag = false;
+
     private string? _name = null;
     private bool? _income = null;
     private bool? _recurring = null;
@@ -16,9 +18,9 @@ namespace ExpensesTracker.Models.DataControllers
     private DateRange? _submitDateRange = null;
     private DateRange? _updateDateRange = null;
     private DateRange? _userDateRange = null;
-    private List<int>? _categories = null;
-    private List<int>? _subcategories = null;
-    private List<int>? _recurrances = null;
+    private List<string>? _categories = null;
+    private List<string>? _subcategories = null;
+    private List<string>? _recurrances = null;
 
     public string? Name
     {
@@ -65,17 +67,17 @@ namespace ExpensesTracker.Models.DataControllers
       get { return _userDateRange; }
       set { _userDateRange = value; OnPropertyChanged(nameof(UserDateRange)); }
     }
-    public List<int>? Categories
+    public List<string>? Categories
     {
       get { return _categories; }
       set { _categories = value; OnPropertyChanged(nameof(Categories)); }
     }
-    public List<int>? Subcategories
+    public List<string>? Subcategories
     {
       get { return _subcategories; }
       set { _subcategories = value; OnPropertyChanged(nameof(Subcategories)); }
     }
-    public List<int>? Recurrances
+    public List<string>? Recurrances
     {
       get { return _recurrances; }
       set { _recurrances = value; OnPropertyChanged(nameof(Recurrances)); }
@@ -83,6 +85,12 @@ namespace ExpensesTracker.Models.DataControllers
 
     public event PropertyChangedEventHandler? PropertyChanged;
 
+    /// <summary>
+    /// Apply all active filters to list of Expenses
+    /// </summary>
+    /// <param name="expensesToFilter">List of records to filter</param>
+    /// <param name="nuberOfRecordsToShow">Number of records in filtered list</param>
+    /// <returns></returns>
     public List<Expense> ApplyFilterCriteria(List<Expense> expensesToFilter, int nuberOfRecordsToShow)
     {
       if (_name != null && _name != string.Empty) expensesToFilter = DatabaseModel.FilterByName(expensesToFilter, _name);
@@ -101,6 +109,36 @@ namespace ExpensesTracker.Models.DataControllers
       return expensesToFilter;
     }
 
-    private void OnPropertyChanged(string propertyName) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    /// <summary>
+    /// Clear all active filters and trigger view update, by setting last property without newFlag
+    /// </summary>
+    public void ClearAllFilters()
+    {
+      _newFlag = true;
+      Name = null;
+      Income = null;
+      Recurring = null;
+      PriceRange = null;
+      QuantityRange = null;
+      TotalRange = null;
+      SubmitDateRange = null;
+      UpdateDateRange = null;
+      UserDateRange = null;
+      Categories = null;
+      Subcategories = null;
+      //Only one update is needed
+      _newFlag = false;
+      Recurrances = null;
+
+    }
+
+    /// <summary>
+    /// Notify about property changed, except of clearing filters
+    /// </summary>
+    /// <param name="propertyName">Changed property</param>
+    private void OnPropertyChanged(string propertyName)
+    {
+      if (!_newFlag) PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
   }
 }

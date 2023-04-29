@@ -24,12 +24,12 @@ namespace ExpensesTracker.DataTypes
       }
       else if (startDate == null)
       {
-        StartDate = null;
+        StartDate = DateTime.MinValue;
         EndDate = endDate;
       }
       else
       {
-        EndDate = null;
+        EndDate = DateTime.Now;
         StartDate = startDate;
       }
     }

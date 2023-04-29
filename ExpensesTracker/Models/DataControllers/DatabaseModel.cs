@@ -1,14 +1,23 @@
 ﻿using ExpensesTracker.DataTypes;
 using ExpensesTracker.Models.DataProviders;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 
 namespace ExpensesTracker.Models.DataControllers
 {
+  /// <summary>
+  /// Class governing interaction with database
+  /// </summary>
   public static class DatabaseModel
   {
+    /// <summary>
+    /// Event notifying whenever subtables are changed
+    /// </summary>
+    public static event EventHandler<EventArgs>? SubtablesChanged;
+
     public static void AddEditDBRecord(Expense expense, bool editMode)
     {
       using var db = new ExpensesContext();
@@ -43,6 +52,7 @@ namespace ExpensesTracker.Models.DataControllers
         var newCategory = new Category { Name = categoryName, Fixed = false };
         db.Categories.Add(newCategory);
         db.SaveChanges();
+        SubtablesChanged?.Invoke(null, new EventArgs());
       }
       else MessageBox.Show("Category with this name already exist.", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
     }
@@ -59,6 +69,7 @@ namespace ExpensesTracker.Models.DataControllers
         var newSubategory = new Subcategory { Name = subcategoryName, CategoryId = categoryId };
         db.Subcategories.Add(newSubategory);
         db.SaveChanges();
+        SubtablesChanged?.Invoke(null, new EventArgs());
       }
       else MessageBox.Show("Subcategory with this name already exist.", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
     }
@@ -73,6 +84,7 @@ namespace ExpensesTracker.Models.DataControllers
         var newRecurrence = new Recurring { Name = recurringName };
         db.Recurrings.Add(newRecurrence);
         db.SaveChanges();
+        SubtablesChanged?.Invoke(null, new EventArgs());
       }
       else MessageBox.Show("Recurrence with this name already exist.", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
     }
@@ -99,6 +111,7 @@ namespace ExpensesTracker.Models.DataControllers
         foreach (var item in itemsInCategory) item.CategoryId = 1;
         db.Entry(categories.First()).State = EntityState.Deleted;
         db.SaveChanges();
+        SubtablesChanged?.Invoke(null, new EventArgs());
         return true;
       }
       else MessageBox.Show("No category to delete.", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
@@ -126,6 +139,7 @@ namespace ExpensesTracker.Models.DataControllers
         foreach (var item in itemsInSubcategory) item.SubcategoryId = null;
         db.Entry(subcategories.First()).State = EntityState.Deleted;
         db.SaveChanges();
+        SubtablesChanged?.Invoke(null, new EventArgs());
         return true;
       }
       else MessageBox.Show("No subcategory to delete.", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
@@ -153,12 +167,53 @@ namespace ExpensesTracker.Models.DataControllers
         foreach (var item in itemsWithRecurrence) item.RecurringId = null;
         db.Entry(recurrences.First()).State = EntityState.Deleted;
         db.SaveChanges();
+        SubtablesChanged?.Invoke(null, new EventArgs());
         return true;
       }
       else MessageBox.Show("No recurrence to delete.", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
       return false;
     }
 
+    /// <summary>
+    /// Opens Categories table and returns its content
+    /// <returns>List of all categories</returns>
+    public static List<string> GetCategoriesNames()
+    {
+      using var db = new ExpensesContext();
+      var categories = (from c in db.Categories
+                        select c.Name).ToList();
+      return categories;
+    }
+    /// <summary>
+    /// Search DB for all subcategories of selected category
+    /// </summary>
+    /// <param name="category">Category to search for subcategories </param>
+    /// <returns>List of all subcategories belong to category</returns>
+    public static List<string> GetSubcategoriesNames(string category)
+    {
+      using var db = new ExpensesContext();
+      var subcategories = (from c in db.Categories
+                           where c.Name == category
+                           join s in db.Subcategories on c.Id equals s.CategoryId
+                           select s.Name).ToList();
+      return subcategories;
+    }
+    /// <summary>
+    /// Opens Recurrings table and returns its content
+    /// <returns>List of all recurrings</returns>
+    public static List<string> GetRecurringNames()
+    {
+      using var db = new ExpensesContext();
+      var recurrings = (from r in db.Recurrings
+                        select r.Name).ToList();
+      return recurrings;
+    }
+
+    /// <summary>
+    /// All available filters that can be applied to filter database
+    /// Output of every filter can be input to another filter
+    /// </summary>
+    #region Filters
     public static List<Expense> FilterByRange(List<Expense>? expenses, bool first, int count = 0)
     {
       List<Expense> listToReturn;
@@ -182,7 +237,7 @@ namespace ExpensesTracker.Models.DataControllers
       using var db = new ExpensesContext();
       if (expenses == null)
       {
-        listToReturn = (from expense in db.Expenses.ToList()
+        listToReturn = (from expense in db.Expenses
                         where expense.Name.Contains(name)
                         select expense).ToList();
         return listToReturn;
@@ -201,7 +256,7 @@ namespace ExpensesTracker.Models.DataControllers
       using var db = new ExpensesContext();
       if (expenses == null)
       {
-        listToReturn = (from expense in db.Expenses.ToList()
+        listToReturn = (from expense in db.Expenses
                         where expense.Income == income
                         select expense).ToList();
         return listToReturn;
@@ -220,7 +275,7 @@ namespace ExpensesTracker.Models.DataControllers
       using var db = new ExpensesContext();
       if (expenses == null)
       {
-        listToReturn = (from expense in db.Expenses.ToList()
+        listToReturn = (from expense in db.Expenses
                         where expense.Recurring == recurring
                         select expense).ToList();
         return listToReturn;
@@ -228,7 +283,7 @@ namespace ExpensesTracker.Models.DataControllers
       else
       {
         listToReturn = (from expense in expenses
-                        where expense.Income == recurring
+                        where expense.Recurring == recurring
                         select expense).ToList();
         return listToReturn;
       }
@@ -239,7 +294,7 @@ namespace ExpensesTracker.Models.DataControllers
       using var db = new ExpensesContext();
       if (expenses == null)
       {
-        listToReturn = (from expense in db.Expenses.ToList()
+        listToReturn = (from expense in db.Expenses
                         where expense.Price > priceRange.NumberMin && expense.Price < priceRange.NumberMax
                         select expense).ToList();
         return listToReturn;
@@ -258,7 +313,7 @@ namespace ExpensesTracker.Models.DataControllers
       using var db = new ExpensesContext();
       if (expenses == null)
       {
-        listToReturn = (from expense in db.Expenses.ToList()
+        listToReturn = (from expense in db.Expenses
                         where expense.Quantity > quantityRange.NumberMin && expense.Quantity < quantityRange.NumberMax
                         select expense).ToList();
         return listToReturn;
@@ -277,7 +332,7 @@ namespace ExpensesTracker.Models.DataControllers
       using var db = new ExpensesContext();
       if (expenses == null)
       {
-        listToReturn = (from expense in db.Expenses.ToList()
+        listToReturn = (from expense in db.Expenses
                         where expense.Total > totalRange.NumberMin && expense.Price < totalRange.NumberMax
                         select expense).ToList();
         return listToReturn;
@@ -296,7 +351,7 @@ namespace ExpensesTracker.Models.DataControllers
       using var db = new ExpensesContext();
       if (expenses == null)
       {
-        listToReturn = (from expense in db.Expenses.ToList()
+        listToReturn = (from expense in db.Expenses
                         where expense.DateOfEntry > submitDateRange.StartDate && expense.DateOfEntry < submitDateRange.EndDate
                         select expense).ToList();
         return listToReturn;
@@ -315,15 +370,15 @@ namespace ExpensesTracker.Models.DataControllers
       using var db = new ExpensesContext();
       if (expenses == null)
       {
-        listToReturn = (from expense in db.Expenses.ToList()
-                        where expense.LastUpdate > updateDateRange.StartDate && expense.DateOfEntry < updateDateRange.EndDate
+        listToReturn = (from expense in db.Expenses
+                        where expense.LastUpdate > updateDateRange.StartDate && expense.LastUpdate < updateDateRange.EndDate
                         select expense).ToList();
         return listToReturn;
       }
       else
       {
         listToReturn = (from expense in expenses
-                        where expense.LastUpdate > updateDateRange.StartDate && expense.DateOfEntry < updateDateRange.EndDate
+                        where expense.LastUpdate > updateDateRange.StartDate && expense.LastUpdate < updateDateRange.EndDate
                         select expense).ToList();
         return listToReturn;
       }
@@ -334,20 +389,20 @@ namespace ExpensesTracker.Models.DataControllers
       using var db = new ExpensesContext();
       if (expenses == null)
       {
-        listToReturn = (from expense in db.Expenses.ToList()
-                        where expense.Date > userDateRange.StartDate && expense.DateOfEntry < userDateRange.EndDate
+        listToReturn = (from expense in db.Expenses
+                        where expense.Date > userDateRange.StartDate && expense.Date < userDateRange.EndDate
                         select expense).ToList();
         return listToReturn;
       }
       else
       {
         listToReturn = (from expense in expenses
-                        where expense.Date > userDateRange.StartDate && expense.DateOfEntry < userDateRange.EndDate
+                        where expense.Date > userDateRange.StartDate && expense.Date < userDateRange.EndDate
                         select expense).ToList();
         return listToReturn;
       }
     }
-    public static List<Expense> FilterByCategories(List<Expense>? expenses, List<int> categories)
+    public static List<Expense> FilterByCategories(List<Expense>? expenses, List<string> categories)
     {
       List<Expense> listToReturn = new();
       using var db = new ExpensesContext();
@@ -355,8 +410,10 @@ namespace ExpensesTracker.Models.DataControllers
       {
         foreach (var category in categories)
         {
-          var categoryRecords = (from expense in db.Expenses.ToList()
-                                 where expense.CategoryId == category
+          var categoryRecords = (from expense in db.Expenses
+                                 join cat in db.Categories
+                                 on expense.CategoryId equals cat.Id
+                                 where cat.Name == category
                                  select expense).ToList();
           listToReturn.AddRange(categoryRecords);
         }
@@ -367,14 +424,16 @@ namespace ExpensesTracker.Models.DataControllers
         foreach (var category in categories)
         {
           var categoryRecords = (from expense in expenses
-                                 where expense.CategoryId == category
+                                 join cat in db.Categories
+                                 on expense.CategoryId equals cat.Id
+                                 where cat.Name == category
                                  select expense).ToList();
           listToReturn.AddRange(categoryRecords);
         }
         return listToReturn;
       }
     }
-    public static List<Expense> FilterBySubcategories(List<Expense>? expenses, List<int> subcategories)
+    public static List<Expense> FilterBySubcategories(List<Expense>? expenses, List<string> subcategories)
     {
       List<Expense> listToReturn = new();
       using var db = new ExpensesContext();
@@ -382,8 +441,10 @@ namespace ExpensesTracker.Models.DataControllers
       {
         foreach (var subcategory in subcategories)
         {
-          var subcategoryRecords = (from expense in db.Expenses.ToList()
-                                    where expense.SubcategoryId == subcategory
+          var subcategoryRecords = (from expense in db.Expenses
+                                    join subcat in db.Subcategories
+                                    on expense.SubcategoryId equals subcat.Id
+                                    where subcat.Name == subcategory
                                     select expense).ToList();
           listToReturn.AddRange(subcategoryRecords);
         }
@@ -394,14 +455,16 @@ namespace ExpensesTracker.Models.DataControllers
         foreach (var subcategory in subcategories)
         {
           var subcategoryRecords = (from expense in expenses
-                                    where expense.SubcategoryId == subcategory
+                                    join subcat in db.Subcategories
+                                    on expense.SubcategoryId equals subcat.Id
+                                    where subcat.Name == subcategory
                                     select expense).ToList();
           listToReturn.AddRange(subcategoryRecords);
         }
         return listToReturn;
       }
     }
-    public static List<Expense> FilterByRecurranceNames(List<Expense>? expenses, List<int> recurringNames)
+    public static List<Expense> FilterByRecurranceNames(List<Expense>? expenses, List<string> recurringNames)
     {
       List<Expense> listToReturn = new();
       using var db = new ExpensesContext();
@@ -409,8 +472,10 @@ namespace ExpensesTracker.Models.DataControllers
       {
         foreach (var recurring in recurringNames)
         {
-          var recurringRecords = (from expense in db.Expenses.ToList()
-                                  where expense.RecurringId == recurring
+          var recurringRecords = (from expense in db.Expenses
+                                  join rec in db.Recurrings
+                                  on expense.RecurringId equals rec.Id
+                                  where rec.Name == recurring
                                   select expense).ToList();
           listToReturn.AddRange(recurringRecords);
         }
@@ -421,12 +486,15 @@ namespace ExpensesTracker.Models.DataControllers
         foreach (var recurring in recurringNames)
         {
           var recurringRecords = (from expense in expenses
-                                  where expense.RecurringId == recurring
+                                  join rec in db.Recurrings
+                                  on expense.RecurringId equals rec.Id
+                                  where rec.Name == recurring
                                   select expense).ToList();
           listToReturn.AddRange(recurringRecords);
         }
         return listToReturn;
       }
     }
+    #endregion
   }
 }

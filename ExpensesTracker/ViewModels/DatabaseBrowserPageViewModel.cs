@@ -14,15 +14,26 @@ namespace ExpensesTracker.ViewModels
     private int _itemsToShow = 10;
     private List<Expense> _expensesItems;
     private FilterSortController _filterSortController = new();
-    public ObservableCollection<DatabaseView> DatabaseViewItems { get; private set; }
 
+    public ObservableCollection<DatabaseView> DatabaseViewItems { get; private set; }
 
     public DatabaseBrowserPageViewModel(Page page)
     {
       _databaseBrowserPage = (DatabaseBrowserPage)page;
       _expensesItems = DatabaseModel.FilterByRange(null, true, -1);
+      _databaseBrowserPage.FilterCluster.SetFilterControllerRef(_filterSortController);
+      _filterSortController.PropertyChanged += FilterSortController_PropertyChanged;
+      DatabaseModel.SubtablesChanged += DatabaseModel_SubtablesChanged;
       ShowRecords();
     }
+
+    private void DatabaseModel_SubtablesChanged(object? sender, System.EventArgs e)
+    {
+      _expensesItems = DatabaseModel.FilterByRange(null, true, -1);
+    }
+
+    private void FilterSortController_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e) => ShowRecords();
+
     public void AddedRecord()
     {
       _expensesItems = DatabaseModel.FilterByRange(null, true, -1);
@@ -35,6 +46,9 @@ namespace ExpensesTracker.ViewModels
       ShowRecords();
     }
 
+    /// <summary>
+    /// Updates database view by applying all selected filters to list of records
+    /// </summary>
     public void ShowRecords()
     {
       var listOfItems = new ObservableCollection<DatabaseView>();
@@ -43,17 +57,16 @@ namespace ExpensesTracker.ViewModels
       DatabaseViewItems = listOfItems;
       _databaseBrowserPage.DatabaseView.ItemsSource = DatabaseViewItems;
     }
+
+    /// <summary>
+    /// Changes number of visible records in database view
+    /// </summary>
     public void LoadMoreRecords()
     {
       if (_itemsToShow == _expensesItems.Count && _itemsToShow != 10 && _itemsToShow != 100 && _itemsToShow != 1000) _itemsToShow = 1;
       _itemsToShow *= 10;
       if (_itemsToShow > 1000) _itemsToShow = _expensesItems.Count;
-      ShowRecords();
-    }
-
-    public void SearchRecord(string name)
-    {
-      _filterSortController.Name = name;
+      _databaseBrowserPage.NumberOfItems.Text = _itemsToShow.ToString();
       ShowRecords();
     }
   }

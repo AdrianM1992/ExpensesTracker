@@ -8,8 +8,8 @@ namespace ExpensesTracker.Models.Settings
   {
     private static MainSettings _mainSettingsInstance;
     Currencies _currency;
-    Dictionary<Currencies, string> _currencies = new Dictionary<Currencies, string>
-        {
+    readonly Dictionary<Currencies, string> _currencies = new()
+    {
           {Currencies.PLN, "pl-pl" },
           {Currencies.USD, "en-US" },
           {Currencies.EUR, "fr-FR" },

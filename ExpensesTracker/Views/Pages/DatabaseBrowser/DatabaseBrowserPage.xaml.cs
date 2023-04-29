@@ -80,14 +80,6 @@ namespace ExpensesTracker.Views.Pages.DatabaseBrowser
       }
     }
 
-    /// <summary>
-    /// Opens new AddEditDBWindow if reference is null or window is not loaded.
-    /// </summary>
-    private void AddEditButton_Click(object sender, RoutedEventArgs e)
-    {
-      var button = (Button)sender;
-      OpenAddEditWindow(button.Name == "EditButton");
-    }
     private void OpenAddEditWindow(bool editMode)
     {
       if (addEditDBWindow == null || !addEditDBWindow.IsLoaded)
@@ -111,11 +103,17 @@ namespace ExpensesTracker.Views.Pages.DatabaseBrowser
       addEditDBWindow.Show();
     }
 
-    private void DatabaseView_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e) => OpenAddEditWindow(true);
-
-
     private void OnAddEditHandler() => _viewModel.AddedRecord();
 
+    /// <summary>
+    /// Opens new AddEditDBWindow if reference is null or window is not loaded.
+    /// </summary>
+    private void AddEditButton_Click(object sender, RoutedEventArgs e)
+    {
+      var button = (Button)sender;
+      OpenAddEditWindow(button.Name == "EditButton");
+    }
+    private void DatabaseView_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e) => OpenAddEditWindow(true);
     private void DeleteButton_Click(object sender, RoutedEventArgs e)
     {
       if (DatabaseView.Items.Count <= 0) MessageBox.Show("Nothing to delete.", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
@@ -134,8 +132,6 @@ namespace ExpensesTracker.Views.Pages.DatabaseBrowser
         _viewModel.RemoveRecord((DatabaseView)DatabaseView.SelectedItem);
       }
     }
-
     private void ShowMoreButton_Click(object sender, RoutedEventArgs e) => _viewModel.LoadMoreRecords();
-
   }
 }

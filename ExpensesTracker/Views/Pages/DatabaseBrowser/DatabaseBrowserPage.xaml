@@ -30,7 +30,7 @@
       </DataGrid.Resources>
     </DataGrid>
 
-    <ctrls:FilterCluster Grid.Column="1"/>
+    <ctrls:FilterCluster x:Name="FilterCluster" Grid.Column="1"/>
     <!--Function buttons-->
     <StackPanel Grid.Row="1" HorizontalAlignment="Left" Margin="10,0,5,10" VerticalAlignment="Bottom" Orientation="Horizontal" Opacity="0.5">
       <Button x:Name="AddButton" Style="{StaticResource OpacityButtonStyle}" Click="AddEditButton_Click" BorderBrush="{x:Null}" Foreground="{x:Null}" IsHitTestVisible="True" Width="36" Height="36" Margin="0,0,10,0">
@@ -53,6 +53,7 @@
           <ImageBrush ImageSource="/Views/Assets/Icons/loadMore.png" Stretch="Uniform"/>
         </Button.Background>
       </Button>
+      <TextBlock x:Name="NumberOfItems" Text="10" VerticalAlignment="Top"/>
     </StackPanel>
     <!--
     <DataGrid x:Name ="DatabaseView" IsReadOnly="True">

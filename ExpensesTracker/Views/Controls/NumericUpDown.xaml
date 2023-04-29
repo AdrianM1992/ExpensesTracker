@@ -16,7 +16,7 @@
       <RowDefinition/>
       <RowDefinition/>
     </Grid.RowDefinitions>
-    <TextBox x:Name="ValueTextBox" Grid.Row="0" Grid.RowSpan="2" MaxLines="1" TextAlignment="Center" TextChanged="ValueTextBox_TextChanged"/>
+    <TextBox x:Name="ValueTextBox" Grid.Row="0" Grid.RowSpan="2" MaxLines="1" TextAlignment="Center" TextChanged="ValueTextBox_TextChanged" Text="0"/>
     <Button x:Name="IncrementButton" Grid.Column="1" Grid.Row="0" Click="IncrementButton_Click">
       <svg:SvgViewbox Source="/Views/Assets/Icons/arrowup.svg"/>
     </Button>

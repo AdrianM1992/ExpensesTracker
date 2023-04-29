@@ -22,7 +22,7 @@
       </Style.Triggers>
     </Style>
   </UserControl.Resources>
-  <Grid>
+  <Grid Background="Transparent" IsHitTestVisible="True">
     <svg:SvgViewbox Source="/Views/Assets/Icons/clear.svg"/>
   </Grid>
 </UserControl>

@@ -1,5 +1,4 @@
 ﻿using ExpensesTracker.Models.DataControllers;
-using ExpensesTracker.Models.DataProviders;
 using ExpensesTracker.Models.Interfaces;
 using ExpensesTracker.Views.Classes;
 using ExpensesTracker.Views.Windows.AddEditDB;
@@ -96,7 +95,6 @@ namespace ExpensesTracker.ViewModels
         _databaseView.Quantity = 1M;
         _myWindow.Quantity.Text = string.Format("{0}", 1M);
       }
-
       _myWindow.Total.Text = string.Format("{0:C}", _databaseView.Total);
     }
 
@@ -154,19 +152,19 @@ namespace ExpensesTracker.ViewModels
       else
       {
         //Populate drop down menu with available categories
-        using var db = new ExpensesContext();
-        var categories = from c in db.Categories.ToList()
-                         select c.Name;
-        _myWindow.Category.ItemsSource = categories;
+        var catList = DatabaseModel.GetCategoriesNames();
+        _myWindow.Category.ItemsSource = catList;
+
         //Find index of databaseView.Subcategory in drop down menu.
         var index = 0;
-        foreach (var category in categories)
+        foreach (var category in catList)
         {
           if (category == _databaseView.Category) break;
           index++;
         }
         _myWindow.Category.SelectedIndex = index;
       }
+
       //Always update subcategory ComboBox when category is changed
       SetSubcategoryValue(null);
     }
@@ -181,21 +179,16 @@ namespace ExpensesTracker.ViewModels
       else
       {
         //Search DB for all subcategories of selected category
-        using var db = new ExpensesContext();
-        var subcategories = from c in db.Categories
-                            where c.Name == _databaseView.Category
-                            join s in db.Subcategories on c.Id equals s.CategoryId
-                            select s.Name;
+        var subCatList = DatabaseModel.GetSubcategoriesNames(_databaseView.Category);
+        if (!subCatList.Contains("None")) subCatList.Insert(0, "None");
+        _myWindow.Subcategory.ItemsSource = subCatList;
 
-        List<string> temp = subcategories.ToList();
-        if (!subcategories.Contains("None")) temp.Insert(0, "None");
-        _myWindow.Subcategory.ItemsSource = temp;
         //Index must be always defined (not null)
         _myWindow.Subcategory.SelectedIndex = 0;
 
         //Find index of databaseView.Subcategory in drop down menu.
         var index = 0;
-        foreach (var subcategory in temp)
+        foreach (var subcategory in subCatList)
         {
           if (subcategory == _databaseView.Subcategory) break;
           index++;
@@ -223,19 +216,17 @@ namespace ExpensesTracker.ViewModels
       if (newRecurringId != null) _databaseView.RecurringId = newRecurringId;
       else
       {
-        //Populate drop down menu with available recurring names
-        using var db = new ExpensesContext();
-        var recurrings = from r in db.Recurrings.ToList()
-                         select r.Name;
+        //Populate drop down menu with available recurring name
+        var recList = DatabaseModel.GetRecurringNames();
+        if (!recList.Contains("None")) recList.Insert(0, "None");
+        _myWindow.RecurringId.ItemsSource = recList;
 
-        List<string> temp = recurrings.ToList();
-        if (!recurrings.Contains("None")) temp.Insert(0, "None");
-        _myWindow.RecurringId.ItemsSource = temp;
         //Index must be always defined (not null)
         _myWindow.RecurringId.SelectedIndex = 0;
+
         //Find index of databaseView.Subcategory in drop down menu.
         var index = 0;
-        foreach (var recurring in recurrings)
+        foreach (var recurring in recList)
         {
           if (recurring == _databaseView.RecurringId) break;
           index++;

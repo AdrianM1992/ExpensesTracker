@@ -57,16 +57,14 @@ namespace ExpensesTracker.Views.Controls
     private void Border_MouseEnter(object sender, MouseEventArgs e)
     {
       //If maximizing is deactivated, highlight is also deactivated
-      var borderToHighlight = sender as Border;
-      if (borderToHighlight != null)
+      if (sender is Border borderToHighlight)
       {
         if (borderToHighlight.Name != "Max" || AllowMaximize) borderToHighlight.Background = HighlightBrush;
       }
     }
     private void Border_MouseLeave(object sender, MouseEventArgs e)
     {
-      var borderToHighlight = sender as Border;
-      if (borderToHighlight != null) borderToHighlight.Background = Brushes.Transparent;
+      if (sender is Border borderToHighlight) borderToHighlight.Background = Brushes.Transparent;
     }
     #endregion
   }

@@ -35,6 +35,12 @@ namespace ExpensesTracker.Views.Controls
       InitializeComponent();
     }
 
+    public void Clear(decimal defaultValue = 0M)
+    {
+      _lastValue = defaultValue;
+      NumericValue = defaultValue;
+      ValueTextBox.Text = defaultValue.ToString();
+    }
     private void ValueTextBox_TextChanged(object sender, TextChangedEventArgs e)
     {
       var input = (TextBox)sender;

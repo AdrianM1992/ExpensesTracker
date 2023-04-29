@@ -63,7 +63,7 @@ namespace ExpensesTracker.Views.Windows.NewElementWindowInput
     /// <param name="textBox">TextBox to blink</param>
     private void BlinkTextBoxOnce(TextBox textBox)
     {
-      DoubleAnimation animation = new DoubleAnimation
+      DoubleAnimation animation = new()
       {
         From = 1,
         To = 0,

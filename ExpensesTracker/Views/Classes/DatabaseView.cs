@@ -113,7 +113,8 @@ namespace ExpensesTracker.Views.Classes
       var categoryNames = from c in cat.Categories.ToList()
                           where c.Id == expense.CategoryId
                           select c.Name;
-      return categoryNames.First();
+      if (categoryNames.IsNullOrEmpty()) return "None";
+      else return categoryNames.First();
     }
 
     /// <summary>
