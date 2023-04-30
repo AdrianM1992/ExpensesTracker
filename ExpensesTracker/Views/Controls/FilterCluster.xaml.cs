@@ -219,8 +219,12 @@ namespace ExpensesTracker.Views.Controls
 
         foreach (var category in CategoriesList.SelectedItems)
         {
+#pragma warning disable CS8604 // Możliwy argument odwołania o wartości null.
           catList.Add(category.ToString());
+#pragma warning restore CS8604 // Możliwy argument odwołania o wartości null.
+#pragma warning disable CS8604 // Możliwy argument odwołania o wartości null.
           subcatList.AddRange(DatabaseModel.GetSubcategoriesNames(category.ToString()));
+#pragma warning restore CS8604 // Możliwy argument odwołania o wartości null.
         }
         _filterController.Categories = catList;
       }
@@ -250,7 +254,9 @@ namespace ExpensesTracker.Views.Controls
         List<string> subcatList = new();
         foreach (var subcategory in SubcategoriesList.SelectedItems)
         {
+#pragma warning disable CS8604 // Możliwy argument odwołania o wartości null.
           subcatList.Add(subcategory.ToString());
+#pragma warning restore CS8604 // Możliwy argument odwołania o wartości null.
         }
         _filterController.Subcategories = subcatList;
       }
@@ -269,7 +275,9 @@ namespace ExpensesTracker.Views.Controls
         List<string> recList = new();
         foreach (var recurrence in RecurrencesList.SelectedItems)
         {
+#pragma warning disable CS8604 // Możliwy argument odwołania o wartości null.
           recList.Add(recurrence.ToString());
+#pragma warning restore CS8604 // Możliwy argument odwołania o wartości null.
         }
         _filterController.Recurrances = recList;
       }

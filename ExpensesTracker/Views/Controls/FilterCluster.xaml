@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:ExpensesTracker.Views.Controls"
              xmlns:ctrls="clr-namespace:ExpensesTracker.Views.Controls"
              mc:Ignorable="d" 
-             d:DesignHeight="752" d:DesignWidth="220" d:Background="Aqua">
+             d:DesignHeight="752" d:DesignWidth="200" d:Background="Aqua">
   <UserControl.Resources>
     <ResourceDictionary>
       <ResourceDictionary.MergedDictionaries>
@@ -14,10 +14,12 @@
       </ResourceDictionary.MergedDictionaries>
     </ResourceDictionary>
   </UserControl.Resources>
+  
   <Grid>
     <Grid.Resources>
       <Style TargetType="ScrollBar" BasedOn="{StaticResource NarrowScrollBars}"/>
     </Grid.Resources>
+    
     <Grid.RowDefinitions>
       <RowDefinition Height="28"/>
       <RowDefinition Height="130"/>
@@ -29,7 +31,7 @@
 
     <Label Content="FILTERS" Grid.Row="0" FontSize="16" HorizontalContentAlignment="Center" BorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}" BorderThickness="1,1,1,1" Padding="0,0,0,0" Margin="2,2,2,2"/>
 
-    <!--Filter options-->
+    <!--#region Filter options-->
     <!--#region Basic filters-->
     <GroupBox x:Name="BasicGroup" Header="Basic" Grid.Row="1">
       <Grid>
@@ -77,7 +79,7 @@
           <ColumnDefinition/>
         </Grid.ColumnDefinitions>
 
-        <StackPanel>
+        <StackPanel >
           <StackPanel Orientation="Horizontal">
             <Label Content="Amount" Padding="0,5,5,5"/>
             <ctrls:ClearButton x:Name="ClearPrice" Grid.Row="0" Margin="0,5,0,0" Height="8" Width="8" MouseLeftButtonDown="ClearButtonPrices_MouseLeftButtonDown"/>
@@ -115,8 +117,14 @@
           <ColumnDefinition/>
           <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-
-        <StackPanel>
+        <Grid.Resources>
+          <Style TargetType="DatePicker">
+            <Style.Setters >
+              <Setter Property="FontSize" Value="10"></Setter>
+            </Style.Setters>
+          </Style>
+        </Grid.Resources>
+        <StackPanel >
           <StackPanel Orientation="Horizontal">
             <Label Content="Date added" Padding="0,5,5,5"/>
             <ctrls:ClearButton x:Name="ClearDateAdded" Grid.Row="0" Margin="0,5,0,0" Height="8" Width="8" MouseLeftButtonDown="ClearButtonDates_MouseLeftButtonDown"/>
@@ -131,7 +139,7 @@
             <Label Content="Date occurred" Padding="0,0,5,5"/>
             <ctrls:ClearButton x:Name="ClearDateOccurred" Grid.Row="0" Margin="0,5,0,0" Height="8" Width="8" MouseLeftButtonDown="ClearButtonDates_MouseLeftButtonDown"/>
           </StackPanel>
-          <DatePicker x:Name="UserDateMin" VerticalAlignment="Top" HorizontalAlignment="Left" Width="80" SelectedDateChanged="DatePicker_SelectedDateChanged"/>
+          <DatePicker x:Name="UserDateMin" VerticalAlignment="Top" HorizontalAlignment="Left" FontSize="10" Width="80" SelectedDateChanged="DatePicker_SelectedDateChanged"/>
         </StackPanel>
 
         <StackPanel Grid.Column="1">
@@ -183,11 +191,13 @@
     </GroupBox>
     <ctrls:ClearButton x:Name="ClearLists" Grid.Row="4" Margin="0,15,5,0" MouseLeftButtonDown="ClearButtonLists_MouseLeftButtonDown"/>
     <!--#endregion-->
-
+    <!--#endregion-->
+    
+    <!--#region Clear all-->
     <StackPanel x:Name="ClearAll" Orientation="Horizontal" Grid.Row="5" HorizontalAlignment="Center" Visibility="Hidden" MouseLeftButtonDown="ClearAll_MouseLeftButtonDown" IsHitTestVisible="True" Background="Transparent">
       <ctrls:ClearButton VerticalAlignment="Center" Width="24" Height="24" Visibility="Visible"/>
       <Label Content="CLEAR ALL FILTERS" VerticalAlignment="Center" Foreground="Red" FontSize="16"/>
     </StackPanel>
-
+    <!--#endregion-->
   </Grid>
 </UserControl>

@@ -2,6 +2,7 @@
 using ExpensesTracker.ViewModels;
 using ExpensesTracker.Views.Classes;
 using ExpensesTracker.Views.Windows.AddEditDB;
+using System;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -10,74 +11,21 @@ namespace ExpensesTracker.Views.Pages.DatabaseBrowser
   /// <summary>
   /// Logic for DatabaseBrowserPage.xaml
   /// </summary>
-  public partial class DatabaseBrowserPage : Page
+  public partial class DatabaseBrowserPage : Page, IObserver<double>
   {
     private readonly DatabaseBrowserPageViewModel _viewModel;
     private AddEditDBWindow? addEditDBWindow;
     private readonly IMainSettings _mainSettings;
     private bool _deleteInfoNotShown = true;
+    private IDisposable? _unsubscription;
 
     public DatabaseBrowserPage(IMainSettings mainSettings)
     {
       _mainSettings = mainSettings;
       InitializeComponent();
-      _viewModel = new DatabaseBrowserPageViewModel(this);
+      _viewModel = DatabaseBrowserPageViewModel.GetDatabaseBrowserPageViewModelRef(this);
+      DatabaseView.DataContext = _viewModel;
       DatabaseView.ItemsSource = _viewModel.DatabaseViewItems;
-    }
-
-    /// <summary>
-    /// Intercepts generated column and overwrites properties based on name
-    /// </summary>
-    private void DatabaseView_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
-    {
-      var typeText = e.Column as DataGridTextColumn;
-      var typeBool = e.Column as DataGridCheckBoxColumn;
-      switch (e.Column.Header)
-      {
-        case "Name":
-          typeText.MaxWidth = 200;
-          typeText.ElementStyle = new Style(typeof(TextBlock));
-          typeText.ElementStyle.Setters.Add(new Setter(TextBlock.TextWrappingProperty, TextWrapping.Wrap));
-          break;
-        case "Price":
-          typeText.Binding.StringFormat = ".00 zł";
-          break;
-        case "Quantity":
-          typeText.Header = "Qty";
-          break;
-        case "Total":
-          typeText.Binding.StringFormat = ".00 zł";
-          typeText.CanUserSort = true;
-          break;
-        case "DateOfEntry":
-          typeText.Header = "Submit date";
-          typeText.Binding.StringFormat = "dd/MM//yyyy HH:mm";
-          break;
-        case "LastUpdate":
-          typeText.Header = "Last updated";
-          typeText.Binding.StringFormat = "dd/MM//yyyy HH:mm";
-          break;
-        case "Date":
-          typeText.Binding.StringFormat = "d";
-          typeText.CanUserSort = true;
-          break;
-        case "Income":
-          typeBool.Header = "Income?";
-          break;
-        case "Recurring":
-          typeBool.Header = "Recurring?";
-          break;
-        case "RecurringId":
-          typeText.Header = "Recurring Name";
-          break;
-        case "Description":
-          typeText.MaxWidth = 300;
-          typeText.ElementStyle = new Style(typeof(TextBlock));
-          typeText.ElementStyle.Setters.Add(new Setter(TextBlock.TextWrappingProperty, TextWrapping.Wrap));
-          break;
-        default:
-          break;
-      }
     }
 
     private void OpenAddEditWindow(bool editMode)
@@ -133,5 +81,27 @@ namespace ExpensesTracker.Views.Pages.DatabaseBrowser
       }
     }
     private void ShowMoreButton_Click(object sender, RoutedEventArgs e) => _viewModel.LoadMoreRecords();
+
+    public void Subscribe(MainWindow mainWindow) => _unsubscription = mainWindow.Subscribe(this);
+    public void Unsubscribe() => _unsubscription.Dispose();
+
+    public void OnCompleted()
+    {
+      //No implementation
+    }
+    public void OnError(Exception error)
+    {
+      //No implementation
+    }
+    public void OnNext(double value)
+    {
+      double maxWidth = value - 210;
+      foreach (var column in DatabaseView.Columns)
+      {
+        if (column != DescriptionColumn) maxWidth -= column.ActualWidth;
+      }
+      if (maxWidth < 300) DescriptionColumn.MaxWidth = 300;
+      else DescriptionColumn.MaxWidth = maxWidth;
+    }
   }
 }

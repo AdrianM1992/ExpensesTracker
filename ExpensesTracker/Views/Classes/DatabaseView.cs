@@ -1,4 +1,5 @@
-﻿using ExpensesTracker.Models.DataProviders;
+﻿using ExpensesTracker.Models.DataControllers;
+using ExpensesTracker.Models.DataProviders;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Linq;
@@ -13,7 +14,7 @@ namespace ExpensesTracker.Views.Classes
     private decimal _price;
     private decimal _quantity;
     private bool _recurring;
-    private Expense? _expense = null;
+    private readonly Expense? _expense = null;
 
     public int ID { get; private set; }
     public string Name { get; set; } = "";
@@ -107,12 +108,9 @@ namespace ExpensesTracker.Views.Classes
     /// </summary>
     /// <param name="expense">Record with reference to categoryId</param>
     /// <returns>Name of category expense or income</returns>
-    private string GetCategoryName(Expense expense)
+    private static string GetCategoryName(Expense expense)
     {
-      using var cat = new ExpensesContext();
-      var categoryNames = from c in cat.Categories.ToList()
-                          where c.Id == expense.CategoryId
-                          select c.Name;
+      var categoryNames = DatabaseModel.GetCategoriesNames(expense);
       if (categoryNames.IsNullOrEmpty()) return "None";
       else return categoryNames.First();
     }
@@ -122,12 +120,9 @@ namespace ExpensesTracker.Views.Classes
     /// </summary>
     /// <param name="expense">Record with reference to categoryId</param>
     /// <returns>Name of category expense or income</returns>
-    private string? GetSubategoryName(Expense expense)
+    private static string? GetSubategoryName(Expense expense)
     {
-      using var subcat = new ExpensesContext();
-      var subcategoryNames = from s in subcat.Subcategories.ToList()
-                             where s.Id == expense.SubcategoryId
-                             select s.Name;
+      var subcategoryNames = DatabaseModel.GetSubcategoriesNames(expense: expense);
       if (subcategoryNames.IsNullOrEmpty()) return null;
       else return subcategoryNames.First();
     }
@@ -137,14 +132,11 @@ namespace ExpensesTracker.Views.Classes
     /// </summary>
     /// <param name="expense">Record with reference to recurringId</param>
     /// <returns>Name of recurring expense or income</returns>
-    private string? GetRecurringName(Expense expense)
+    private static string? GetRecurringName(Expense expense)
     {
       if (expense.Recurring)
       {
-        using var rec = new ExpensesContext();
-        var recurringNames = from r in rec.Recurrings.ToList()
-                             where r.Id == expense.RecurringId
-                             select r.Name;
+        var recurringNames = DatabaseModel.GetRecurringNames(expense: expense);
         if (recurringNames.IsNullOrEmpty()) return "";
         else return recurringNames.First();
       }

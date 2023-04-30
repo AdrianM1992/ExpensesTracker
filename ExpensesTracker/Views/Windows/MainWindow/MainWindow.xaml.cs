@@ -1,6 +1,7 @@
 ﻿using ExpensesTracker.Models.Interfaces;
 using ExpensesTracker.Models.Settings;
 using ExpensesTracker.ViewModels;
+using ExpensesTracker.Views.Classes;
 using ExpensesTracker.Views.Controls;
 using ExpensesTracker.Views.Pages.DatabaseBrowser;
 using ExpensesTracker.Views.Pages.Graphs;
@@ -8,6 +9,7 @@ using ExpensesTracker.Views.Pages.Home;
 using ExpensesTracker.Views.Pages.Settings;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -19,41 +21,40 @@ namespace ExpensesTracker
   /// <summary>
   /// Logic for MainWindow.xaml
   /// </summary>
-  public partial class MainWindow : Window
+  public partial class MainWindow : Window, IObservable<double>
   {
     private readonly IMainSettings _mainSettings;
-    MainWindowViewModel _viewModel;
+    private readonly MainWindowViewModel _viewModel;
     /// <summary>
     /// Stores instances of pages [value] by tab name [key]
     /// </summary>
-    readonly Dictionary<string, Page> _pages = new();
+    private readonly Dictionary<string, Page> _pages = new();
     /// <summary>
     /// Stores names of all pages
     /// </summary>
-    readonly List<string> _tabNames = new();
+    private readonly List<string> _tabNames = new();
+
+    private readonly List<IObserver<double>> _observers = new();
 
     public MainWindow()
     {
       InitializeComponent();
       _mainSettings = MainSettings.GetMainSettingsInstance();
-      _viewModel = MainWindowViewModel.GetMainWindowViewModel();
+      _viewModel = MainWindowViewModel.GetMainWindowViewModel(this);
       DataContext = _viewModel;
       HomeTab.CustomTabChanged += OnTabChangedHandler;
       InitTabs();
       ContentPage.Content = _pages[_tabNames[0]];
     }
-
-    private void Menu_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+    public IDisposable Subscribe(IObserver<double> observer)
     {
-      MenuShowHide();
+      if (!_observers.Contains(observer)) _observers.Add(observer);
+      return new Unsubscriber(_observers, observer);
     }
 
-    private void Bar_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
-    {
-      if (e.LeftButton == MouseButtonState.Pressed) DragMove();
-    }
+    private void Menu_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) => MenuShowHide();
 
-    private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+    private void Window_Closing(object sender, CancelEventArgs e)
     {
       foreach (Window window in Application.Current.Windows)
       {
@@ -61,39 +62,50 @@ namespace ExpensesTracker
       }
     }
 
-    #region Menu Items
-    //Methods handling interaction with menu items
-    private void MenuHome_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+    /// <summary>
+    /// Handles interaction with menu items
+    /// </summary>
+    /// <param name="sender">Menu item StackPanel</param>
+    private void MenuItem_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
-      SwapTab(_tabNames[0]);
-      ContentPage.Navigate(_pages[_tabNames[0]]);
+      var tab = (StackPanel)sender;
+      switch (tab.Name)
+      {
+        case "Home":
+          SwapTab(_tabNames[0]);
+          ContentPage.Navigate(_pages[_tabNames[0]]);
+          break;
+        case "Database":
+          SwapTab(_tabNames[1]);
+          ContentPage.Navigate(_pages[_tabNames[1]]);
+          break;
+        case "Graphs":
+          SwapTab(_tabNames[2]);
+          ContentPage.Navigate(_pages[_tabNames[2]]);
+          break;
+        case "Settings":
+          SwapTab(_tabNames[3]);
+          ContentPage.Navigate(_pages[_tabNames[3]]);
+          break;
+        default:
+          break;
+      }
     }
-    private void Database_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-    {
-      SwapTab(_tabNames[1]);
-      ContentPage.Navigate(_pages[_tabNames[1]]);
-    }
-    private void MenuGraph_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-    {
-      SwapTab(_tabNames[2]);
-      ContentPage.Navigate(_pages[_tabNames[2]]);
-    }
-    private void Settings_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-    {
-      SwapTab(_tabNames[3]);
-      ContentPage.Navigate(_pages[_tabNames[3]]);
-    }
-    #endregion
 
     /// <summary>
     /// Initializes _tabNames and _pages variables
     /// </summary>
     private void InitTabs()
     {
+      Page page;
       _tabNames.Add("Home");
       _pages.Add(_tabNames.Last(), new HomePage());
+
       _tabNames.Add("Database");
-      _pages.Add(_tabNames.Last(), new DatabaseBrowserPage(_mainSettings));
+      page = new DatabaseBrowserPage(_mainSettings);
+      ((DatabaseBrowserPage)page).Subscribe(this);
+      _pages.Add(_tabNames.Last(), page);
+
       _tabNames.Add("Graphs");
       _pages.Add(_tabNames.Last(), new GraphsPage());
       _tabNames.Add("Settings");
@@ -195,6 +207,13 @@ namespace ExpensesTracker
         SwapTab(tabName);
         ContentPage.Navigate(_pages[tabName]);
       }
+    }
+
+    private void Tabs_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) => DragMove();
+
+    private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
+    {
+      foreach (var observer in _observers) observer.OnNext(ContentPage.ActualWidth);
     }
   }
 }

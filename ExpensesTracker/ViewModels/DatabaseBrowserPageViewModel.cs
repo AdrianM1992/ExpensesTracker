@@ -4,22 +4,23 @@ using ExpensesTracker.Views.Classes;
 using ExpensesTracker.Views.Pages.DatabaseBrowser;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Windows.Controls;
 
 namespace ExpensesTracker.ViewModels
 {
   class DatabaseBrowserPageViewModel
   {
     private readonly DatabaseBrowserPage _databaseBrowserPage;
+    private static DatabaseBrowserPageViewModel? _instance;
     private int _itemsToShow = 10;
     private List<Expense> _expensesItems;
-    private FilterSortController _filterSortController = new();
+    private readonly FilterSortController _filterSortController = new();
 
-    public ObservableCollection<DatabaseView> DatabaseViewItems { get; private set; }
+    public ObservableCollection<DatabaseView> DatabaseViewItems { get; private set; } = new();
 
-    public DatabaseBrowserPageViewModel(Page page)
+    private DatabaseBrowserPageViewModel(DatabaseBrowserPage page)
     {
-      _databaseBrowserPage = (DatabaseBrowserPage)page;
+
+      _databaseBrowserPage = page;
       _expensesItems = DatabaseModel.FilterByRange(null, true, -1);
       _databaseBrowserPage.FilterCluster.SetFilterControllerRef(_filterSortController);
       _filterSortController.PropertyChanged += FilterSortController_PropertyChanged;
@@ -27,12 +28,16 @@ namespace ExpensesTracker.ViewModels
       ShowRecords();
     }
 
-    private void DatabaseModel_SubtablesChanged(object? sender, System.EventArgs e)
+    /// <summary>
+    /// Implementation of singleton pattern
+    /// </summary>
+    /// <param name="page">DatabaseBrowserPage reference</param>
+    /// <returns>Reference to DatabaseBrowserPageViewModel</returns>
+    public static DatabaseBrowserPageViewModel GetDatabaseBrowserPageViewModelRef(DatabaseBrowserPage page)
     {
-      _expensesItems = DatabaseModel.FilterByRange(null, true, -1);
+      if (_instance == null) return _instance = new DatabaseBrowserPageViewModel(page);
+      else return _instance;
     }
-
-    private void FilterSortController_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e) => ShowRecords();
 
     public void AddedRecord()
     {
@@ -69,5 +74,11 @@ namespace ExpensesTracker.ViewModels
       _databaseBrowserPage.NumberOfItems.Text = _itemsToShow.ToString();
       ShowRecords();
     }
+
+    private void DatabaseModel_SubtablesChanged(object? sender, System.EventArgs e)
+    {
+      _expensesItems = DatabaseModel.FilterByRange(null, true, -1);
+    }
+    private void FilterSortController_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e) => ShowRecords();
   }
 }

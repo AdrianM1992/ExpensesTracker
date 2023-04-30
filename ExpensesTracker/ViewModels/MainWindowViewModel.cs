@@ -2,24 +2,24 @@
 {
   internal class MainWindowViewModel
   {
-    MainWindow _mainWindow;
-
+    private readonly MainWindow _mainWindow;
     /// <summary>
     /// Singleton pattern implementation
     /// </summary>
-    private static MainWindowViewModel _instance;
-    private MainWindowViewModel()
+    private static MainWindowViewModel? _instance;
+    private MainWindowViewModel(MainWindow window)
     {
-
+      _mainWindow = window;
     }
 
-    public static MainWindowViewModel GetMainWindowViewModel()
+    /// <summary>
+    /// Implementation of singleton pattern
+    /// </summary>
+    /// <param name="window">MainWindow reference</param>
+    /// <returns>Reference to MainWindowViewModel</returns>
+    public static MainWindowViewModel GetMainWindowViewModel(MainWindow window)
     {
-      if (_instance == null)
-      {
-        _instance = new MainWindowViewModel();
-        return _instance;
-      }
+      if (_instance == null) return _instance = new MainWindowViewModel(window);
       else return _instance;
     }
   }

@@ -155,7 +155,9 @@ namespace ExpensesTracker.Views.Windows.AddEditDB
       var result = MessageBox.Show("Are you sure?\nThis cannot be undone.", "Warning", MessageBoxButton.YesNo, MessageBoxImage.Question);
       if (result == MessageBoxResult.Yes)
       {
+#pragma warning disable CS8604 // Możliwy argument odwołania o wartości null.
         _viewModel.RemoveCategory(Category.SelectedItem.ToString());
+#pragma warning restore CS8604 // Możliwy argument odwołania o wartości null.
       }
     }
     private void AddSubCategoryButton_Click(object sender, RoutedEventArgs e)
@@ -173,7 +175,9 @@ namespace ExpensesTracker.Views.Windows.AddEditDB
       var result = MessageBox.Show("Are you sure?\nThis cannot be undone.", "Warning", MessageBoxButton.YesNo, MessageBoxImage.Question);
       if (result == MessageBoxResult.Yes && Subcategory.SelectedItem.ToString() != "None")
       {
+#pragma warning disable CS8604 // Możliwy argument odwołania o wartości null.
         _viewModel.RemoveSubcategory(Subcategory.SelectedItem.ToString());
+#pragma warning restore CS8604 // Możliwy argument odwołania o wartości null.
       }
     }
     private void AddRecurringButton_Click(object sender, RoutedEventArgs e)
@@ -191,7 +195,9 @@ namespace ExpensesTracker.Views.Windows.AddEditDB
       var result = MessageBox.Show("Are you sure?\nThis cannot be undone.", "Warning", MessageBoxButton.YesNo, MessageBoxImage.Question);
       if (result == MessageBoxResult.Yes && RecurringId.SelectedItem.ToString() != "None")
       {
+#pragma warning disable CS8604 // Możliwy argument odwołania o wartości null.
         _viewModel.RemoveRecurrence(RecurringId.SelectedItem.ToString());
+#pragma warning restore CS8604 // Możliwy argument odwołania o wartości null.
       }
     }
 

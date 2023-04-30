@@ -8,7 +8,6 @@
       xmlns:svg="http://sharpvectors.codeplex.com/svgc/"
       xmlns:vm="clr-namespace:ExpensesTracker.ViewModels"
       mc:Ignorable="d"
-      d:DataContext="{d:DesignInstance vm:DatabaseBrowserPageViewModel}"
       d:DesignHeight="752" d:DesignWidth="1158"
       Title="DatabaseBrowser" x:Name="DatabaseBrowser" Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}">
   <Page.Resources>
@@ -18,20 +17,55 @@
       </ResourceDictionary.MergedDictionaries>
     </ResourceDictionary>
   </Page.Resources>
-  <Grid>
+  
+  <Grid x:Name="BrowserGrid">
     <Grid.ColumnDefinitions>
       <ColumnDefinition/>
-      <ColumnDefinition Width="220"/>
+      <ColumnDefinition Width="200"/>
     </Grid.ColumnDefinitions>
-
-    <DataGrid x:Name ="DatabaseView" IsReadOnly="True" AutoGeneratingColumn="DatabaseView_AutoGeneratingColumn" MouseDoubleClick="DatabaseView_MouseDoubleClick" Margin="0,2,0,0">
+    
+    <!--#region DataGrid layout-->
+    <DataGrid x:Name="DatabaseView" ItemsSource="{Binding _viewModel.DatabaseViewItems}" AutoGenerateColumns="False" CanUserResizeRows="False" CanUserDeleteRows="False" CanUserAddRows="False" CanUserResizeColumns="False" CanUserReorderColumns="False" IsReadOnly="True" MouseDoubleClick="DatabaseView_MouseDoubleClick" Margin="0,2,0,0" HorizontalAlignment="Left">
       <DataGrid.Resources>
         <Style TargetType="ScrollBar" BasedOn="{StaticResource NarrowScrollBars}"/>
+        <Style TargetType="{x:Type DataGridColumnHeader}">
+          <Setter Property="FontWeight" Value="Bold"/>
+        </Style>
       </DataGrid.Resources>
+      <DataGrid.Columns>
+        <DataGridTextColumn Header="ID" Binding="{Binding ID}" Width="40"/> <!--Only for development-->
+        <DataGridTextColumn Header="Name" Binding="{Binding Name}" MaxWidth="200">
+          <DataGridTextColumn.ElementStyle>
+            <Style TargetType="{x:Type TextBlock}">
+              <Setter Property="TextWrapping" Value="Wrap" />
+            </Style>
+          </DataGridTextColumn.ElementStyle>
+        </DataGridTextColumn>
+        <DataGridCheckBoxColumn Header="Income?" Binding="{Binding Income}" Width="60" />
+        <DataGridCheckBoxColumn Header="Recurring?" Binding="{Binding Recurring}" Width="70" />
+        <DataGridTextColumn Header="Price" Binding="{Binding Price, StringFormat='{}{0:C2}'}"/>
+        <DataGridTextColumn Header="Qty" Binding="{Binding Quantity, StringFormat='{}{0:F2}'}"/>
+        <DataGridTextColumn Header="Total" Binding="{Binding Total, StringFormat='{}{0:C2}'}"/>
+        <DataGridTextColumn Header="Submit date" Binding="{Binding DateOfEntry, StringFormat='{}dd.MM.yyyy HH:mm'}"/>
+        <DataGridTextColumn Header="Last updated" Binding="{Binding LastUpdate, StringFormat='{}dd.MM.yyyy HH:mm'}"/>
+        <DataGridTextColumn Header="Date" Binding="{Binding Date, StringFormat='{}dd.MM.yyyy'}"/>
+        <DataGridTextColumn Header="Category" Binding="{Binding Category}" Width="100"/>
+        <DataGridTextColumn Header="Subcategory" Binding="{Binding Subcategory}" Width="100" />
+        <DataGridTextColumn Header="Recurrence" Binding="{Binding RecurringId}" Width="100" />
+        <DataGridTextColumn x:Name="DescriptionColumn" Header="Description" Binding="{Binding Description}" MaxWidth="300">
+          <DataGridTextColumn.ElementStyle>
+            <Style TargetType="{x:Type TextBlock}">
+              <Setter Property="TextWrapping" Value="Wrap" />
+            </Style>
+          </DataGridTextColumn.ElementStyle>
+        </DataGridTextColumn>
+      </DataGrid.Columns>
     </DataGrid>
-
+    <!--#endregion-->
+    
     <ctrls:FilterCluster x:Name="FilterCluster" Grid.Column="1"/>
-    <!--Function buttons-->
+    
+    <!--#region Function buttons-->
     <StackPanel Grid.Row="1" HorizontalAlignment="Left" Margin="10,0,5,10" VerticalAlignment="Bottom" Orientation="Horizontal" Opacity="0.5">
       <Button x:Name="AddButton" Style="{StaticResource OpacityButtonStyle}" Click="AddEditButton_Click" BorderBrush="{x:Null}" Foreground="{x:Null}" IsHitTestVisible="True" Width="36" Height="36" Margin="0,0,10,0">
         <Button.Background>
@@ -53,25 +87,8 @@
           <ImageBrush ImageSource="/Views/Assets/Icons/loadMore.png" Stretch="Uniform"/>
         </Button.Background>
       </Button>
-      <TextBlock x:Name="NumberOfItems" Text="10" VerticalAlignment="Top"/>
+      <TextBlock x:Name="NumberOfItems" Text="10" VerticalAlignment="Bottom"/>
     </StackPanel>
-    <!--
-    <DataGrid x:Name ="DatabaseView" IsReadOnly="True">
-      <DataGrid.Columns>
-        <DataGridTextColumn Header="ID"/>
-        <DataGridTextColumn Header="Name"/>
-        <DataGridTextColumn Header="Price" HeaderStringFormat="{}{0:C2}"/>
-        <DataGridTextColumn Header="Qty"/>
-        <DataGridTextColumn Header="Total" HeaderStringFormat="{}{0:C2}"/>
-        <DataGridTextColumn Header="Category"/>
-        <DataGridTextColumn Header="Subcategory"/>
-        <DataGridCheckBoxColumn Header="Income?"/>
-        <DataGridCheckBoxColumn Header="Recurring?"/>
-        <DataGridTextColumn Header="Description"/>
-        <DataGridTemplateColumn>
-        </DataGridTemplateColumn>
-      </DataGrid.Columns>
-    </DataGrid>
-    -->
+    <!--#endregion-->
   </Grid>
 </Page>

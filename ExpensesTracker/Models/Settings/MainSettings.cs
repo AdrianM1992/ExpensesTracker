@@ -6,7 +6,9 @@ namespace ExpensesTracker.Models.Settings
 {
   public class MainSettings : IMainSettings
   {
+#pragma warning disable CS8618 // Pole niedopuszczające wartości null musi zawierać wartość inną niż null podczas kończenia działania konstruktora. Rozważ zadeklarowanie pola jako dopuszczającego wartość null.
     private static MainSettings _mainSettingsInstance;
+#pragma warning restore CS8618 // Pole niedopuszczające wartości null musi zawierać wartość inną niż null podczas kończenia działania konstruktora. Rozważ zadeklarowanie pola jako dopuszczającego wartość null.
     Currencies _currency;
     readonly Dictionary<Currencies, string> _currencies = new()
     {
