@@ -4,12 +4,52 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:ExpensesTracker.Views.Pages.Graphs"
+      xmlns:ctrls ="clr-namespace:ExpensesTracker.Views.Controls"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="DataGraphs" x:Name="Graphs">
+  <Page.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/Views/Assets/Styles/Styles.xaml"/>
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+  </Page.Resources>
+  <Grid Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}">
+    <Grid.RowDefinitions>
+      <RowDefinition Height="28"/>
+      <RowDefinition/>
+    </Grid.RowDefinitions>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition/>
+    </Grid.ColumnDefinitions>
+    <Grid.Resources>
+      <Style TargetType="ScrollBar" BasedOn="{StaticResource NarrowScrollBars}"/>
+    </Grid.Resources>
+    <ScrollViewer Grid.Row="0" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled" CanContentScroll="False">
+      <StackPanel x:Name="GraphsTabs" Grid.Row="0" Orientation="Horizontal"/>
+    </ScrollViewer>
 
-    <Grid>
-    <Ellipse HorizontalAlignment="Left" Height="215" Margin="265,145,0,0" Stroke="Black" VerticalAlignment="Top" Width="340" Fill="#FFC52929"/>
-<TabControl />
+    <StackPanel x:Name="GraphsContainer" Grid.Row="1"/>
+    
+    <!--#region Function buttons-->
+    <StackPanel Grid.Row="1" HorizontalAlignment="Left" Margin="10,0,5,10" VerticalAlignment="Bottom" Orientation="Horizontal" Opacity="0.5">
+      <Button x:Name="AddButton" Style="{StaticResource OpacityButtonStyle}" Click="AddDuplicateButton_Click" BorderBrush="{x:Null}" Foreground="{x:Null}" IsHitTestVisible="True" Width="36" Height="36" Margin="0,0,10,0" ToolTip="Add new graph">
+        <Button.Background>
+          <ImageBrush ImageSource="/Views/Assets/Icons/newRecord.png" Stretch="Uniform"/>
+        </Button.Background>
+      </Button>
+      <Button x:Name="DuplicateButton" Style="{StaticResource OpacityButtonStyle}" Click="AddDuplicateButton_Click" BorderBrush="{x:Null}" Foreground="{x:Null}" IsHitTestVisible="True" Width="36" Height="36" Margin="0,0,10,0" ToolTip="Duplicate graph">
+        <Button.Background>
+          <ImageBrush ImageSource="/Views/Assets/Icons/duplicateRecord.png" Stretch="Uniform"/>
+        </Button.Background>
+      </Button>
+      <Button x:Name="DeleteButton" Style="{StaticResource OpacityButtonStyle}" BorderBrush="{x:Null}" Foreground="{x:Null}" IsHitTestVisible="True" Width="36" Height="36" Margin="0,0,10,0" Click="DeleteButton_Click" ToolTip="Delete graph">
+        <Button.Background>
+          <ImageBrush ImageSource="/Views/Assets/Icons/deleteRecord.png" Stretch="Uniform"/>
+        </Button.Background>
+      </Button>
+    </StackPanel>
+    <!--#endregion-->
   </Grid>
 </Page>

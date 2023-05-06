@@ -21,7 +21,7 @@
     
     <Rectangle Grid.ColumnSpan="2" RadiusY="3" RadiusX="3"  Margin="0,2,0,0" Fill="{Binding Path=BackgroundTabColor, RelativeSource={RelativeSource AncestorType={x:Type local:CustomTabControl}}}"/>
     
-    <TextBlock x:Name="Description" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Bottom" FontSize="16" Text="{Binding Path=TabName, RelativeSource={RelativeSource AncestorType={x:Type local:CustomTabControl}}}" Margin="2,2,2,2" MouseDown="SelectTab_Click"/>
+    <TextBlock x:Name="Description" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Bottom" FontSize="16" Text="{Binding Path=TabName, RelativeSource={RelativeSource AncestorType={x:Type local:CustomTabControl}}}" Margin="2,2,2,2" MouseLeftButtonDown="Description_MouseLeftButtonDown" MouseRightButtonDown="Description_MouseRightButtonDown"/>
     
     <Button Style="{StaticResource OpacityButtonStyle }" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top" Height="8" Width="8" Margin="2,4,2,2" Visibility="{Binding Path=CloseTabVisible, RelativeSource={RelativeSource AncestorType={x:Type local:CustomTabControl}}}" Click="Button_Click">
       <Button.Background>

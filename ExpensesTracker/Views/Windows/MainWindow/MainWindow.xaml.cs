@@ -1,4 +1,5 @@
-﻿using ExpensesTracker.Models.Interfaces;
+﻿using ExpensesTracker.DataTypes.Enums;
+using ExpensesTracker.Models.Interfaces;
 using ExpensesTracker.Models.Settings;
 using ExpensesTracker.ViewModels;
 using ExpensesTracker.Views.Classes;
@@ -42,7 +43,7 @@ namespace ExpensesTracker
       _mainSettings = MainSettings.GetMainSettingsInstance();
       _viewModel = MainWindowViewModel.GetMainWindowViewModel(this);
       DataContext = _viewModel;
-      HomeTab.CustomTabChanged += OnTabChangedHandler;
+      HomeTab.CustomTabEvent += OnCustomTabEventHandler;
       InitTabs();
       ContentPage.Content = _pages[_tabNames[0]];
     }
@@ -122,16 +123,15 @@ namespace ExpensesTracker
       //Gets references to all opened tabs, then checks if desired tab is already opened
       IEnumerable<CustomTabControl> customTabControls = Tabs.Children.OfType<CustomTabControl>();
       var match = customTabControls.Where(tab => tab.TabName == tabName).Select(tab => tab);
+
       //Grays out all opened tabs
-      foreach (var customTabControl in customTabControls)
-      {
-        customTabControl.BackgroundTabColor = SystemColors.ScrollBarBrush;
-      }
+      foreach (var customTabControl in customTabControls) customTabControl.BackgroundTabColor = SystemColors.ScrollBarBrush;
+
       //If tab is already opened highlights it, if not creates new tab
       if (!match.Any())
       {
         var newTab = new CustomTabControl { TabName = tabName, VerticalAlignment = VerticalAlignment.Bottom, BackgroundTabColor = SystemColors.MenuBarBrush };
-        newTab.CustomTabChanged += OnTabChangedHandler;
+        newTab.CustomTabEvent += OnCustomTabEventHandler;
         Tabs.Children.Add(newTab);
         return newTab;
       }
@@ -193,10 +193,10 @@ namespace ExpensesTracker
     /// </summary>
     /// <param name="tabName">Name of calling tab</param>
     /// <param name="tabClose">Specifies if tab is marked for closing</param>
-    private void OnTabChangedHandler(string tabName, bool tabClose)
+    private void OnCustomTabEventHandler(string tabName, CustomTabEnums customTabEvent, string o)
     {
       //If tab is marked for closing, set 'Home' tab as active tab
-      if (tabClose)
+      if (customTabEvent == CustomTabEnums.Closed)
       {
         Tabs.Children.Remove(SwapTab(tabName));
         SwapTab(_tabNames[0]);

@@ -23,6 +23,7 @@ namespace ExpensesTracker.Views.Windows.AddEditDB
     private readonly Dictionary<TextBox, string> _textBoxes;
     private bool _savedFlag = false;
     private event AddEditRecordHandler? AddEditRecordEvent;
+
     public AddEditDBWindow(IMainSettings mainSettings, DatabaseBrowserEnum operationType, DatabaseView? databaseView = null)
     {
       _mainSettings = mainSettings;

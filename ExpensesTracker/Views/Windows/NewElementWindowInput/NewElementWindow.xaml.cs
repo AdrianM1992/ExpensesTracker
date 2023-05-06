@@ -6,7 +6,7 @@ using System.Windows.Media.Animation;
 namespace ExpensesTracker.Views.Windows.NewElementWindowInput
 {
   /// <summary>
-  /// Logic for NewElementWindow.xaml
+  /// User input dialog box
   /// </summary>
   public partial class NewElementWindow : Window
   {
@@ -61,7 +61,7 @@ namespace ExpensesTracker.Views.Windows.NewElementWindowInput
     /// Blink control to get attention
     /// </summary>
     /// <param name="textBox">TextBox to blink</param>
-    private void BlinkTextBoxOnce(TextBox textBox)
+    private static void BlinkTextBoxOnce(TextBox textBox)
     {
       DoubleAnimation animation = new()
       {

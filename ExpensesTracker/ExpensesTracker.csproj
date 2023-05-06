@@ -72,6 +72,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="ScottPlot" Version="4.1.63" />
+    <PackageReference Include="ScottPlot.WPF" Version="4.1.63" />
     <PackageReference Include="SharpVectors.Wpf" Version="1.8.1" />
   </ItemGroup>
 

@@ -1,4 +1,6 @@
-﻿using System.Windows;
+﻿using ExpensesTracker.DataTypes.Enums;
+using ExpensesTracker.Views.Windows.NewElementWindowInput;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using static ExpensesTracker.Views.Delegates.ViewDelegates;
@@ -11,9 +13,21 @@ namespace ExpensesTracker.Views.Controls
   public partial class CustomTabControl : UserControl
   {
     /// <summary>
+    /// Specifies ability to change header
+    /// </summary>
+    public bool IsHeaderEditable
+    {
+      get { return (bool)GetValue(IsHeaderEditableProperty); }
+      set { SetValue(IsHeaderEditableProperty, value); }
+    }
+    public static readonly DependencyProperty IsHeaderEditableProperty =
+        DependencyProperty.Register("IsHeaderEditable", typeof(bool), typeof(CustomTabControl), new PropertyMetadata(false));
+
+
+    /// <summary>
     /// Custom event that informs main window to take specific actions
     /// </summary>
-    public event CustomTabEventHandler? CustomTabChanged;
+    public event CustomTabEventHandler? CustomTabEvent;
 
     #region Dependency properties
     /// <summary>
@@ -56,15 +70,31 @@ namespace ExpensesTracker.Views.Controls
       InitializeComponent();
     }
 
-    #region Custom event rising methods
+    #region Click events
     private void Button_Click(object sender, RoutedEventArgs e)
     {
-      CustomTabChanged?.Invoke(TabName, true);
+      CustomTabEvent?.Invoke(TabName, CustomTabEnums.Closed);
     }
 
-    private void SelectTab_Click(object sender, System.Windows.Input.MouseButtonEventArgs e)
+    private void Description_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
     {
-      CustomTabChanged?.Invoke(TabName, false);
+      CustomTabEvent?.Invoke(TabName, CustomTabEnums.Clicked);
+    }
+
+    private void Description_MouseRightButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+    {
+      if (IsHeaderEditable)
+      {
+        var dialog = new NewElementWindow { Header = "Name the tab:" };
+        bool? result = dialog.ShowDialog();
+        if (result == true)
+        {
+          var oldName = TabName;
+          TabName = dialog.NewElementName;
+          CustomTabEvent?.Invoke(TabName, CustomTabEnums.NameChanged, oldName);
+        }
+        dialog.Close();
+      }
     }
     #endregion
   }

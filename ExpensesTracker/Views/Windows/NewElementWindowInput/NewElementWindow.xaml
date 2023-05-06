@@ -13,7 +13,7 @@
     <Grid MouseLeftButtonDown="Grid_MouseLeftButtonDown" IsHitTestVisible="True" Margin="5" Background="Transparent">
       <Label x:Name="ElementName" Content="{Binding Path=Header,RelativeSource={RelativeSource AncestorType={x:Type local:NewElementWindow}}}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,17,0,0" FontSize="16"/>
       <TextBox x:Name="ElementNameValue" HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Center" Width="186" FontSize="16"/>
-      <Button x:Name="AddButton" Content="Add" HorizontalAlignment="Left"  VerticalAlignment="Top" Margin="0,110,0,0" Width="90" Click="AddButton_Click" FontSize="16"/>
+      <Button x:Name="AddButton" Content="Apply" HorizontalAlignment="Left"  VerticalAlignment="Top" Margin="0,110,0,0" Width="90" Click="AddButton_Click" FontSize="16"/>
       <Button x:Name="CancelButton" Content="Cancel" HorizontalAlignment="Left"  VerticalAlignment="Top" Margin="106,110,0,0" Width="80" Click="CancelButton_Click" FontSize="16"/>
     </Grid>
   </Border>

@@ -10,7 +10,7 @@ using System.Windows.Controls;
 namespace ExpensesTracker.Views.Pages.DatabaseBrowser
 {
   /// <summary>
-  /// Logic for DatabaseBrowserPage.xaml
+  /// Database browser, editing and filtering page
   /// </summary>
   public partial class DatabaseBrowserPage : Page, IObserver<double>
   {
