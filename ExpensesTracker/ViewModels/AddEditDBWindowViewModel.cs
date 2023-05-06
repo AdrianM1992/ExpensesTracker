@@ -1,4 +1,5 @@
-﻿using ExpensesTracker.Models.DataControllers;
+﻿using ExpensesTracker.DataTypes.Enums;
+using ExpensesTracker.Models.DataControllers;
 using ExpensesTracker.Models.Interfaces;
 using ExpensesTracker.Views.Classes;
 using ExpensesTracker.Views.Windows.AddEditDB;
@@ -15,14 +16,26 @@ namespace ExpensesTracker.ViewModels
   {
     private readonly IMainSettings _mainSettings;
     private readonly AddEditDBWindow _myWindow;
-    private DatabaseView _databaseView;
+    private readonly DatabaseView? _databaseView;
 
-    public AddEditDBWindowViewModel(IMainSettings mainSettings, AddEditDBWindow addEditDBWindow, DatabaseView? databaseView = null)
+    public AddEditDBWindowViewModel(IMainSettings mainSettings, AddEditDBWindow addEditDBWindow, DatabaseBrowserEnum operationType, DatabaseView? databaseView = null)
     {
       _myWindow = addEditDBWindow;
       _mainSettings = mainSettings;
-      if (databaseView == null) this._databaseView = new DatabaseView();
-      else this._databaseView = databaseView;
+      switch (operationType)
+      {
+        case DatabaseBrowserEnum.Add:
+          _databaseView = new DatabaseView();
+          break;
+        case DatabaseBrowserEnum.Duplicate:
+          _databaseView = new DatabaseView(databaseView.ReturnExpense(), false);
+          break;
+        case DatabaseBrowserEnum.Edit:
+          _databaseView = databaseView;
+          break;
+        default:
+          break;
+      }
     }
 
     /// <summary>
@@ -124,7 +137,7 @@ namespace ExpensesTracker.ViewModels
     /// </summary>
     /// <param name="input">String to extract number from</param>
     /// <returns>Extracted number or null, if input did not contain any number</returns>
-    private decimal? ExtractNumberFromString(string input)
+    private static decimal? ExtractNumberFromString(string input)
     {
       bool decimalPointFlag = false;
       List<char> inputChars = input.ToList();
@@ -175,7 +188,7 @@ namespace ExpensesTracker.ViewModels
     /// <param name="newSubcategory">New value of Subcategory property</param>
     public void SetSubcategoryValue(string? newSubcategory)
     {
-      if (newSubcategory != null) _databaseView.Subcategory = newSubcategory;
+      if (newSubcategory != null && newSubcategory != "None") _databaseView.Subcategory = newSubcategory;
       else
       {
         //Search DB for all subcategories of selected category
@@ -188,9 +201,14 @@ namespace ExpensesTracker.ViewModels
 
         //Find index of databaseView.Subcategory in drop down menu.
         var index = 0;
+        var oldSubcategory = _databaseView.Subcategory;
+        _databaseView.Subcategory = null;
         foreach (var subcategory in subCatList)
         {
-          if (subcategory == _databaseView.Subcategory) break;
+          if (subcategory == oldSubcategory)
+          {
+            _databaseView.Subcategory = oldSubcategory; break;
+          }
           index++;
         }
         _myWindow.Subcategory.SelectedIndex = index;
@@ -213,7 +231,7 @@ namespace ExpensesTracker.ViewModels
     /// <param name="newRecurringId">New value of RecurringId property</param>
     public void SetRecurringId(string? newRecurringId)
     {
-      if (newRecurringId != null) _databaseView.RecurringId = newRecurringId;
+      if (newRecurringId != null && newRecurringId != "None") _databaseView.RecurringId = newRecurringId;
       else
       {
         //Populate drop down menu with available recurring name

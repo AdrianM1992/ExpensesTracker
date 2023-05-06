@@ -2,6 +2,7 @@
 using ExpensesTracker.Models.DataProviders;
 using Microsoft.IdentityModel.Tokens;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace ExpensesTracker.Views.Classes
@@ -40,10 +41,13 @@ namespace ExpensesTracker.Views.Classes
       Quantity = 1M;
       Recurring = false;
     }
-    public DatabaseView(Expense expense)
+    public DatabaseView(Expense expense, bool edit)
     {
-      _expense = expense;
-      ID = expense.Id;
+      if (edit)
+      {
+        _expense = expense;
+        ID = expense.Id;
+      }
       Name = expense.Name;
       Price = expense.Price;
       Quantity = expense.Quantity;
@@ -149,10 +153,7 @@ namespace ExpensesTracker.Views.Classes
     /// <returns>Name of category expense or income</returns>
     private short GetCategoryId()
     {
-      using var cat = new ExpensesContext();
-      var categoryIds = from c in cat.Categories.ToList()
-                        where c.Name == Category
-                        select c.Id;
+      var categoryIds = DatabaseModel.GetCategoriesIds(new List<DatabaseView> { this });
       return categoryIds.First();
     }
 
@@ -162,10 +163,7 @@ namespace ExpensesTracker.Views.Classes
     /// <returns>Name of category expense or income</returns>
     private int? GetSubategoryId()
     {
-      using var subcat = new ExpensesContext();
-      var subcategoryIds = from s in subcat.Subcategories.ToList()
-                           where s.Name == Subcategory
-                           select s.Id;
+      var subcategoryIds = DatabaseModel.GetSubcategoriesIds(new List<DatabaseView> { this });
       if (subcategoryIds.IsNullOrEmpty()) return null;
       else return subcategoryIds.First();
     }
@@ -178,10 +176,7 @@ namespace ExpensesTracker.Views.Classes
     {
       if (Recurring)
       {
-        using var rec = new ExpensesContext();
-        var recurringIds = from r in rec.Recurrings.ToList()
-                           where r.Name == RecurringId
-                           select r.Id;
+        var recurringIds = DatabaseModel.GetRecurringIds(new List<DatabaseView> { this });
         if (recurringIds.IsNullOrEmpty()) return null;
         else return recurringIds.First();
       }

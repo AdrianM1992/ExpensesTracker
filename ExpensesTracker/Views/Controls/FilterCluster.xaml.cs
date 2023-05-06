@@ -27,7 +27,7 @@ namespace ExpensesTracker.Views.Controls
 
     private void DatabaseModel_SubtablesChanged(object? sender, EventArgs e) => ClearAll_MouseLeftButtonDown(ClearAll, null);
     public void SetFilterControllerRef(FilterSortController filterSortController) => _filterController = filterSortController;
-    private void ClearAll_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+    private void ClearAll_MouseLeftButtonDown(object sender, MouseButtonEventArgs? e)
     {
       SetDeafultValues();
       _filterController.ClearAllFilters();

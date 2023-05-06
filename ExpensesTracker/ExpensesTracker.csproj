@@ -26,14 +26,18 @@
     <None Remove="Views\Assets\Icons\clear.svg" />
     <None Remove="Views\Assets\Icons\dataBase.png" />
     <None Remove="Views\Assets\Icons\delete.png" />
+    <None Remove="Views\Assets\Icons\deleteRecord.png" />
+    <None Remove="Views\Assets\Icons\duplicateRecord.png" />
     <None Remove="Views\Assets\Icons\edit-alt.png" />
     <None Remove="Views\Assets\Icons\edit.png" />
+    <None Remove="Views\Assets\Icons\editRecord.png" />
     <None Remove="Views\Assets\Icons\exit.png" />
     <None Remove="Views\Assets\Icons\home.png" />
     <None Remove="Views\Assets\Icons\loadMore.png" />
     <None Remove="Views\Assets\Icons\maximize.png" />
     <None Remove="Views\Assets\Icons\menu.png" />
     <None Remove="Views\Assets\Icons\minimize.png" />
+    <None Remove="Views\Assets\Icons\newRecord.png" />
     <None Remove="Views\Assets\Icons\settings.png" />
   </ItemGroup>
 
@@ -67,6 +71,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="ScottPlot" Version="4.1.63" />
     <PackageReference Include="SharpVectors.Wpf" Version="1.8.1" />
   </ItemGroup>
 
@@ -80,18 +85,42 @@
     <Resource Include="Views\Assets\Icons\delete.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Views\Assets\Icons\deleteRecord.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Views\Assets\Icons\duplicateRecord.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Views\Assets\Icons\edit.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Views\Assets\Icons\editRecord.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Views\Assets\Icons\exit.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Views\Assets\Icons\home.png" />
-    <Resource Include="Views\Assets\Icons\loadMore.png" />
-    <Resource Include="Views\Assets\Icons\maximize.png" />
-    <Resource Include="Views\Assets\Icons\menu.png" />
-    <Resource Include="Views\Assets\Icons\minimize.png" />
-    <Resource Include="Views\Assets\Icons\settings.png" />
+    <Resource Include="Views\Assets\Icons\home.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Views\Assets\Icons\loadMore.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Views\Assets\Icons\maximize.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Views\Assets\Icons\menu.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Views\Assets\Icons\minimize.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Views\Assets\Icons\newRecord.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Views\Assets\Icons\settings.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
 
   <ItemGroup>

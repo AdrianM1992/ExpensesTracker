@@ -1,4 +1,5 @@
-﻿using ExpensesTracker.Models.Interfaces;
+﻿using ExpensesTracker.DataTypes.Enums;
+using ExpensesTracker.Models.Interfaces;
 using ExpensesTracker.ViewModels;
 using ExpensesTracker.Views.Classes;
 using ExpensesTracker.Views.Windows.NewElementWindowInput;
@@ -18,20 +19,19 @@ namespace ExpensesTracker.Views.Windows.AddEditDB
   {
     private readonly AddEditDBWindowViewModel _viewModel;
     private readonly IMainSettings _mainSettings;
-    private bool _savedFlag = false;
     private readonly bool editMode;
+    private readonly Dictionary<TextBox, string> _textBoxes;
+    private bool _savedFlag = false;
     private event AddEditRecordHandler? AddEditRecordEvent;
-    private Dictionary<TextBox, string> _textBoxes;
-
-    public AddEditDBWindow(IMainSettings mainSettings, DatabaseView? databaseView = null, bool editMode = true)
+    public AddEditDBWindow(IMainSettings mainSettings, DatabaseBrowserEnum operationType, DatabaseView? databaseView = null)
     {
       _mainSettings = mainSettings;
-      if (databaseView == null) _viewModel = new AddEditDBWindowViewModel(_mainSettings, this);
-      else _viewModel = new AddEditDBWindowViewModel(_mainSettings, this, databaseView);
+      _viewModel = new AddEditDBWindowViewModel(_mainSettings, this, operationType, databaseView);
       InitializeComponent();
       _textBoxes = CreateTextboxesDictionary();
       _viewModel.SetControlsValues();
-      this.editMode = editMode;
+      if (operationType == DatabaseBrowserEnum.Edit) editMode = true;
+      else editMode = false;
     }
 
     public void AddListenerToAddEditRecordEvent(AddEditRecordHandler onAddEditRecordHandler) => AddEditRecordEvent += onAddEditRecordHandler;
@@ -155,19 +155,15 @@ namespace ExpensesTracker.Views.Windows.AddEditDB
       var result = MessageBox.Show("Are you sure?\nThis cannot be undone.", "Warning", MessageBoxButton.YesNo, MessageBoxImage.Question);
       if (result == MessageBoxResult.Yes)
       {
-#pragma warning disable CS8604 // Możliwy argument odwołania o wartości null.
-        _viewModel.RemoveCategory(Category.SelectedItem.ToString());
-#pragma warning restore CS8604 // Możliwy argument odwołania o wartości null.
+        var cat = Category.SelectedItem?.ToString();
+        if (cat != null) _viewModel.RemoveCategory(cat);
       }
     }
     private void AddSubCategoryButton_Click(object sender, RoutedEventArgs e)
     {
       var dialog = new NewElementWindow { Header = "Name new subcategory:" };
       bool? result = dialog.ShowDialog();
-      if (result == true)
-      {
-        _viewModel.AddNewSubcategory(dialog.NewElementName);
-      }
+      if (result == true) _viewModel.AddNewSubcategory(dialog.NewElementName);
       dialog.Close();
     }
     private void DeleteSubCategoryButton_Click(object sender, RoutedEventArgs e)
@@ -175,19 +171,15 @@ namespace ExpensesTracker.Views.Windows.AddEditDB
       var result = MessageBox.Show("Are you sure?\nThis cannot be undone.", "Warning", MessageBoxButton.YesNo, MessageBoxImage.Question);
       if (result == MessageBoxResult.Yes && Subcategory.SelectedItem.ToString() != "None")
       {
-#pragma warning disable CS8604 // Możliwy argument odwołania o wartości null.
-        _viewModel.RemoveSubcategory(Subcategory.SelectedItem.ToString());
-#pragma warning restore CS8604 // Możliwy argument odwołania o wartości null.
+        var subcat = Subcategory.SelectedItem?.ToString();
+        if (subcat != null) _viewModel.RemoveSubcategory(subcat);
       }
     }
     private void AddRecurringButton_Click(object sender, RoutedEventArgs e)
     {
       var dialog = new NewElementWindow { Header = "Name new recurrence:" };
       bool? result = dialog.ShowDialog();
-      if (result == true)
-      {
-        _viewModel.AddNewRecurrence(dialog.NewElementName);
-      }
+      if (result == true) _viewModel.AddNewRecurrence(dialog.NewElementName);
       dialog.Close();
     }
     private void DeleteRecurringButton_Click(object sender, RoutedEventArgs e)
@@ -195,9 +187,8 @@ namespace ExpensesTracker.Views.Windows.AddEditDB
       var result = MessageBox.Show("Are you sure?\nThis cannot be undone.", "Warning", MessageBoxButton.YesNo, MessageBoxImage.Question);
       if (result == MessageBoxResult.Yes && RecurringId.SelectedItem.ToString() != "None")
       {
-#pragma warning disable CS8604 // Możliwy argument odwołania o wartości null.
-        _viewModel.RemoveRecurrence(RecurringId.SelectedItem.ToString());
-#pragma warning restore CS8604 // Możliwy argument odwołania o wartości null.
+        var rec = RecurringId.SelectedItem.ToString();
+        if (rec != null) _viewModel.RemoveRecurrence(rec);
       }
     }
 
@@ -210,6 +201,7 @@ namespace ExpensesTracker.Views.Windows.AddEditDB
       {
         MessageBoxResult result = MessageBox.Show("Changes are not saved. \nExit anyway?", "Warning", MessageBoxButton.YesNo, MessageBoxImage.Question);
         if (result == MessageBoxResult.No) e.Cancel = true;
+        else AddEditRecordEvent?.Invoke();
       }
     }
   }

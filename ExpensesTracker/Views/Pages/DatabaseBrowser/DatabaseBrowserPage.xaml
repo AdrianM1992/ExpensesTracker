@@ -67,22 +67,27 @@
     
     <!--#region Function buttons-->
     <StackPanel Grid.Row="1" HorizontalAlignment="Left" Margin="10,0,5,10" VerticalAlignment="Bottom" Orientation="Horizontal" Opacity="0.5">
-      <Button x:Name="AddButton" Style="{StaticResource OpacityButtonStyle}" Click="AddEditButton_Click" BorderBrush="{x:Null}" Foreground="{x:Null}" IsHitTestVisible="True" Width="36" Height="36" Margin="0,0,10,0">
+      <Button x:Name="AddButton" Style="{StaticResource OpacityButtonStyle}" Click="AddEditButton_Click" BorderBrush="{x:Null}" Foreground="{x:Null}" IsHitTestVisible="True" Width="36" Height="36" Margin="0,0,10,0" ToolTip="Add new record">
         <Button.Background>
-          <ImageBrush ImageSource="/Views/Assets/Icons/add.png" Stretch="Uniform"/>
+          <ImageBrush ImageSource="/Views/Assets/Icons/newRecord.png" Stretch="Uniform"/>
         </Button.Background>
       </Button>
-      <Button x:Name="EditButton" Style="{StaticResource OpacityButtonStyle}" Click="AddEditButton_Click" BorderBrush="{x:Null}" Foreground="{x:Null}" IsHitTestVisible="True" Width="36" Height="36" Margin="0,0,10,0">
+      <Button x:Name="DuplicateButton" Style="{StaticResource OpacityButtonStyle}" Click="AddEditButton_Click" BorderBrush="{x:Null}" Foreground="{x:Null}" IsHitTestVisible="True" Width="36" Height="36" Margin="0,0,10,0" ToolTip="Duplicate record and edit">
         <Button.Background>
-          <ImageBrush ImageSource="/Views/Assets/Icons/edit.png" Stretch="Uniform"/>
+          <ImageBrush ImageSource="/Views/Assets/Icons/duplicateRecord.png" Stretch="Uniform"/>
         </Button.Background>
       </Button>
-      <Button x:Name="DeleteButton" Style="{StaticResource OpacityButtonStyle}" BorderBrush="{x:Null}" Foreground="{x:Null}" IsHitTestVisible="True" Width="36" Height="36" Margin="0,0,10,0" Click="DeleteButton_Click">
+      <Button x:Name="EditButton" Style="{StaticResource OpacityButtonStyle}" Click="AddEditButton_Click" BorderBrush="{x:Null}" Foreground="{x:Null}" IsHitTestVisible="True" Width="36" Height="36" Margin="0,0,10,0" ToolTip="Edit record">
         <Button.Background>
-          <ImageBrush ImageSource="/Views/Assets/Icons/delete.png" Stretch="Uniform"/>
+          <ImageBrush ImageSource="/Views/Assets/Icons/editRecord.png" Stretch="Uniform"/>
         </Button.Background>
       </Button>
-      <Button x:Name="ShowMoreButton" Style="{StaticResource OpacityButtonStyle}" BorderBrush="{x:Null}" Foreground="{x:Null}" IsHitTestVisible="True" Width="36" Height="36" Margin="0,0,10,0" Click="ShowMoreButton_Click">
+      <Button x:Name="DeleteButton" Style="{StaticResource OpacityButtonStyle}" BorderBrush="{x:Null}" Foreground="{x:Null}" IsHitTestVisible="True" Width="36" Height="36" Margin="0,0,10,0" Click="DeleteButton_Click" ToolTip="Delete record">
+        <Button.Background>
+          <ImageBrush ImageSource="/Views/Assets/Icons/deleteRecord.png" Stretch="Uniform"/>
+        </Button.Background>
+      </Button>
+      <Button x:Name="ShowMoreButton" Style="{StaticResource OpacityButtonStyle}" BorderBrush="{x:Null}" Foreground="{x:Null}" IsHitTestVisible="True" Width="36" Height="36" Margin="0,0,10,0" Click="ShowMoreButton_Click" ToolTip="Load more records">
         <Button.Background>
           <ImageBrush ImageSource="/Views/Assets/Icons/loadMore.png" Stretch="Uniform"/>
         </Button.Background>

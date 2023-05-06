@@ -1,5 +1,6 @@
 ﻿using ExpensesTracker.DataTypes;
 using ExpensesTracker.Models.DataProviders;
+using ExpensesTracker.Views.Classes;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -195,7 +196,23 @@ namespace ExpensesTracker.Models.DataControllers
                           select c.Name).ToList();
         return categories;
       }
-
+    }
+    /// <summary>
+    /// Opens Categories table and searches matches in names on category in provided DatabaseViews list
+    /// </summary>
+    /// <param name="databaseViews">List of DatabaseView to return IDs from</param>
+    /// <returns>List of all matched categories IDs</returns>
+    public static List<short> GetCategoriesIds(List<DatabaseView> databaseViews)
+    {
+      using var db = new ExpensesContext();
+      List<short> categoriesIds = new();
+      foreach (var view in databaseViews)
+      {
+        categoriesIds.AddRange((from c in db.Categories
+                                where c.Name == view.Category
+                                select c.Id).ToList());
+      }
+      return categoriesIds;
     }
     /// <summary>
     /// Search DB for all subcategories of selected category, or if Expense instance is passed returns name of subcategory of instance
@@ -222,6 +239,23 @@ namespace ExpensesTracker.Models.DataControllers
         return subcategories;
       }
     }
+    /// <summary>
+    /// Opens Subcategories table and searches matches in names on subcategory in provided DatabaseViews list
+    /// </summary>
+    /// <param name="databaseViews">List of DatabaseView to return IDs from</param>
+    /// <returns>List of all matched subcategories IDs</returns>
+    public static List<int> GetSubcategoriesIds(List<DatabaseView> databaseViews)
+    {
+      using var db = new ExpensesContext();
+      List<int> subcategoriesIds = new();
+      foreach (var view in databaseViews)
+      {
+        subcategoriesIds.AddRange((from c in db.Subcategories
+                                   where c.Name == view.Subcategory
+                                   select c.Id).ToList());
+      }
+      return subcategoriesIds;
+    }
     /// Opens Recurrings table and returns its content, or if Expense instance is passed returns recurring name of instance
     /// </summary>
     /// <param name="expense">Optional Expanse instance</param>
@@ -242,6 +276,23 @@ namespace ExpensesTracker.Models.DataControllers
                           select r.Name).ToList();
         return recurrings;
       }
+    }
+    /// <summary>
+    /// Opens Recurrings table and searches matches in names on recurringId in provided DatabaseViews list
+    /// </summary>
+    /// <param name="databaseViews">List of DatabaseView to return IDs from</param>
+    /// <returns>List of all matched recurring IDs</returns>
+    public static List<short> GetRecurringIds(List<DatabaseView> databaseViews)
+    {
+      using var db = new ExpensesContext();
+      List<short> recurringIds = new();
+      foreach (var view in databaseViews)
+      {
+        recurringIds.AddRange((from c in db.Recurrings
+                               where c.Name == view.RecurringId
+                               select c.Id).ToList());
+      }
+      return recurringIds;
     }
 
     /// <summary>

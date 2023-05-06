@@ -1,4 +1,5 @@
-﻿using ExpensesTracker.Models.Interfaces;
+﻿using ExpensesTracker.DataTypes.Enums;
+using ExpensesTracker.Models.Interfaces;
 using ExpensesTracker.ViewModels;
 using ExpensesTracker.Views.Classes;
 using ExpensesTracker.Views.Windows.AddEditDB;
@@ -28,26 +29,20 @@ namespace ExpensesTracker.Views.Pages.DatabaseBrowser
       DatabaseView.ItemsSource = _viewModel.DatabaseViewItems;
     }
 
-    private void OpenAddEditWindow(bool editMode)
+    private void OpenAddEditWindow(DatabaseBrowserEnum operationType)
     {
-      if (addEditDBWindow == null || !addEditDBWindow.IsLoaded)
-      {
-        if (!editMode) addEditDBWindow = new AddEditDBWindow(_mainSettings, editMode: editMode);
-        else addEditDBWindow = new AddEditDBWindow(_mainSettings, (DatabaseView)DatabaseView.SelectedItem);
-        addEditDBWindow.AddListenerToAddEditRecordEvent(OnAddEditHandler);
-      }
-      else
+      if (addEditDBWindow != null && addEditDBWindow.IsLoaded)
       {
         var action = MessageBox.Show("Another window is already opened.\n\nDo you wish to open new one?", "Warning", MessageBoxButton.YesNo, MessageBoxImage.Warning);
-        if (action == MessageBoxResult.Yes)
+        if (action == MessageBoxResult.Yes) addEditDBWindow.Close();
+        else
         {
-          addEditDBWindow.Close();
-          if (!editMode) addEditDBWindow = new AddEditDBWindow(_mainSettings, editMode: editMode);
-          else addEditDBWindow = new AddEditDBWindow(_mainSettings, (DatabaseView)DatabaseView.SelectedItem);
-          addEditDBWindow.AddListenerToAddEditRecordEvent(OnAddEditHandler);
+          addEditDBWindow.Focus();
+          return;
         }
-        else addEditDBWindow.Focus();
       }
+      addEditDBWindow = new AddEditDBWindow(_mainSettings, operationType, (DatabaseView)DatabaseView.SelectedItem);
+      addEditDBWindow.AddListenerToAddEditRecordEvent(OnAddEditHandler);
       addEditDBWindow.Show();
     }
 
@@ -59,9 +54,22 @@ namespace ExpensesTracker.Views.Pages.DatabaseBrowser
     private void AddEditButton_Click(object sender, RoutedEventArgs e)
     {
       var button = (Button)sender;
-      OpenAddEditWindow(button.Name == "EditButton");
+      switch (button.Name)
+      {
+        case "AddButton":
+          OpenAddEditWindow(DatabaseBrowserEnum.Add);
+          break;
+        case "DuplicateButton":
+          OpenAddEditWindow(DatabaseBrowserEnum.Duplicate);
+          break;
+        case "EditButton":
+          OpenAddEditWindow(DatabaseBrowserEnum.Edit);
+          break;
+        default:
+          break;
+      }
     }
-    private void DatabaseView_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e) => OpenAddEditWindow(true);
+    private void DatabaseView_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e) => OpenAddEditWindow(DatabaseBrowserEnum.Edit);
     private void DeleteButton_Click(object sender, RoutedEventArgs e)
     {
       if (DatabaseView.Items.Count <= 0) MessageBox.Show("Nothing to delete.", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);

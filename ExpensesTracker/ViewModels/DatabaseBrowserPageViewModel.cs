@@ -57,7 +57,7 @@ namespace ExpensesTracker.ViewModels
     public void ShowRecords()
     {
       var listOfItems = new ObservableCollection<DatabaseView>();
-      foreach (var item in _filterSortController.ApplyFilterCriteria(_expensesItems, _itemsToShow)) listOfItems.Add(new DatabaseView(item));
+      foreach (var item in _filterSortController.ApplyFilterCriteria(_expensesItems, _itemsToShow)) listOfItems.Add(new DatabaseView(item, true));
 
       DatabaseViewItems = listOfItems;
       _databaseBrowserPage.DatabaseView.ItemsSource = DatabaseViewItems;
@@ -70,8 +70,15 @@ namespace ExpensesTracker.ViewModels
     {
       if (_itemsToShow == _expensesItems.Count && _itemsToShow != 10 && _itemsToShow != 100 && _itemsToShow != 1000) _itemsToShow = 1;
       _itemsToShow *= 10;
-      if (_itemsToShow > 1000) _itemsToShow = _expensesItems.Count;
-      _databaseBrowserPage.NumberOfItems.Text = _itemsToShow.ToString();
+      string? textToShow;
+      if (_itemsToShow > 1000)
+      {
+        _itemsToShow = _expensesItems.Count;
+        textToShow = $"All ({_itemsToShow})";
+      }
+      else textToShow = _itemsToShow.ToString();
+
+      _databaseBrowserPage.NumberOfItems.Text = textToShow;
       ShowRecords();
     }
 
