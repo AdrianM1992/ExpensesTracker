@@ -216,15 +216,10 @@ namespace ExpensesTracker.Views.Controls
       ClearCategory.Visibility = Visibility.Visible;
       if (CategoriesList.SelectedItems.Count != 0)
       {
-
         foreach (var category in CategoriesList.SelectedItems)
         {
-#pragma warning disable CS8604 // Możliwy argument odwołania o wartości null.
-          catList.Add(category.ToString());
-#pragma warning restore CS8604 // Możliwy argument odwołania o wartości null.
-#pragma warning disable CS8604 // Możliwy argument odwołania o wartości null.
-          subcatList.AddRange(DatabaseModel.GetSubcategoriesNames(category.ToString()));
-#pragma warning restore CS8604 // Możliwy argument odwołania o wartości null.
+          catList.Add((string)category);
+          subcatList.AddRange(DatabaseModel.GetSubcategoriesNames((string)category));
         }
         _filterController.Categories = catList;
       }
@@ -239,7 +234,6 @@ namespace ExpensesTracker.Views.Controls
       }
       else
       {
-        _filterController.Subcategories = subcatList;
         SubcategoriesList.ItemsSource = subcatList;
         Subcategories.IsEnabled = true;
       }
@@ -252,18 +246,11 @@ namespace ExpensesTracker.Views.Controls
       if (SubcategoriesList.SelectedItems.Count != 0)
       {
         List<string> subcatList = new();
-        foreach (var subcategory in SubcategoriesList.SelectedItems)
-        {
-#pragma warning disable CS8604 // Możliwy argument odwołania o wartości null.
-          subcatList.Add(subcategory.ToString());
-#pragma warning restore CS8604 // Możliwy argument odwołania o wartości null.
-        }
+        foreach (var subcategory in SubcategoriesList.SelectedItems) subcatList.Add((string)subcategory);
+
         _filterController.Subcategories = subcatList;
       }
-      else
-      {
-        _filterController.Subcategories = null;
-      }
+      else _filterController.Subcategories = null;
     }
     private void RecurrencesList_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
@@ -273,18 +260,11 @@ namespace ExpensesTracker.Views.Controls
       if (RecurrencesList.SelectedItems.Count != 0)
       {
         List<string> recList = new();
-        foreach (var recurrence in RecurrencesList.SelectedItems)
-        {
-#pragma warning disable CS8604 // Możliwy argument odwołania o wartości null.
-          recList.Add(recurrence.ToString());
-#pragma warning restore CS8604 // Możliwy argument odwołania o wartości null.
-        }
+        foreach (var recurrence in RecurrencesList.SelectedItems) recList.Add((string)recurrence);
+
         _filterController.Recurrances = recList;
       }
-      else
-      {
-        _filterController.Recurrances = null;
-      }
+      else _filterController.Recurrances = null;
     }
     #endregion
 

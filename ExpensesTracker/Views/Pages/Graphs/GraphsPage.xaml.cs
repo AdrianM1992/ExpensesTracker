@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 
 namespace ExpensesTracker.Views.Pages.Graphs
 {
@@ -14,8 +15,8 @@ namespace ExpensesTracker.Views.Pages.Graphs
   public partial class GraphsPage : Page
   {
     private readonly GraphsPageViewModel _viewModel;
-    private Dictionary<string, CustomTabControl> _tabs = new();
-    private Dictionary<string, GraphControl> _graphs = new();
+    private readonly Dictionary<string, CustomTabControl> _tabs = new();
+    private readonly Dictionary<string, GraphControl> _graphs = new();
     private string? _currentTabName;
     public GraphsPage()
     {
@@ -34,8 +35,10 @@ namespace ExpensesTracker.Views.Pages.Graphs
       }
       else
       {
-
-        _graphs.Add(currentTabName, new GraphControl());
+        var graphToAdd = new GraphControl();
+        var binding = new Binding("Height") { Source = GraphsContainer };
+        graphToAdd.SetBinding(HeightProperty, binding);
+        _graphs.Add(currentTabName, graphToAdd);
       }
       _currentTabName = currentTabName;
       var tabToAdd = new CustomTabControl() { TabName = _currentTabName, IsHeaderEditable = true };
@@ -99,7 +102,7 @@ namespace ExpensesTracker.Views.Pages.Graphs
     {
       //Grays out all opened tabs
       foreach (var customTabControl in _tabs.Values) customTabControl.BackgroundTabColor = SystemColors.MenuBarBrush;
-
+      //Highlight active tab
       _tabs[tabName].BackgroundTabColor = SystemColors.ActiveCaptionBrush;
     }
     private string GetNewGraphName(string graphName = "New Graph")

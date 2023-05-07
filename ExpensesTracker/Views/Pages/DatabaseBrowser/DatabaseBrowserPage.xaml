@@ -9,7 +9,7 @@
       xmlns:vm="clr-namespace:ExpensesTracker.ViewModels"
       mc:Ignorable="d"
       d:DesignHeight="752" d:DesignWidth="1158"
-      Title="DatabaseBrowser" x:Name="DatabaseBrowser" Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}">
+      Title="DatabaseBrowser" x:Name="DatabaseBrowser">
   <Page.Resources>
     <ResourceDictionary>
       <ResourceDictionary.MergedDictionaries>
@@ -17,7 +17,10 @@
       </ResourceDictionary.MergedDictionaries>
     </ResourceDictionary>
   </Page.Resources>
-  
+  <Page.Style>
+    <Style TargetType="Page" BasedOn="{StaticResource PageBackground}"/>
+  </Page.Style>
+
   <Grid x:Name="BrowserGrid">
     <Grid.ColumnDefinitions>
       <ColumnDefinition/>
@@ -25,7 +28,7 @@
     </Grid.ColumnDefinitions>
     
     <!--#region DataGrid layout-->
-    <DataGrid x:Name="DatabaseView" ItemsSource="{Binding _viewModel.DatabaseViewItems}" AutoGenerateColumns="False" CanUserResizeRows="False" CanUserDeleteRows="False" CanUserAddRows="False" CanUserResizeColumns="False" CanUserReorderColumns="False" IsReadOnly="True" MouseDoubleClick="DatabaseView_MouseDoubleClick" Margin="0,2,0,0" HorizontalAlignment="Left">
+    <DataGrid x:Name="DatabaseView" ItemsSource="{Binding _viewModel.DatabaseViewItems}" AutoGenerateColumns="False" CanUserResizeRows="False" CanUserDeleteRows="False" CanUserAddRows="False" CanUserResizeColumns="False" CanUserReorderColumns="False" IsReadOnly="True" MouseDoubleClick="DatabaseView_MouseDoubleClick" Margin="0,2,0,0" HorizontalAlignment="Left" Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}">
       <DataGrid.Resources>
         <Style TargetType="ScrollBar" BasedOn="{StaticResource NarrowScrollBars}"/>
         <Style TargetType="{x:Type DataGridColumnHeader}">

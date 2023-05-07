@@ -27,6 +27,7 @@
     <None Remove="Views\Assets\Icons\dataBase.png" />
     <None Remove="Views\Assets\Icons\delete.png" />
     <None Remove="Views\Assets\Icons\deleteRecord.png" />
+    <None Remove="Views\Assets\Icons\downloadGraph.png" />
     <None Remove="Views\Assets\Icons\duplicateRecord.png" />
     <None Remove="Views\Assets\Icons\edit-alt.png" />
     <None Remove="Views\Assets\Icons\edit.png" />
@@ -34,10 +35,12 @@
     <None Remove="Views\Assets\Icons\exit.png" />
     <None Remove="Views\Assets\Icons\home.png" />
     <None Remove="Views\Assets\Icons\loadMore.png" />
+    <None Remove="Views\Assets\Icons\loadSettings.png" />
     <None Remove="Views\Assets\Icons\maximize.png" />
     <None Remove="Views\Assets\Icons\menu.png" />
     <None Remove="Views\Assets\Icons\minimize.png" />
     <None Remove="Views\Assets\Icons\newRecord.png" />
+    <None Remove="Views\Assets\Icons\saveSettings.png" />
     <None Remove="Views\Assets\Icons\settings.png" />
   </ItemGroup>
 
@@ -89,6 +92,9 @@
     <Resource Include="Views\Assets\Icons\deleteRecord.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Views\Assets\Icons\downloadGraph.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Views\Assets\Icons\duplicateRecord.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
@@ -107,6 +113,9 @@
     <Resource Include="Views\Assets\Icons\loadMore.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Views\Assets\Icons\loadSettings.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Views\Assets\Icons\maximize.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
@@ -117,6 +126,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Views\Assets\Icons\newRecord.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Views\Assets\Icons\saveSettings.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Views\Assets\Icons\settings.png">

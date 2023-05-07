@@ -5,6 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:ExpensesTracker.Views.Pages.Graphs"
       xmlns:ctrls ="clr-namespace:ExpensesTracker.Views.Controls"
+      xmlns:converters ="clr-namespace:ExpensesTracker.Views.Classes"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="DataGraphs" x:Name="Graphs">
@@ -13,11 +14,16 @@
       <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/Views/Assets/Styles/Styles.xaml"/>
       </ResourceDictionary.MergedDictionaries>
+      <converters:SubstractConverter x:Key="SubstractConverter"/>
     </ResourceDictionary>
   </Page.Resources>
-  <Grid Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}">
+  <Page.Style>
+    <Style TargetType="Page" BasedOn="{StaticResource PageBackground}"/>
+  </Page.Style>
+  
+  <Grid >
     <Grid.RowDefinitions>
-      <RowDefinition Height="28"/>
+      <RowDefinition Height="32"/>
       <RowDefinition/>
     </Grid.RowDefinitions>
     <Grid.ColumnDefinitions>
@@ -26,12 +32,11 @@
     <Grid.Resources>
       <Style TargetType="ScrollBar" BasedOn="{StaticResource NarrowScrollBars}"/>
     </Grid.Resources>
-    <ScrollViewer Grid.Row="0" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled" CanContentScroll="False">
-      <StackPanel x:Name="GraphsTabs" Grid.Row="0" Orientation="Horizontal"/>
+    <ScrollViewer Grid.Row="0" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled" CanContentScroll="False" VerticalAlignment ="TOP">
+      <StackPanel x:Name="GraphsTabs" Orientation="Horizontal"/>
     </ScrollViewer>
+    <StackPanel x:Name="GraphsContainer" Grid.Row="1" Height="{Binding ElementName=Graphs, Path=ActualHeight, Converter={StaticResource SubstractConverter}, ConverterParameter=32}"/>
 
-    <StackPanel x:Name="GraphsContainer" Grid.Row="1"/>
-    
     <!--#region Function buttons-->
     <StackPanel Grid.Row="1" HorizontalAlignment="Left" Margin="10,0,5,10" VerticalAlignment="Bottom" Orientation="Horizontal" Opacity="0.5">
       <Button x:Name="AddButton" Style="{StaticResource OpacityButtonStyle}" Click="AddDuplicateButton_Click" BorderBrush="{x:Null}" Foreground="{x:Null}" IsHitTestVisible="True" Width="36" Height="36" Margin="0,0,10,0" ToolTip="Add new graph">
@@ -47,6 +52,23 @@
       <Button x:Name="DeleteButton" Style="{StaticResource OpacityButtonStyle}" BorderBrush="{x:Null}" Foreground="{x:Null}" IsHitTestVisible="True" Width="36" Height="36" Margin="0,0,10,0" Click="DeleteButton_Click" ToolTip="Delete graph">
         <Button.Background>
           <ImageBrush ImageSource="/Views/Assets/Icons/deleteRecord.png" Stretch="Uniform"/>
+        </Button.Background>
+      </Button>
+      <Border Width="20"/>
+      <Button x:Name="LoadButton" Style="{StaticResource OpacityButtonStyle}" BorderBrush="{x:Null}" Foreground="{x:Null}" IsHitTestVisible="True" Width="36" Height="36" Margin="0,0,10,0" Click="DeleteButton_Click" ToolTip="Delete graph">
+        <Button.Background>
+          <ImageBrush ImageSource="/Views/Assets/Icons/loadSettings.png" Stretch="Uniform"/>
+        </Button.Background>
+      </Button>
+      <Button x:Name="SaveButton" Style="{StaticResource OpacityButtonStyle}" BorderBrush="{x:Null}" Foreground="{x:Null}" IsHitTestVisible="True" Width="36" Height="36" Margin="0,0,10,0" Click="DeleteButton_Click" ToolTip="Delete graph">
+        <Button.Background>
+          <ImageBrush ImageSource="/Views/Assets/Icons/saveSettings.png" Stretch="Uniform"/>
+        </Button.Background>
+      </Button>
+      <Border Width="20"/>
+      <Button x:Name="ImageSaveButton" Style="{StaticResource OpacityButtonStyle}" BorderBrush="{x:Null}" Foreground="{x:Null}" IsHitTestVisible="True" Width="36" Height="36" Margin="0,0,10,0" Click="DeleteButton_Click" ToolTip="Delete graph">
+        <Button.Background>
+          <ImageBrush ImageSource="/Views/Assets/Icons/downloadGraph.png" Stretch="Uniform"/>
         </Button.Background>
       </Button>
     </StackPanel>

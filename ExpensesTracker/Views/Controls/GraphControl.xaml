@@ -8,17 +8,69 @@
              xmlns:ctrls="clr-namespace:ExpensesTracker.Views.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800" d:Background="Aqua">
-    <Grid>
+  <UserControl.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/Views/Assets/Styles/Styles.xaml"/>
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+  </UserControl.Resources>
+  <Grid>
+    <Grid.Resources>
+      <Style TargetType="ScrollBar" BasedOn="{StaticResource NarrowScrollBars}"/>
+    </Grid.Resources>
     <Grid.ColumnDefinitions>
-      <ColumnDefinition/>
-      <ColumnDefinition/>
-      
+      <ColumnDefinition />
+      <ColumnDefinition Width="Auto"/>
     </Grid.ColumnDefinitions>
-    <Grid.RowDefinitions>
-      <RowDefinition/>
-      <RowDefinition/>
-    </Grid.RowDefinitions>
-    <graphs:WpfPlot x:Name="Graph"/>
-    <ctrls:FilterCluster Grid.Column="1"/>
+    
+    <Grid Grid.Column="1" Height="200" VerticalAlignment="Top">
+      <Grid.RowDefinitions>
+        <RowDefinition/>
+        <RowDefinition/>
+        <RowDefinition/>
+        <RowDefinition/>
+      </Grid.RowDefinitions>
+      <Expander Header="Filters" ExpandDirection="Left" Grid.Row ="0" Grid.RowSpan="10" VerticalAlignment="Top" HorizontalAlignment="Center" >
+        <ScrollViewer>
+          <ctrls:FilterCluster/>
+        </ScrollViewer>
+      </Expander>
+      <Expander Header="Type" ExpandDirection="Left" Grid.Row ="1" Grid.RowSpan="10"  VerticalAlignment="Top" HorizontalAlignment="Center" >
+        <ScrollViewer>
+        </ScrollViewer>
+      </Expander>
+      <Expander Header="X Axis" ExpandDirection="Left" Grid.Row ="2" Grid.RowSpan="10" VerticalAlignment="Top" HorizontalAlignment="Center" >
+        <ScrollViewer>
+          <ctrls:FilterCluster/>
+        </ScrollViewer>
+      </Expander>
+      <Expander Header="Y Axis" ExpandDirection="Left" Grid.Row ="3" Grid.RowSpan="10" VerticalAlignment="Top" HorizontalAlignment="Center" >
+        <ScrollViewer>
+        </ScrollViewer>
+      </Expander>
+    </Grid>
+    <graphs:WpfPlot x:Name="Graph" Grid.Column="0"/>
+
   </Grid>
 </UserControl>
+<!--
+        <Expander Header="Filters" ExpandDirection="Left" Grid.Column ="1" VerticalAlignment="Top">
+        <ScrollViewer>
+          <ctrls:FilterCluster/>
+        </ScrollViewer>
+      </Expander>
+      <Expander Header="Type" ExpandDirection="Left" Grid.Column ="1" VerticalAlignment="Top" Margin="0,50,0,0">
+        <ScrollViewer>
+        </ScrollViewer>
+      </Expander>
+      <Expander Header="X Axis" ExpandDirection="Left" Grid.Column ="1" VerticalAlignment="Top" Margin="0,100,0,0">
+        <ScrollViewer>
+          <ctrls:FilterCluster/>
+        </ScrollViewer>
+      </Expander>
+      <Expander Header="Y Axis" ExpandDirection="Left" Grid.Column ="1" VerticalAlignment="Top" Margin="0,150,0,0">
+        <ScrollViewer>
+        </ScrollViewer>
+      </Expander>
+  -->

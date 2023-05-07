@@ -40,4 +40,9 @@
     <Setter Property="BorderBrush" Value="#FFABADB3"/>
     <Setter Property="FontSize" Value="16px"/>
   </Style>
+
+  <Style x:Key="PageBackground" TargetType="Page">
+    <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"/>
+  </Style>
+
 </ResourceDictionary>
