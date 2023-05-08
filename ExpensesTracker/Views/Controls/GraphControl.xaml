@@ -23,54 +23,49 @@
       <ColumnDefinition />
       <ColumnDefinition Width="Auto"/>
     </Grid.ColumnDefinitions>
-    
-    <Grid Grid.Column="1" Height="200" VerticalAlignment="Top">
+
+    <Grid Grid.Column="1" VerticalAlignment="Top">
       <Grid.RowDefinitions>
-        <RowDefinition/>
-        <RowDefinition/>
-        <RowDefinition/>
+        <RowDefinition Height="50"/>
+        <RowDefinition Height="50"/>
+        <RowDefinition Height="50"/>
+        <RowDefinition Height="50"/>
         <RowDefinition/>
       </Grid.RowDefinitions>
-      <Expander Header="Filters" ExpandDirection="Left" Grid.Row ="0" Grid.RowSpan="10" VerticalAlignment="Top" HorizontalAlignment="Center" >
-        <ScrollViewer>
-          <ctrls:FilterCluster/>
-        </ScrollViewer>
-      </Expander>
-      <Expander Header="Type" ExpandDirection="Left" Grid.Row ="1" Grid.RowSpan="10"  VerticalAlignment="Top" HorizontalAlignment="Center" >
-        <ScrollViewer>
-        </ScrollViewer>
-      </Expander>
-      <Expander Header="X Axis" ExpandDirection="Left" Grid.Row ="2" Grid.RowSpan="10" VerticalAlignment="Top" HorizontalAlignment="Center" >
-        <ScrollViewer>
-          <ctrls:FilterCluster/>
-        </ScrollViewer>
-      </Expander>
-      <Expander Header="Y Axis" ExpandDirection="Left" Grid.Row ="3" Grid.RowSpan="10" VerticalAlignment="Top" HorizontalAlignment="Center" >
-        <ScrollViewer>
-        </ScrollViewer>
-      </Expander>
+      <StackPanel Grid.Row ="0" Grid.RowSpan="10" Orientation="Vertical">
+        <Label Content="Filters" HorizontalAlignment="Right"/>
+        <Expander ExpandDirection="Left" HorizontalAlignment="Right">
+          <ScrollViewer Margin=" 0,0,25,0" MaxHeight="650">
+            <ctrls:FilterCluster/>
+          </ScrollViewer>
+        </Expander>
+      </StackPanel>
+      <StackPanel Grid.Row ="1" Grid.RowSpan="10" Orientation="Vertical">
+        <Label Content="Type" HorizontalAlignment="Right"/>
+        <Expander ExpandDirection="Left" HorizontalAlignment="Right" >
+          <ScrollViewer Margin=" 0,0,25,0">
+            <ctrls:FilterCluster/>
+          </ScrollViewer>
+        </Expander>
+      </StackPanel>
+      <StackPanel Grid.Row ="2" Grid.RowSpan="10" Orientation="Vertical">
+        <Label Content="X Axis" HorizontalAlignment="Right"/>
+        <Expander ExpandDirection="Left"  HorizontalAlignment="Right" >
+          <ScrollViewer Margin=" 0,0,25,0">
+            <ctrls:FilterCluster/>
+          </ScrollViewer>
+        </Expander>
+      </StackPanel>
+      <StackPanel Grid.Row ="3" Grid.RowSpan="10" Orientation="Vertical">
+        <Label Content="Y Axis" HorizontalAlignment="Right"/>
+        <Expander ExpandDirection="Left" HorizontalAlignment="Right" >
+          <ScrollViewer Margin=" 0,0,25,0" MaxHeight="650">
+            <ctrls:FilterCluster/>
+          </ScrollViewer>
+        </Expander>
+      </StackPanel>
     </Grid>
     <graphs:WpfPlot x:Name="Graph" Grid.Column="0"/>
 
   </Grid>
 </UserControl>
-<!--
-        <Expander Header="Filters" ExpandDirection="Left" Grid.Column ="1" VerticalAlignment="Top">
-        <ScrollViewer>
-          <ctrls:FilterCluster/>
-        </ScrollViewer>
-      </Expander>
-      <Expander Header="Type" ExpandDirection="Left" Grid.Column ="1" VerticalAlignment="Top" Margin="0,50,0,0">
-        <ScrollViewer>
-        </ScrollViewer>
-      </Expander>
-      <Expander Header="X Axis" ExpandDirection="Left" Grid.Column ="1" VerticalAlignment="Top" Margin="0,100,0,0">
-        <ScrollViewer>
-          <ctrls:FilterCluster/>
-        </ScrollViewer>
-      </Expander>
-      <Expander Header="Y Axis" ExpandDirection="Left" Grid.Column ="1" VerticalAlignment="Top" Margin="0,150,0,0">
-        <ScrollViewer>
-        </ScrollViewer>
-      </Expander>
-  -->
