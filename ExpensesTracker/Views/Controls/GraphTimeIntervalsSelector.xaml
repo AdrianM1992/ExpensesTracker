@@ -1,0 +1,72 @@
+﻿<UserControl x:Class="ExpensesTracker.Views.Controls.GraphTimeIntervalsSelector"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ExpensesTracker.Views.Controls"
+             xmlns:enums="clr-namespace:ExpensesTracker.DataTypes.Enums"
+             mc:Ignorable="d"  d:Background="Aqua"
+             d:DesignHeight="300" Width="190">
+  <UserControl.Resources>
+    <ObjectDataProvider x:Key="TimeDivisionIntervals" MethodName="GetValues" ObjectType="{x:Type enums:TimeDivisionIntervals}">
+      <ObjectDataProvider.MethodParameters>
+        <x:Type TypeName="enums:TimeDivisionIntervals" />
+      </ObjectDataProvider.MethodParameters>
+    </ObjectDataProvider>
+    
+  </UserControl.Resources>
+    <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition/>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="Auto"/>
+    </Grid.RowDefinitions>
+      
+    <Label Content="TIME SETTINGS" Grid.Row="0" FontSize="16" HorizontalContentAlignment="Center" BorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}" BorderThickness="1,1,1,1" Padding="0,0,0,0" Margin="2,2,2,2"/>
+
+    <GroupBox Grid.Row="1" Header="Basic">
+      <StackPanel  >
+        <StackPanel Orientation="Horizontal">
+          <Label Content="X axis name"/>
+          <CheckBox VerticalAlignment="Center"/>
+        </StackPanel>
+        <TextBox />
+        <Label Content="Time scope"/>
+        <ComboBox SelectedIndex="2" >
+          <ComboBoxItem Content="Current week"/>
+          <ComboBoxItem Content="Past 7 days"/>
+          <ComboBoxItem Content="Current month"/>
+          <ComboBoxItem Content="Past 30 days"/>
+          <ComboBoxItem Content="Current year"/>
+          <ComboBoxItem Content="Past 365 days"/>
+          <ComboBoxItem Content="Custom"/>
+        </ComboBox>
+      </StackPanel>
+    </GroupBox>
+
+    <GroupBox x:Name="CustomTimeSettings" Grid.Row="2" Header="Custom time settings">
+      <StackPanel Orientation="Vertical" IsEnabled="False">
+        <Label Content="Time scope"/>
+        <Grid>
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+          </Grid.ColumnDefinitions>
+          <Grid.Resources>
+            <Style TargetType="DatePicker">
+              <Style.Setters >
+                <Setter Property="FontSize" Value="10"></Setter>
+              </Style.Setters>
+            </Style>
+          </Grid.Resources>
+          
+          <DatePicker Grid.Column="0" Width="80" HorizontalAlignment="Left"/>
+          <DatePicker Grid.Column="1" Width="80" HorizontalAlignment="Left"/>
+        </Grid>
+        
+        <Label Content="Divisor"/>
+        <ComboBox ItemsSource="{Binding Source={StaticResource TimeDivisionIntervals}}"/>
+      </StackPanel>
+    </GroupBox>
+  </Grid>
+</UserControl>

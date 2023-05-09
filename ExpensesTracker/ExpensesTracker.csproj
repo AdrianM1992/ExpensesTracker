@@ -22,6 +22,7 @@
     <None Remove="Views\Assets\Icons\arrowdown.svg" />
     <None Remove="Views\Assets\Icons\arrowup.png" />
     <None Remove="Views\Assets\Icons\arrowup.svg" />
+    <None Remove="Views\Assets\Icons\barGraph.svg" />
     <None Remove="Views\Assets\Icons\chart-histogram.png" />
     <None Remove="Views\Assets\Icons\clear.svg" />
     <None Remove="Views\Assets\Icons\dataBase.png" />
@@ -40,6 +41,7 @@
     <None Remove="Views\Assets\Icons\menu.png" />
     <None Remove="Views\Assets\Icons\minimize.png" />
     <None Remove="Views\Assets\Icons\newRecord.png" />
+    <None Remove="Views\Assets\Icons\pieGraph.svg" />
     <None Remove="Views\Assets\Icons\saveSettings.png" />
     <None Remove="Views\Assets\Icons\settings.png" />
   </ItemGroup>
@@ -53,6 +55,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Views\Assets\Icons\arrowup.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Views\Assets\Icons\barGraph.svg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Views\Assets\Icons\clear.svg">
@@ -128,6 +133,9 @@
     <Resource Include="Views\Assets\Icons\newRecord.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Views\Assets\Icons\pieGraph.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Views\Assets\Icons\saveSettings.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
@@ -145,6 +153,12 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Update="Views\Controls\GraphTypeSelector.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\Controls\GraphValuesSelector.xaml.cs">
+      <SubType>Code</SubType>
     </Compile>
     <Compile Update="Views\Windows\AddEditDB\AddEditDBWindow.xaml.cs">
       <SubType>Code</SubType>

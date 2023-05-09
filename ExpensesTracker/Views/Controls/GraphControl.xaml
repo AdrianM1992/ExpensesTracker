@@ -15,6 +15,8 @@
       </ResourceDictionary.MergedDictionaries>
     </ResourceDictionary>
   </UserControl.Resources>
+  
+  
   <Grid>
     <Grid.Resources>
       <Style TargetType="ScrollBar" BasedOn="{StaticResource NarrowScrollBars}"/>
@@ -33,38 +35,23 @@
         <RowDefinition/>
       </Grid.RowDefinitions>
       <StackPanel Grid.Row ="0" Grid.RowSpan="10" Orientation="Vertical">
-        <Label Content="Filters" HorizontalAlignment="Right"/>
-        <Expander ExpandDirection="Left" HorizontalAlignment="Right">
+        <Label x:Name="FilterLabel" Content="Filters" HorizontalAlignment="Right"/>
+        <Expander x:Name="FilterExpander" ExpandDirection="Left" HorizontalAlignment="Right">
           <ScrollViewer Margin=" 0,0,25,0" MaxHeight="650">
             <ctrls:FilterCluster/>
           </ScrollViewer>
         </Expander>
       </StackPanel>
       <StackPanel Grid.Row ="1" Grid.RowSpan="10" Orientation="Vertical">
-        <Label Content="Type" HorizontalAlignment="Right"/>
-        <Expander ExpandDirection="Left" HorizontalAlignment="Right" >
-          <ScrollViewer Margin=" 0,0,25,0">
-            <ctrls:FilterCluster/>
-          </ScrollViewer>
-        </Expander>
-      </StackPanel>
-      <StackPanel Grid.Row ="2" Grid.RowSpan="10" Orientation="Vertical">
-        <Label Content="X Axis" HorizontalAlignment="Right"/>
-        <Expander ExpandDirection="Left"  HorizontalAlignment="Right" >
-          <ScrollViewer Margin=" 0,0,25,0">
-            <ctrls:FilterCluster/>
-          </ScrollViewer>
-        </Expander>
-      </StackPanel>
-      <StackPanel Grid.Row ="3" Grid.RowSpan="10" Orientation="Vertical">
-        <Label Content="Y Axis" HorizontalAlignment="Right"/>
-        <Expander ExpandDirection="Left" HorizontalAlignment="Right" >
-          <ScrollViewer Margin=" 0,0,25,0" MaxHeight="650">
-            <ctrls:FilterCluster/>
+        <Label x:Name="SelectrosLabel" Content="Type" HorizontalAlignment="Right"/>
+        <Expander  x:Name="SelectorsExpander" ExpandDirection="Left" HorizontalAlignment="Right">
+          <ScrollViewer Margin=" 0,-50,25,0" MaxHeight="650">
+            <ctrls:GraphControlSelectors/>
           </ScrollViewer>
         </Expander>
       </StackPanel>
     </Grid>
+ 
     <graphs:WpfPlot x:Name="Graph" Grid.Column="0"/>
 
   </Grid>

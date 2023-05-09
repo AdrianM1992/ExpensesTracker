@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:ExpensesTracker.Views.Controls"
              xmlns:ctrls="clr-namespace:ExpensesTracker.Views.Controls"
              mc:Ignorable="d" 
-             d:DesignHeight="752" d:DesignWidth="200" d:Background="Aqua">
+             d:DesignHeight="752" Width="190" d:Background="Aqua">
   <UserControl.Resources>
     <ResourceDictionary>
       <ResourceDictionary.MergedDictionaries>

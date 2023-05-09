@@ -1,0 +1,19 @@
+﻿<UserControl x:Class="ExpensesTracker.Views.Controls.GraphControlSelectors"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ExpensesTracker.Views.Controls"
+             xmlns:ctrls="clr-namespace:ExpensesTracker.Views.Controls"
+             mc:Ignorable="d" d:Background="Aqua"
+             Width="190">
+  <UserControl.Resources>
+  </UserControl.Resources>
+  <StackPanel>
+    <ctrls:GraphTypeSelector Grid.Row="0"/>
+    <Separator Height="20" BorderBrush="black" Width="100"/>
+    <ctrls:GraphTimeIntervalsSelector Grid.Row="1"/>
+    <Separator Height="20" BorderBrush="black" Width="100"/>
+    <ctrls:GraphValuesSelector Grid.Row="2"/>
+  </StackPanel>
+</UserControl>

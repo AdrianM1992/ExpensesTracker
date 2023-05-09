@@ -1,0 +1,17 @@
+<?xml version="1.0" ?><svg data-name="bar chart" height="60" id="bar_chart" viewBox="0 0 48 60" width="48" xmlns="http://www.w3.org/2000/svg"><defs><style>
+      .cls-1 {
+        fill: #9f4c4c;
+      }
+
+      .cls-1, .cls-2, .cls-3 {
+        fill-rule: evenodd;
+      }
+
+      .cls-2 {
+        fill: #5b75a0;
+      }
+
+      .cls-3 {
+        fill: #bf873e;
+      }
+    </style></defs><path class="cls-1" d="M252,390V372a4,4,0,0,1,4-4h4a4,4,0,0,1,4,4v18H252Z" data-name="bar chart" id="bar_chart-2" transform="translate(-216 -330)"/><path class="cls-2" d="M234,334m0,56,0,0V334a4,4,0,0,1,4-4h4a4,4,0,0,1,4,4v56H234Zm18-18,0,18" data-name="bar charts copy 4" id="bar_charts_copy_4" transform="translate(-216 -330)"/><path class="cls-3" d="M216,390V360a4,4,0,0,1,4-4h4a4,4,0,0,1,4,4v30H216Zm18-56,0,56" data-name="bar charts copy 3" id="bar_charts_copy_3" transform="translate(-216 -330)"/></svg>

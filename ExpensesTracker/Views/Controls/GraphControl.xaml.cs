@@ -13,6 +13,5 @@ namespace ExpensesTracker.Views.Controls
       InitializeComponent();
       _instance = this;
     }
-
   }
 }

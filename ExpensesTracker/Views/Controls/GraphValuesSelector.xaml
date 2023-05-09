@@ -1,0 +1,55 @@
+﻿<UserControl x:Class="ExpensesTracker.Views.Controls.GraphValuesSelector"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ExpensesTracker.Views.Controls"
+             xmlns:enums="clr-namespace:ExpensesTracker.DataTypes.Enums"
+             mc:Ignorable="d" d:Background="Aqua"
+             d:DesignHeight="300" Width="190">
+  <UserControl.Resources>
+    <ObjectDataProvider x:Key="TimeDivisionIntervals" MethodName="GetValues" ObjectType="{x:Type enums:TimeDivisionIntervals}">
+      <ObjectDataProvider.MethodParameters>
+        <x:Type TypeName="enums:TimeDivisionIntervals" />
+      </ObjectDataProvider.MethodParameters>
+    </ObjectDataProvider>
+
+  </UserControl.Resources>
+  <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition/>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="Auto"/>
+    </Grid.RowDefinitions>
+
+    <Label Content="VALUES SETTINGS" Grid.Row="0" FontSize="16" HorizontalContentAlignment="Center" BorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}" BorderThickness="1,1,1,1" Padding="0,0,0,0" Margin="2,2,2,2"/>
+
+    <GroupBox Grid.Row="1" Header="Basic">
+      <StackPanel>
+        <StackPanel Orientation="Horizontal">
+          <Label Content="Y axis name"/>
+          <CheckBox VerticalAlignment="Center"/>
+        </StackPanel>
+        <TextBox />
+        <Label Content="Values type"/>
+        <Grid>
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+          </Grid.ColumnDefinitions>
+        <RadioButton Grid.Column="0" GroupName="TypeOfValues" Content="Relative (%)" IsChecked="True"/>
+        <RadioButton Grid.Column="1" GroupName="TypeOfValues" Content="Absolute"/>
+        </Grid>
+        <Label Content="Values scope"/>
+        <ComboBox SelectedIndex="1" >
+          <ComboBoxItem Content="Balance"/>
+          <ComboBoxItem Content="Categories"/>
+          <ComboBoxItem Content="Recurring"/>
+          <ComboBoxItem Content="Recurring vs Nonrecurring"/>
+          <ComboBoxItem Content="Subcategories"/>
+        </ComboBox>
+      </StackPanel>
+    </GroupBox>
+
+  </Grid>
+</UserControl>
