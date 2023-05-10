@@ -1,28 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using ExpensesTracker.Models.DataControllers;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace ExpensesTracker.Views.Controls
 {
-    /// <summary>
-    /// Logika interakcji dla klasy GraphControlSelectors.xaml
-    /// </summary>
-    public partial class GraphControlSelectors : UserControl
+  /// <summary>
+  /// Logika interakcji dla klasy GraphControlSelectors.xaml
+  /// </summary>
+  public partial class GraphControlSelectors : UserControl
+  {
+    private GraphSettings _graphSettings = new();
+
+    public GraphControlSelectors()
     {
-        public GraphControlSelectors()
-        {
-            InitializeComponent();
-        }
+      InitializeComponent();
     }
+
+    public void SetGraphSettingsReference(GraphSettings graphSettings)
+    {
+      _graphSettings = graphSettings;
+      GeneralSelector.SetGraphSettingsReference(_graphSettings);
+      TimeSelector.SetGraphSettingsReference(_graphSettings);
+      ValuesSelector.SetGraphSettingsReference(_graphSettings);
+    }
+  }
 }

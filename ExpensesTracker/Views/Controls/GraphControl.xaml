@@ -36,17 +36,17 @@
       </Grid.RowDefinitions>
       <StackPanel Grid.Row ="0" Grid.RowSpan="10" Orientation="Vertical">
         <Label x:Name="FilterLabel" Content="Filters" HorizontalAlignment="Right"/>
-        <Expander x:Name="FilterExpander" ExpandDirection="Left" HorizontalAlignment="Right">
+        <Expander x:Name="FilterExpander" ExpandDirection="Left" HorizontalAlignment="Right" Expanded="Expander_Expanded">
           <ScrollViewer Margin=" 0,0,25,0" MaxHeight="650">
-            <ctrls:FilterCluster/>
+            <ctrls:FilterCluster x:Name="GraphFilterCluster"/>
           </ScrollViewer>
         </Expander>
       </StackPanel>
       <StackPanel Grid.Row ="1" Grid.RowSpan="10" Orientation="Vertical">
         <Label x:Name="SelectrosLabel" Content="Type" HorizontalAlignment="Right"/>
-        <Expander  x:Name="SelectorsExpander" ExpandDirection="Left" HorizontalAlignment="Right">
+        <Expander  x:Name="SelectorsExpander" ExpandDirection="Left" HorizontalAlignment="Right" Expanded="Expander_Expanded">
           <ScrollViewer Margin=" 0,-50,25,0" MaxHeight="650">
-            <ctrls:GraphControlSelectors/>
+            <ctrls:GraphControlSelectors x:Name="GraphControlSelectros"/>
           </ScrollViewer>
         </Expander>
       </StackPanel>

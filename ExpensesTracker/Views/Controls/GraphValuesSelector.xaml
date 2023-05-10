@@ -7,14 +7,6 @@
              xmlns:enums="clr-namespace:ExpensesTracker.DataTypes.Enums"
              mc:Ignorable="d" d:Background="Aqua"
              d:DesignHeight="300" Width="190">
-  <UserControl.Resources>
-    <ObjectDataProvider x:Key="TimeDivisionIntervals" MethodName="GetValues" ObjectType="{x:Type enums:TimeDivisionIntervals}">
-      <ObjectDataProvider.MethodParameters>
-        <x:Type TypeName="enums:TimeDivisionIntervals" />
-      </ObjectDataProvider.MethodParameters>
-    </ObjectDataProvider>
-
-  </UserControl.Resources>
   <Grid>
     <Grid.RowDefinitions>
       <RowDefinition/>
@@ -28,20 +20,24 @@
       <StackPanel>
         <StackPanel Orientation="Horizontal">
           <Label Content="Y axis name"/>
-          <CheckBox VerticalAlignment="Center"/>
+          <CheckBox VerticalAlignment="Center" Checked="CheckBox_CheckedChanged" Unchecked="CheckBox_CheckedChanged" IsChecked="False"/>
         </StackPanel>
-        <TextBox />
+        <TextBox x:Name="YAxisDescription" IsEnabled="False" TextChanged="YAxisDescription_TextChanged"/>
         <Label Content="Values type"/>
+        
         <Grid>
           <Grid.ColumnDefinitions>
             <ColumnDefinition/>
             <ColumnDefinition/>
           </Grid.ColumnDefinitions>
-        <RadioButton Grid.Column="0" GroupName="TypeOfValues" Content="Relative (%)" IsChecked="True"/>
-        <RadioButton Grid.Column="1" GroupName="TypeOfValues" Content="Absolute"/>
+          
+        <RadioButton x:Name="RelativeRadioButton" Grid.Column="0" GroupName="TypeOfValues" Content="Relative (%)" IsChecked="True" Checked="RadioButton_Checked"/>
+        <RadioButton x:Name="AbsoluteRadioButton" Grid.Column="1" GroupName="TypeOfValues" Content="Absolute" Checked="RadioButton_Checked"/>
         </Grid>
+        
         <Label Content="Values scope"/>
-        <ComboBox SelectedIndex="1" >
+        <!-- These values are manually tied to ValuesScopes Enum-->
+        <ComboBox SelectedIndex="1" SelectionChanged="ComboBox_SelectionChanged">
           <ComboBoxItem Content="Balance"/>
           <ComboBoxItem Content="Categories"/>
           <ComboBoxItem Content="Recurring"/>

@@ -1,4 +1,5 @@
-﻿using System.Windows.Controls;
+﻿using ExpensesTracker.ViewModels;
+using System.Windows.Controls;
 
 namespace ExpensesTracker.Views.Controls
 {
@@ -7,11 +8,18 @@ namespace ExpensesTracker.Views.Controls
   /// </summary>
   public partial class GraphControl : UserControl
   {
-    private readonly GraphControl _instance;
+    private readonly GraphControlViewModel _viewModel;
     public GraphControl()
     {
       InitializeComponent();
-      _instance = this;
+      _viewModel = new GraphControlViewModel(this);
+    }
+
+    private void Expander_Expanded(object sender, System.Windows.RoutedEventArgs e)
+    {
+      var expander = (Expander)sender;
+      if (expander.Name == "FilterExpander") SelectorsExpander.IsExpanded = false;
+      else FilterExpander.IsExpanded = false;
     }
   }
 }

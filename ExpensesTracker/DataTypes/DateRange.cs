@@ -27,7 +27,7 @@ namespace ExpensesTracker.DataTypes
         StartDate = DateTime.MinValue;
         EndDate = endDate;
       }
-      else
+      else if (endDate == null)
       {
         EndDate = DateTime.Now;
         StartDate = startDate;

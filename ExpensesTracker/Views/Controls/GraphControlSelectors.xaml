@@ -10,10 +10,10 @@
   <UserControl.Resources>
   </UserControl.Resources>
   <StackPanel>
-    <ctrls:GraphTypeSelector Grid.Row="0"/>
+    <ctrls:GraphTypeSelector x:Name="GeneralSelector" Grid.Row="0"/>
     <Separator Height="20" BorderBrush="black" Width="100"/>
-    <ctrls:GraphTimeIntervalsSelector Grid.Row="1"/>
+    <ctrls:GraphTimeIntervalsSelector x:Name="TimeSelector" Grid.Row="1"/>
     <Separator Height="20" BorderBrush="black" Width="100"/>
-    <ctrls:GraphValuesSelector Grid.Row="2"/>
+    <ctrls:GraphValuesSelector x:Name="ValuesSelector" Grid.Row="2"/>
   </StackPanel>
 </UserControl>

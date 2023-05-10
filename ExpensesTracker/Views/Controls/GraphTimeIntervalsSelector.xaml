@@ -28,11 +28,12 @@
       <StackPanel  >
         <StackPanel Orientation="Horizontal">
           <Label Content="X axis name"/>
-          <CheckBox VerticalAlignment="Center"/>
+          <CheckBox VerticalAlignment="Center" Checked="CheckBox_CheckedChanged" Unchecked="CheckBox_CheckedChanged"/>
         </StackPanel>
-        <TextBox />
+        <TextBox x:Name="XAxisDescription" TextChanged="XAxisDescription_TextChanged" IsEnabled="False"/>
         <Label Content="Time scope"/>
-        <ComboBox SelectedIndex="2" >
+        <ComboBox SelectedIndex="2" SelectionChanged="ComboBox_SelectionChanged">
+          <!-- These values are manually tied to TimeRanges Enum-->
           <ComboBoxItem Content="Current week"/>
           <ComboBoxItem Content="Past 7 days"/>
           <ComboBoxItem Content="Current month"/>
@@ -44,8 +45,8 @@
       </StackPanel>
     </GroupBox>
 
-    <GroupBox x:Name="CustomTimeSettings" Grid.Row="2" Header="Custom time settings">
-      <StackPanel Orientation="Vertical" IsEnabled="False">
+    <GroupBox x:Name="CustomTimeSettings" Grid.Row="2" Header="Custom time settings" IsEnabled="False">
+      <StackPanel Orientation="Vertical">
         <Label Content="Time scope"/>
         <Grid>
           <Grid.ColumnDefinitions>
@@ -60,12 +61,12 @@
             </Style>
           </Grid.Resources>
           
-          <DatePicker Grid.Column="0" Width="80" HorizontalAlignment="Left"/>
-          <DatePicker Grid.Column="1" Width="80" HorizontalAlignment="Left"/>
+          <DatePicker x:Name="StartDate" Grid.Column="0" Width="80" HorizontalAlignment="Left" SelectedDateChanged="DatePicker_SelectedDateChanged"/>
+          <DatePicker x:Name="EndDate" Grid.Column="1" Width="80" HorizontalAlignment="Left" SelectedDateChanged="DatePicker_SelectedDateChanged"/>
         </Grid>
         
         <Label Content="Divisor"/>
-        <ComboBox ItemsSource="{Binding Source={StaticResource TimeDivisionIntervals}}"/>
+        <ComboBox x:Name="TimeDivisorComboBox" ItemsSource="{Binding Source={StaticResource TimeDivisionIntervals}}" SelectedIndex="0" SelectionChanged="TimeDivisorComboBox_SelectionChanged"/>
       </StackPanel>
     </GroupBox>
   </Grid>
