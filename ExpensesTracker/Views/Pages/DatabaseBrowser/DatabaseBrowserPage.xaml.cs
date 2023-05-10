@@ -24,7 +24,7 @@ namespace ExpensesTracker.Views.Pages.DatabaseBrowser
     {
       _mainSettings = mainSettings;
       InitializeComponent();
-      _viewModel = DatabaseBrowserPageViewModel.GetDatabaseBrowserPageViewModelRef(this);
+      _viewModel = DatabaseBrowserPageViewModel.GetDatabaseBrowserPageViewModelRef(this, _mainSettings);
       DatabaseView.DataContext = _viewModel;
       DatabaseView.ItemsSource = _viewModel.DatabaseViewItems;
     }
@@ -42,11 +42,8 @@ namespace ExpensesTracker.Views.Pages.DatabaseBrowser
         }
       }
       addEditDBWindow = new AddEditDBWindow(_mainSettings, operationType, (DatabaseView)DatabaseView.SelectedItem);
-      addEditDBWindow.AddListenerToAddEditRecordEvent(OnAddEditHandler);
       addEditDBWindow.Show();
     }
-
-    private void OnAddEditHandler() => _viewModel.AddedRecord();
 
     /// <summary>
     /// Opens new AddEditDBWindow if reference is null or window is not loaded.

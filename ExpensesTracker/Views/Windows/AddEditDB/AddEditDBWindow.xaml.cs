@@ -8,7 +8,6 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using static ExpensesTracker.Views.Delegates.ViewDelegates;
 
 namespace ExpensesTracker.Views.Windows.AddEditDB
 {
@@ -22,7 +21,6 @@ namespace ExpensesTracker.Views.Windows.AddEditDB
     private readonly bool editMode;
     private readonly Dictionary<TextBox, string> _textBoxes;
     private bool _savedFlag = false;
-    private event AddEditRecordHandler? AddEditRecordEvent;
 
     public AddEditDBWindow(IMainSettings mainSettings, DatabaseBrowserEnum operationType, DatabaseView? databaseView = null)
     {
@@ -34,8 +32,6 @@ namespace ExpensesTracker.Views.Windows.AddEditDB
       if (operationType == DatabaseBrowserEnum.Edit) editMode = true;
       else editMode = false;
     }
-
-    public void AddListenerToAddEditRecordEvent(AddEditRecordHandler onAddEditRecordHandler) => AddEditRecordEvent += onAddEditRecordHandler;
 
     private void TitleBar_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e) => DragMove();
 
@@ -138,17 +134,14 @@ namespace ExpensesTracker.Views.Windows.AddEditDB
     {
       _savedFlag = true;
       _viewModel.CommitChanges(editMode);
-      AddEditRecordEvent?.Invoke();
       Close();
     }
     private void AddCategoryButton_Click(object sender, RoutedEventArgs e)
     {
       var dialog = new NewElementWindow { Header = "Name new category:" };
       bool? result = dialog.ShowDialog();
-      if (result == true)
-      {
-        _viewModel.AddNewCategory(dialog.NewElementName);
-      }
+      if (result == true) _viewModel.AddNewCategory(dialog.NewElementName);
+
       dialog.Close();
     }
     private void DeleteCategoryButton_Click(object sender, RoutedEventArgs e)
@@ -202,7 +195,6 @@ namespace ExpensesTracker.Views.Windows.AddEditDB
       {
         MessageBoxResult result = MessageBox.Show("Changes are not saved. \nExit anyway?", "Warning", MessageBoxButton.YesNo, MessageBoxImage.Question);
         if (result == MessageBoxResult.No) e.Cancel = true;
-        else AddEditRecordEvent?.Invoke();
       }
     }
   }

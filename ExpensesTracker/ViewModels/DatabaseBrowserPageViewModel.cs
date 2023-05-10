@@ -1,5 +1,6 @@
 ﻿using ExpensesTracker.Models.DataControllers;
 using ExpensesTracker.Models.DataProviders;
+using ExpensesTracker.Models.Interfaces;
 using ExpensesTracker.Views.Classes;
 using ExpensesTracker.Views.Pages.DatabaseBrowser;
 using System.Collections.Generic;
@@ -11,20 +12,34 @@ namespace ExpensesTracker.ViewModels
   {
     private readonly DatabaseBrowserPage _databaseBrowserPage;
     private static DatabaseBrowserPageViewModel? _instance;
+    private readonly IMainSettings _mainSettings;
     private int _itemsToShow = 10;
+    private bool _allItems = false;
     private List<Expense> _expensesItems;
     private readonly FilterSortController _filterSortController = new();
 
     public ObservableCollection<DatabaseView> DatabaseViewItems { get; private set; } = new();
 
-    private DatabaseBrowserPageViewModel(DatabaseBrowserPage page)
+    private DatabaseBrowserPageViewModel(DatabaseBrowserPage page, IMainSettings mainSettings)
     {
-
       _databaseBrowserPage = page;
-      _expensesItems = DatabaseModel.FilterByRange(null, true, -1);
+      _mainSettings = mainSettings;
+      _mainSettings.PropertyChanged += MainSettings_PropertyChanged;
+      _expensesItems = _mainSettings.DatabaseRecords;
       _databaseBrowserPage.FilterCluster.SetFilterControllerRef(_filterSortController);
       _filterSortController.PropertyChanged += FilterSortController_PropertyChanged;
-      DatabaseModel.SubtablesChanged += DatabaseModel_SubtablesChanged;
+      ShowRecords();
+    }
+
+    private void MainSettings_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+      _expensesItems = _mainSettings.DatabaseRecords;
+      if (_allItems)
+      {
+        _itemsToShow = _expensesItems.Count;
+        string textToShow = $"All ({_itemsToShow})";
+        _databaseBrowserPage.NumberOfItems.Text = textToShow;
+      }
       ShowRecords();
     }
 
@@ -33,23 +48,14 @@ namespace ExpensesTracker.ViewModels
     /// </summary>
     /// <param name="page">DatabaseBrowserPage reference</param>
     /// <returns>Reference to DatabaseBrowserPageViewModel</returns>
-    public static DatabaseBrowserPageViewModel GetDatabaseBrowserPageViewModelRef(DatabaseBrowserPage page)
+    public static DatabaseBrowserPageViewModel GetDatabaseBrowserPageViewModelRef(DatabaseBrowserPage page, IMainSettings mainSettings)
     {
-      if (_instance == null) return _instance = new DatabaseBrowserPageViewModel(page);
+      if (_instance == null) return _instance = new DatabaseBrowserPageViewModel(page, mainSettings);
       else return _instance;
     }
 
-    public void AddedRecord()
-    {
-      _expensesItems = DatabaseModel.FilterByRange(null, true, -1);
-      ShowRecords();
-    }
-    public void RemoveRecord(DatabaseView itemToDelete)
-    {
-      DatabaseModel.DeleteDBRecord(itemToDelete.ReturnExpense());
-      _expensesItems = DatabaseModel.FilterByRange(null, true, -1);
-      ShowRecords();
-    }
+    public void RemoveRecord(DatabaseView itemToDelete) => DatabaseModel.DeleteDBRecord(itemToDelete.ReturnExpense());
+
 
     /// <summary>
     /// Updates database view by applying all selected filters to list of records
@@ -74,18 +80,19 @@ namespace ExpensesTracker.ViewModels
       if (_itemsToShow > 1000)
       {
         _itemsToShow = _expensesItems.Count;
+        _allItems = true;
         textToShow = $"All ({_itemsToShow})";
       }
-      else textToShow = _itemsToShow.ToString();
+      else
+      {
+        textToShow = _itemsToShow.ToString();
+        _allItems = false;
+      }
 
       _databaseBrowserPage.NumberOfItems.Text = textToShow;
       ShowRecords();
     }
 
-    private void DatabaseModel_SubtablesChanged(object? sender, System.EventArgs e)
-    {
-      _expensesItems = DatabaseModel.FilterByRange(null, true, -1);
-    }
     private void FilterSortController_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e) => ShowRecords();
   }
 }

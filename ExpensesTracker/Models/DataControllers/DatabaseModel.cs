@@ -15,9 +15,10 @@ namespace ExpensesTracker.Models.DataControllers
   public static class DatabaseModel
   {
     /// <summary>
-    /// Event notifying whenever subtables are changed
+    /// Event notifying whenever database is changed
     /// </summary>
     public static event EventHandler<EventArgs>? SubtablesChanged;
+    public static event EventHandler<EventArgs>? DataChanged;
 
     public static void AddEditDBRecord(Expense expense, bool editMode)
     {
@@ -25,6 +26,7 @@ namespace ExpensesTracker.Models.DataControllers
       if (editMode) db.Entry(expense).State = EntityState.Modified;
       else db.Add(expense);
       db.SaveChanges();
+      DataChanged?.Invoke(null, new EventArgs());
     }
     public static void DeleteDBRecord(Expense expense)
     {
@@ -39,6 +41,7 @@ namespace ExpensesTracker.Models.DataControllers
         db.Remove(record);
       }
       db.SaveChanges();
+      DataChanged?.Invoke(null, new EventArgs());
     }
 
     public static void AddCategory(string categoryName)
@@ -300,7 +303,7 @@ namespace ExpensesTracker.Models.DataControllers
     /// Output of every filter can be input to another filter
     /// </summary>
     #region Filters
-    public static List<Expense> FilterByRange(List<Expense>? expenses, bool first, int count = 0)
+    public static List<Expense> FilterByRange(List<Expense>? expenses, bool first, int count = 10)
     {
       List<Expense> listToReturn;
       using var db = new ExpensesContext();

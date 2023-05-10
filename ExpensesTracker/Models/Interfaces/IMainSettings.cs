@@ -1,5 +1,7 @@
 ﻿using ExpensesTracker.DataTypes.Enums;
+using ExpensesTracker.Models.DataProviders;
 using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace ExpensesTracker.Models.Interfaces
 {
@@ -8,5 +10,7 @@ namespace ExpensesTracker.Models.Interfaces
     public string Currency { get; }
     public void SetDefaultCurrency(Currencies currency);
     public List<string> GetAvaliableCurrencies();
+    public List<Expense> DatabaseRecords { get; }
+    public event PropertyChangedEventHandler? PropertyChanged;
   }
 }
