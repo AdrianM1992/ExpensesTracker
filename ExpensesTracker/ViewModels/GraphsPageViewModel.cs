@@ -1,4 +1,5 @@
 ﻿using ExpensesTracker.DataTypes.Enums;
+using ExpensesTracker.Models.Interfaces;
 using ExpensesTracker.Views.Controls;
 using ExpensesTracker.Views.Pages.Graphs;
 using Microsoft.IdentityModel.Tokens;
@@ -14,15 +15,17 @@ namespace ExpensesTracker.ViewModels
   class GraphsPageViewModel
   {
     private readonly GraphsPage _graphsPage;
+    private readonly IMainSettings _mainSettings;
     private static GraphsPageViewModel? _instance;
     private readonly Dictionary<string, CustomTabControl> _tabs = new();
     private readonly Dictionary<string, GraphControl> _graphs = new();
     private readonly ModifyContainers _modifyView;
 
-    private GraphsPageViewModel(GraphsPage page, ModifyContainers modify)
+    private GraphsPageViewModel(GraphsPage page, ModifyContainers modify, IMainSettings mainSettings)
     {
       _graphsPage = page;
       _modifyView = modify;
+      _mainSettings = mainSettings;
     }
 
     /// <summary>
@@ -30,9 +33,9 @@ namespace ExpensesTracker.ViewModels
     /// </summary>
     /// <param name="page">GraphsPage reference</param>
     /// <returns>Reference to GraphsPageViewModel</returns>
-    public static GraphsPageViewModel GetGraphsPageViewModelRef(GraphsPage page, ModifyContainers modify)
+    public static GraphsPageViewModel GetGraphsPageViewModelRef(GraphsPage page, ModifyContainers modify, IMainSettings mainSettings)
     {
-      if (_instance == null) return _instance = new GraphsPageViewModel(page, modify);
+      if (_instance == null) return _instance = new GraphsPageViewModel(page, modify, mainSettings);
       else return _instance;
     }
 
@@ -70,7 +73,7 @@ namespace ExpensesTracker.ViewModels
       _tabs.Add(newTabName, tabToAdd);
 
       //Binding graph control height to graphs container height to prevent bugs during page size changing
-      var graphToAdd = new GraphControl();
+      var graphToAdd = new GraphControl(_mainSettings);
       var binding = new Binding("Height") { Source = _graphsPage.GraphsContainer };
       graphToAdd.SetBinding(FrameworkElement.HeightProperty, binding);
       _graphs.Add(newTabName, graphToAdd);

@@ -108,7 +108,7 @@ namespace ExpensesTracker
       _pages.Add(_tabNames.Last(), page);
 
       _tabNames.Add("Graphs");
-      _pages.Add(_tabNames.Last(), new GraphsPage());
+      _pages.Add(_tabNames.Last(), new GraphsPage(_mainSettings));
       _tabNames.Add("Settings");
       _pages.Add(_tabNames.Last(), new SettingsPage());
     }

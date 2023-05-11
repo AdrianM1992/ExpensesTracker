@@ -1,4 +1,5 @@
-﻿using ExpensesTracker.ViewModels;
+﻿using ExpensesTracker.Models.Interfaces;
+using ExpensesTracker.ViewModels;
 using System.Windows.Controls;
 
 namespace ExpensesTracker.Views.Controls
@@ -9,10 +10,12 @@ namespace ExpensesTracker.Views.Controls
   public partial class GraphControl : UserControl
   {
     private readonly GraphControlViewModel _viewModel;
-    public GraphControl()
+    private readonly IMainSettings _mainSettings;
+    public GraphControl(IMainSettings mainSettings)
     {
       InitializeComponent();
-      _viewModel = new GraphControlViewModel(this);
+      _mainSettings = mainSettings;
+      _viewModel = new GraphControlViewModel(this, _mainSettings);
     }
 
     private void Expander_Expanded(object sender, System.Windows.RoutedEventArgs e)

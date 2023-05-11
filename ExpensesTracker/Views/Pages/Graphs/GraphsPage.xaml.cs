@@ -1,4 +1,5 @@
 ﻿using ExpensesTracker.DataTypes.Enums;
+using ExpensesTracker.Models.Interfaces;
 using ExpensesTracker.ViewModels;
 using ExpensesTracker.Views.Controls;
 using System.Windows;
@@ -12,10 +13,12 @@ namespace ExpensesTracker.Views.Pages.Graphs
   public partial class GraphsPage : Page
   {
     private readonly GraphsPageViewModel _viewModel;
+    private readonly IMainSettings _mainSettings;
     private string? _currentTabName;
-    public GraphsPage()
+    public GraphsPage(IMainSettings mainSettings)
     {
-      _viewModel = GraphsPageViewModel.GetGraphsPageViewModelRef(this, ModifyContainers);
+      _viewModel = GraphsPageViewModel.GetGraphsPageViewModelRef(this, ModifyContainers, mainSettings);
+      _mainSettings = mainSettings;
       InitializeComponent();
     }
 
