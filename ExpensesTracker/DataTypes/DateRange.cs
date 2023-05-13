@@ -2,37 +2,44 @@
 
 namespace ExpensesTracker.DataTypes
 {
+  /// <summary>
+  /// Time span represented by StartDate and EndDate
+  /// </summary>
   public class DateRange
   {
-    public DateTime? StartDate { get; private set; }
-    public DateTime? EndDate { get; private set; }
+    public DateTime StartDate { get; private set; }
+    public DateTime EndDate { get; private set; }
 
+    ///<summary>
+    ///New DateRange
+    /// </summary>
+    /// <param name="startDate">If null == DateTime.MinValue</param>
+    /// <param name="endDate">If null == value DateTime.Now</param>
     public DateRange(DateTime? startDate = null, DateTime? endDate = null)
     {
       if (startDate != null && endDate != null)
       {
+        //Check if dates are not swapped
         if (startDate < endDate)
         {
-          StartDate = startDate;
-          EndDate = endDate;
+          StartDate = (DateTime)startDate;
+          EndDate = (DateTime)endDate;
         }
         else
         {
-          StartDate = endDate;
-          EndDate = startDate;
+          StartDate = (DateTime)endDate;
+          EndDate = (DateTime)startDate;
         }
       }
-      else if (startDate == null)
+      else
       {
-        StartDate = DateTime.MinValue;
-        EndDate = endDate;
-      }
-      else if (endDate == null)
-      {
-        EndDate = DateTime.Now;
-        StartDate = startDate;
+        //In case any of dates is null assign default value
+        StartDate = startDate == null ? DateTime.MinValue : (DateTime)startDate;
+        EndDate = endDate == null ? DateTime.Now : (DateTime)endDate;
       }
     }
+
+    public override string ToString() => $"{StartDate:g} - {EndDate:g}";
   }
 }
 

@@ -123,8 +123,8 @@ namespace ExpensesTracker.Views.Controls
     }
     private void TimeDivisorComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-      var combox = (ComboBox)sender;
-      TimeDivisor = (TimeDivisionIntervals)combox.SelectedIndex;
+      var comboBox = (ComboBox)sender;
+      TimeDivisor = (TimeDivisionIntervals)comboBox.SelectedIndex;
     }
     private void DatePicker_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
     {

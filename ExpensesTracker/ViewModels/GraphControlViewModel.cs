@@ -47,6 +47,7 @@ namespace ExpensesTracker.ViewModels
     private void GraphSettings_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
       _graph.UpdateGraph(_data);
+      _graphControl.Graph = _graph;
     }
 
     public void Test()
