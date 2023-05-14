@@ -1,6 +1,8 @@
 ﻿using ExpensesTracker.DataTypes;
 using ExpensesTracker.DataTypes.Enums;
 using ExpensesTracker.Models.DataProviders;
+using Microsoft.IdentityModel.Tokens;
+using ScottPlot;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,18 +12,23 @@ namespace ExpensesTracker.Models.DataControllers.Graphs_Classes
   internal class BarGraph : GraphWPF
   {
     private string[] _xAxisLabels = Array.Empty<string>();
-    public BarGraph(GraphSettings settings, List<Expense>? data) : base(settings, data) { }
-
-
+    private double[] _xAxisPositions = Array.Empty<double>();
+    public BarGraph(GraphSettings settings, List<Expense>? data, WpfPlot barPlot) : base(settings, data, barPlot) { }
 
     protected override void PlotGraph()
     {
+      _plot.Plot.Clear();
       SetTitle();
-      Plot.XAxis.Label(_settings.XAxisName, size: 12);
-      Plot.YAxis.Label(_settings.YAxisName, size: 12);
+      _plot.Plot.XAxis.Label(_settings.XAxisName ?? "", size: 16);
+      _plot.Plot.YAxis.Label(_settings.YAxisName ?? "", size: 16);
       _xAxisValues = CalculateXAxisIntervals();
       _yAxisValues = CalculateYAxisValues();
+      AddGraphBars();
+      _plot.Plot.XTicks(_xAxisPositions, _xAxisLabels);
+      _plot.Plot.Legend(true, Alignment.UpperLeft);
+      _plot.Refresh();
     }
+
     protected override List<DateRange> CalculateXAxisIntervals()
     {
       var currentDate = DateTime.Today;
@@ -58,7 +65,7 @@ namespace ExpensesTracker.Models.DataControllers.Graphs_Classes
 
         case TimeRanges.monthExact:
           rangesToReturn = DateIntervalDivider.DivideByWeek(new DateRange(currentDate.AddDays(-29), currentDate));
-          foreach (var week in rangesToReturn) xAxisLabels.Add($"Week {DateIntervalDivider.WeekNumber(week.StartDate)}");
+          foreach (var week in rangesToReturn) xAxisLabels.Add($"{week.StartDate:dd.MM} - {week.EndDate:dd.MM}");
           break;
 
         case TimeRanges.year:
@@ -74,18 +81,25 @@ namespace ExpensesTracker.Models.DataControllers.Graphs_Classes
           break;
 
         case TimeRanges.custom:
-          if (_settings.UserTimeScope != null && _settings.TimeDivisor != null) rangesToReturn = CalculateCustomXAxisIntervals(_settings.UserTimeScope, (TimeDivisionIntervals)_settings.TimeDivisor);
-          xAxisLabels = _xAxisLabels.ToList();
-          break;
-
-        default:
+          if (_settings.UserTimeScope != null && _settings.TimeDivisor != null)
+          {
+            rangesToReturn = CalculateCustomXAxisIntervals(_settings.UserTimeScope, (TimeDivisionIntervals)_settings.TimeDivisor);
+            xAxisLabels = _xAxisLabels.ToList();
+          }
+          else xAxisLabels = new();
           break;
       }
       _xAxisLabels = xAxisLabels.ToArray();
+      _xAxisPositions = Enumerable.Range(0, rangesToReturn.Count).Select(x => (double)x).ToArray();
       return rangesToReturn;
     }
-
-    protected override List<DateRange> CalculateCustomXAxisIntervals(DateRange dateRange, TimeDivisionIntervals interval)
+    /// <summary>
+    /// Based on graph type calculates ranges to be shown on graph
+    /// </summary>
+    /// <param name="dateRange">User defined DateRange</param>
+    /// <param name="interval">Division specifier</param>
+    /// <returns>List of DateRange</returns>
+    private List<DateRange> CalculateCustomXAxisIntervals(DateRange dateRange, TimeDivisionIntervals interval)
     {
       var rangesToReturn = new List<DateRange>();
       var labelsToReturn = new List<string>();
@@ -105,8 +119,9 @@ namespace ExpensesTracker.Models.DataControllers.Graphs_Classes
         case TimeDivisionIntervals.Week:
           rangesToReturn = DateIntervalDivider.DivideByWeek(dateRange);
 
-          if (dateRange.StartDate.Year == dateRange.EndDate.Year) foreach (var week in rangesToReturn) labelsToReturn.Add(DateIntervalDivider.WeekNumber(week.StartDate).ToString());
-          else foreach (var week in rangesToReturn) labelsToReturn.Add($"{DateIntervalDivider.WeekNumber(week.StartDate)} {week.StartDate:yyyy}");
+          if (dateRange.StartDate.Year == dateRange.EndDate.Year) foreach (var week in rangesToReturn) labelsToReturn.Add($"{week.StartDate:dd.MM} - {week.EndDate:dd.MM}");
+          // labelsToReturn.Add(DateIntervalDivider.WeekNumber(week.StartDate).ToString());
+          else foreach (var week in rangesToReturn) labelsToReturn.Add($"{week.StartDate:dd.MM.yyyy} - {week.EndDate:dd.MM.yyyy}");
           break;
 
         case TimeDivisionIntervals.Month:
@@ -121,26 +136,26 @@ namespace ExpensesTracker.Models.DataControllers.Graphs_Classes
 
           foreach (var year in rangesToReturn) labelsToReturn.Add(year.StartDate.ToString("yyyy"));
           break;
-
-        default:
-          break;
       }
       _xAxisLabels = labelsToReturn.ToArray();
       return rangesToReturn;
     }
 
-    protected override decimal?[,] CalculateYAxisValues()
+    protected override double?[,] CalculateYAxisValues()
     {
-      decimal?[,] data = new decimal?[0, 0];
+      double?[,] data = new double?[0, 0];
+      var legendLabels = Array.Empty<string>();
 
+      //Calculate values based on chosen scope
       switch (_settings.ValuesScope)
       {
         //This pattern repeats in all cases
         case ValuesScopes.Balance:
 
           //Initialize array of proper dimension sizes
-          data = new decimal?[_xAxisValues.Count(), 2];
-
+          data = new double?[_xAxisValues.Count, 2];
+          //Get legend strings
+          legendLabels = new string[2] { "Income", "Expense" };
           //Iterate through ranges applying boundary conditions to get sum of Record.Total
           for (int i = 0; i < _xAxisValues.Count; i++)
           {
@@ -148,40 +163,43 @@ namespace ExpensesTracker.Models.DataControllers.Graphs_Classes
 
             var incomeValue = (from income in Data
                                where income.Income == true
-                               where (income.Date.HasValue && income.Date >= range.StartDate && income.Date <= range.EndDate) ||
-                               (!income.Date.HasValue && income.DateOfEntry >= range.StartDate && income.DateOfEntry <= range.EndDate)
+                               where (income.Date.HasValue && income.Date >= range.StartDate && income.Date < range.EndDate) ||
+                               (!income.Date.HasValue && income.DateOfEntry >= range.StartDate && income.DateOfEntry < range.EndDate)
                                where income.Total != null
-                               select income.Total).Sum() ?? 0M;
+                               select income.Total).Sum() ?? 0;
             var expenseValue = (from income in Data
                                 where income.Income != true
-                                where (income.Date.HasValue && income.Date >= range.StartDate && income.Date <= range.EndDate) ||
-                                (!income.Date.HasValue && income.DateOfEntry >= range.StartDate && income.DateOfEntry <= range.EndDate)
+                                where (income.Date.HasValue && income.Date >= range.StartDate && income.Date < range.EndDate) ||
+                                (!income.Date.HasValue && income.DateOfEntry >= range.StartDate && income.DateOfEntry < range.EndDate)
                                 where income.Total != null
-                                select income.Total).Sum() ?? 0M;
+                                select income.Total).Sum() ?? 0;
 
             //Adapt values to be shown on graph
             if (_settings.ValuesRelativeType)
             {
               if (incomeValue == 0) data[i, 0] = 0;
-              else data[i, 0] = ((incomeValue - expenseValue) / incomeValue) * 100;
+              else data[i, 0] = (double)(((incomeValue - expenseValue)));
               data[i, 1] = null;
+              legendLabels = new string[1] { "Balance" };
             }
             else
             {
-              data[i, 0] = incomeValue;
-              data[i, 1] = -expenseValue;
+              data[i, 0] = (double)incomeValue;
+              data[i, 1] = (double)-expenseValue;
             }
           }
           break;
 
         case ValuesScopes.Categories:
+
           var categories = from category in Data
                            group category by category.CategoryId into categoryGroups
                            select categoryGroups.Key;
 
-          data = new decimal?[_xAxisValues.Count(), categories.Count()];
+          data = new double?[_xAxisValues.Count, categories.Count()];
+          legendLabels = DatabaseModel.GetCategoriesNames(categories.ToList()).ToArray();
 
-          for (int i = 0; i < _xAxisValues.Count(); i++)
+          for (int i = 0; i < _xAxisValues.Count; i++)
           {
             var range = _xAxisValues[i];
             var categoryValues = new List<decimal>();
@@ -190,8 +208,8 @@ namespace ExpensesTracker.Models.DataControllers.Graphs_Classes
             {
               var categoryValue = (from cat in Data
                                    where cat.CategoryId == category
-                                   where (cat.Date.HasValue && cat.Date >= range.StartDate && cat.Date <= range.EndDate) ||
-                                   (!cat.Date.HasValue && cat.DateOfEntry >= range.StartDate && cat.DateOfEntry <= range.EndDate)
+                                   where (cat.Date.HasValue && cat.Date >= range.StartDate && cat.Date < range.EndDate) ||
+                                   (!cat.Date.HasValue && cat.DateOfEntry >= range.StartDate && cat.DateOfEntry < range.EndDate)
                                    select cat.Total).Sum() ?? 0M;
               categoryValues.Add(categoryValue);
             }
@@ -199,8 +217,8 @@ namespace ExpensesTracker.Models.DataControllers.Graphs_Classes
 
             for (int j = 0; j < categoryValues.Count; j++)
             {
-              if (_settings.ValuesRelativeType) data[i, j] = categoryValues.Take(j + 1).Sum() / sumOfCategories * 100;
-              else data[i, j] = categoryValues.Take(j + 1).Sum();
+              if (_settings.ValuesRelativeType) data[i, j] = (double)(categoryValues.Take(j + 1).Sum() / sumOfCategories * 100);
+              else data[i, j] = (double)(categoryValues.Take(j + 1).Sum());
             }
           }
           break;
@@ -212,9 +230,10 @@ namespace ExpensesTracker.Models.DataControllers.Graphs_Classes
                             group rec by rec.RecurringId into recurringGroups
                             select recurringGroups.Key;
 
-          data = new decimal?[_xAxisValues.Count(), recurrences.Count()];
+          data = new double?[_xAxisValues.Count, recurrences.Count()];
+          legendLabels = DatabaseModel.GetRecurringNames(recurrences.ToList()).ToArray();
 
-          for (int i = 0; i < _xAxisValues.Count(); i++)
+          for (int i = 0; i < _xAxisValues.Count; i++)
           {
             var range = _xAxisValues[i];
             var recurrencesValues = new List<decimal>();
@@ -223,8 +242,8 @@ namespace ExpensesTracker.Models.DataControllers.Graphs_Classes
             {
               var recurrenceValue = (from rec in Data
                                      where rec.RecurringId == recurrence
-                                     where (rec.Date.HasValue && rec.Date >= range.StartDate && rec.Date <= range.EndDate) ||
-                                     (!rec.Date.HasValue && rec.DateOfEntry >= range.StartDate && rec.DateOfEntry <= range.EndDate)
+                                     where (rec.Date.HasValue && rec.Date >= range.StartDate && rec.Date < range.EndDate) ||
+                                     (!rec.Date.HasValue && rec.DateOfEntry >= range.StartDate && rec.DateOfEntry < range.EndDate)
                                      select rec.Total).Sum() ?? 0M;
               recurrencesValues.Add(recurrenceValue);
             }
@@ -232,53 +251,65 @@ namespace ExpensesTracker.Models.DataControllers.Graphs_Classes
 
             for (int j = 0; j < recurrencesValues.Count; j++)
             {
-              if (_settings.ValuesRelativeType) data[i, j] = recurrencesValues.Take(j + 1).Sum() / sumOfRecurrences * 100;
-              else data[i, j] = recurrencesValues.Take(j + 1).Sum();
+              if (_settings.ValuesRelativeType) data[i, j] = (double)(recurrencesValues.Take(j + 1).Sum() / sumOfRecurrences * 100);
+              else data[i, j] = (double)(recurrencesValues.Take(j + 1).Sum());
             }
           }
           break;
+
         case ValuesScopes.BalanceRecurring:
-          data = new decimal?[_xAxisValues.Count(), 2];
+
+          data = new double?[_xAxisValues.Count, 2];
+          legendLabels = new string[2] { "Recurring", "Nonrecurring" };
+
           for (int i = 0; i < _xAxisValues.Count; i++)
           {
             var range = _xAxisValues[i];
 
             var recValue = (from rec in Data
                             where rec.Recurring == true
-                            where (rec.Date.HasValue && rec.Date >= range.StartDate && rec.Date <= range.EndDate) ||
-                            (!rec.Date.HasValue && rec.DateOfEntry >= range.StartDate && rec.DateOfEntry <= range.EndDate)
+                            where (rec.Date.HasValue && rec.Date >= range.StartDate && rec.Date < range.EndDate) ||
+                            (!rec.Date.HasValue && rec.DateOfEntry >= range.StartDate && rec.DateOfEntry < range.EndDate)
                             where rec.Total != null
                             select rec.Total).Sum() ?? 0M;
             var nonRecValue = (from rec in Data
                                where rec.Recurring != true
-                               where (rec.Date.HasValue && rec.Date >= range.StartDate && rec.Date <= range.EndDate) ||
-                               (!rec.Date.HasValue && rec.DateOfEntry >= range.StartDate && rec.DateOfEntry <= range.EndDate)
+                               where (rec.Date.HasValue && rec.Date >= range.StartDate && rec.Date < range.EndDate) ||
+                               (!rec.Date.HasValue && rec.DateOfEntry >= range.StartDate && rec.DateOfEntry < range.EndDate)
                                where rec.Total != null
                                select rec.Total).Sum() ?? 0M;
 
             if (_settings.ValuesRelativeType)
             {
-              if (recValue == 0) data[i, 0] = 0;
-              else data[i, 0] = ((recValue - nonRecValue) / recValue) * 100;
-              data[i, 1] = null;
+              if (recValue == 0 && nonRecValue == 0)
+              {
+                data[i, 0] = 0;
+                data[i, 1] = 0;
+              }
+              else
+              {
+                data[i, 0] = (double)((recValue) / (recValue + nonRecValue) * 100);
+                data[i, 1] = (double)((recValue + nonRecValue) / (recValue + nonRecValue) * 100);
+              }
             }
             else
             {
-              data[i, 0] = recValue;
-              data[i, 1] = -nonRecValue;
+              data[i, 0] = (double)recValue;
+              data[i, 1] = (double)-nonRecValue;
             }
           }
           break;
 
         case ValuesScopes.Subcategories:
+
           var subCategories = from subCat in Data
                               where subCat.SubcategoryId != null
                               group subCat by subCat.SubcategoryId into subCatGroups
                               select subCatGroups.Key;
 
-          data = new decimal?[_xAxisValues.Count(), subCategories.Count()];
-
-          for (int i = 0; i < _xAxisValues.Count(); i++)
+          data = new double?[_xAxisValues.Count, subCategories.Count()];
+          legendLabels = DatabaseModel.GetSubcategoriesNames(subCategories.ToList()).ToArray();
+          for (int i = 0; i < _xAxisValues.Count; i++)
           {
             var range = _xAxisValues[i];
             var subCategoryValues = new List<decimal>();
@@ -287,8 +318,8 @@ namespace ExpensesTracker.Models.DataControllers.Graphs_Classes
             {
               var subCategoryValue = (from subCat in Data
                                       where subCat.SubcategoryId == subCategory
-                                      where (subCat.Date.HasValue && subCat.Date >= range.StartDate && subCat.Date <= range.EndDate) ||
-                                      (!subCat.Date.HasValue && subCat.DateOfEntry >= range.StartDate && subCat.DateOfEntry <= range.EndDate)
+                                      where (subCat.Date.HasValue && subCat.Date >= range.StartDate && subCat.Date < range.EndDate) ||
+                                      (!subCat.Date.HasValue && subCat.DateOfEntry >= range.StartDate && subCat.DateOfEntry < range.EndDate)
                                       select subCat.Total).Sum() ?? 0M;
               subCategoryValues.Add(subCategoryValue);
             }
@@ -296,18 +327,15 @@ namespace ExpensesTracker.Models.DataControllers.Graphs_Classes
 
             for (int j = 0; j < subCategoryValues.Count; j++)
             {
-              if (_settings.ValuesRelativeType) data[i, j] = subCategoryValues.Take(j + 1).Sum() / sumOfSubCategories * 100;
-              else data[i, j] = subCategoryValues.Take(j + 1).Sum();
+              if (_settings.ValuesRelativeType) data[i, j] = (double)(subCategoryValues.Take(j + 1).Sum() / sumOfSubCategories * 100);
+              else data[i, j] = (double)(subCategoryValues.Take(j + 1).Sum());
             }
           }
-          break;
-
-        default:
           break;
       }
 
       //Transpose array and return
-      var transposedData = new decimal?[data.GetLength(1), data.GetLength(0)];
+      var transposedData = new double?[data.GetLength(1), data.GetLength(0)];
       for (int i = 0; i < data.GetLength(0); i++)
       {
         for (int j = 0; j < data.GetLength(1); j++)
@@ -316,7 +344,27 @@ namespace ExpensesTracker.Models.DataControllers.Graphs_Classes
         }
       }
 
+      _legendLabels = legendLabels;
       return transposedData;
+    }
+
+    private void AddGraphBars()
+    {
+      //Plot last first, because they are higher
+      for (int i = _yAxisValues.GetLength(0) - 1; i >= 0; i--)
+      {
+        //One row is one data set
+        double?[] row = new double?[_yAxisValues.GetLength(1)];
+
+        for (int j = 0; j < _yAxisValues.GetLength(1); j++) row[j] = _yAxisValues[i, j];
+
+        if (!row.Contains(null) && !row.IsNullOrEmpty())
+        {
+          var bar = _plot.Plot.AddBar(row.Select(r => (double)r).ToArray(), _xAxisPositions);
+          bar.Label = _legendLabels[i];
+          bar.FillColorNegative = bar.FillColor;
+        }
+      }
     }
   }
 }

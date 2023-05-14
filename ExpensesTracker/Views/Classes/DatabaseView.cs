@@ -47,15 +47,16 @@ namespace ExpensesTracker.Views.Classes
       {
         _expense = expense;
         ID = expense.Id;
+        DateOfEntry = expense.DateOfEntry;
       }
+      else DateOfEntry = DateTime.Now;
       Name = expense.Name;
       Price = expense.Price;
       Quantity = expense.Quantity;
       Total = expense.Total;
-      DateOfEntry = expense.DateOfEntry;
       LastUpdate = expense.LastUpdate;
       Date = expense.Date;
-      Subcategory = GetSubategoryName(expense);
+      Subcategory = GetSubCategoryName(expense);
       Income = expense.Income;
       Recurring = expense.Recurring;
       Description = expense.Description;
@@ -78,7 +79,7 @@ namespace ExpensesTracker.Views.Classes
         _expense.DateOfEntry = DateOfEntry;
         _expense.LastUpdate = DateTime.Now;
         _expense.Date = Date;
-        _expense.SubcategoryId = GetSubategoryId();
+        _expense.SubcategoryId = GetSubCategoryId();
         _expense.Income = Income;
         _expense.Recurring = Recurring;
         _expense.Description = Description;
@@ -97,7 +98,7 @@ namespace ExpensesTracker.Views.Classes
           DateOfEntry = DateOfEntry,
           LastUpdate = DateTime.Now,
           Date = Date,
-          SubcategoryId = GetSubategoryId(),
+          SubcategoryId = GetSubCategoryId(),
           Income = Income,
           Recurring = Recurring,
           Description = Description,
@@ -124,7 +125,7 @@ namespace ExpensesTracker.Views.Classes
     /// </summary>
     /// <param name="expense">Record with reference to categoryId</param>
     /// <returns>Name of category expense or income</returns>
-    private static string? GetSubategoryName(Expense expense)
+    private static string? GetSubCategoryName(Expense expense)
     {
       var subcategoryNames = DatabaseModel.GetSubcategoriesNames(expense: expense);
       if (subcategoryNames.IsNullOrEmpty()) return null;
@@ -161,7 +162,7 @@ namespace ExpensesTracker.Views.Classes
     /// Gets subcategory ID of expense or income
     /// </summary>
     /// <returns>Name of category expense or income</returns>
-    private int? GetSubategoryId()
+    private int? GetSubCategoryId()
     {
       var subcategoryIds = DatabaseModel.GetSubcategoriesIds(new List<DatabaseView> { this });
       if (subcategoryIds.IsNullOrEmpty()) return null;

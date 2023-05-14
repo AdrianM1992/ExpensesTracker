@@ -27,7 +27,7 @@ namespace ExpensesTracker.Views.Windows.AddEditDB
       _mainSettings = mainSettings;
       _viewModel = new AddEditDBWindowViewModel(_mainSettings, this, operationType, databaseView);
       InitializeComponent();
-      _textBoxes = CreateTextboxesDictionary();
+      _textBoxes = CreateTextBoxesDictionary();
       _viewModel.SetControlsValues();
       if (operationType == DatabaseBrowserEnum.Edit) editMode = true;
       else editMode = false;
@@ -52,13 +52,13 @@ namespace ExpensesTracker.Views.Windows.AddEditDB
         textBox.FontStyle = FontStyles.Italic;
         textBox.Foreground = new SolidColorBrush(Color.FromArgb(0xFF, 0x5F, 0x5F, 0x5F));
       }
-      else _viewModel.HandleTextboxInput(textBox);
+      else _viewModel.HandleTextBoxInput(textBox);
     }
 
     /// <summary>
     /// Searches controls list and picks TextBoxes to create dictionary keys; values are default text
     /// </summary>
-    private Dictionary<TextBox, string> CreateTextboxesDictionary()
+    private Dictionary<TextBox, string> CreateTextBoxesDictionary()
     {
       var textBoxes = new Dictionary<TextBox, string>();
       foreach (var textBox in GetAllControls(this).OfType<TextBox>())
@@ -165,8 +165,8 @@ namespace ExpensesTracker.Views.Windows.AddEditDB
       var result = MessageBox.Show("Are you sure?\nThis cannot be undone.", "Warning", MessageBoxButton.YesNo, MessageBoxImage.Question);
       if (result == MessageBoxResult.Yes && Subcategory.SelectedItem.ToString() != "None")
       {
-        var subcat = Subcategory.SelectedItem?.ToString();
-        if (subcat != null) _viewModel.RemoveSubcategory(subcat);
+        var subCat = Subcategory.SelectedItem?.ToString();
+        if (subCat != null) _viewModel.RemoveSubcategory(subCat);
       }
     }
     private void AddRecurringButton_Click(object sender, RoutedEventArgs e)

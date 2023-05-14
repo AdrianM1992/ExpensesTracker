@@ -44,11 +44,12 @@
           <ImageBrush ImageSource="/Views/Assets/Icons/newRecord.png" Stretch="Uniform"/>
         </Button.Background>
       </Button>
+      <!-- For future implementation
       <Button x:Name="DuplicateButton" Style="{StaticResource OpacityButtonStyle}" Click="AddDuplicateButton_Click" BorderBrush="{x:Null}" Foreground="{x:Null}" IsHitTestVisible="True" Width="36" Height="36" Margin="0,0,10,0" ToolTip="Duplicate graph">
         <Button.Background>
           <ImageBrush ImageSource="/Views/Assets/Icons/duplicateRecord.png" Stretch="Uniform"/>
         </Button.Background>
-      </Button>
+      </Button>-->
       <Button x:Name="DeleteButton" Style="{StaticResource OpacityButtonStyle}" BorderBrush="{x:Null}" Foreground="{x:Null}" IsHitTestVisible="True" Width="36" Height="36" Margin="0,0,10,0" Click="DeleteButton_Click" ToolTip="Delete graph">
         <Button.Background>
           <ImageBrush ImageSource="/Views/Assets/Icons/deleteRecord.png" Stretch="Uniform"/>
@@ -66,11 +67,6 @@
         </Button.Background>
       </Button>
       <Border Width="20"/>
-      <Button x:Name="ImageSaveButton" Style="{StaticResource OpacityButtonStyle}" BorderBrush="{x:Null}" Foreground="{x:Null}" IsHitTestVisible="True" Width="36" Height="36" Margin="0,0,10,0" Click="DeleteButton_Click" ToolTip="Delete graph">
-        <Button.Background>
-          <ImageBrush ImageSource="/Views/Assets/Icons/downloadGraph.png" Stretch="Uniform"/>
-        </Button.Background>
-      </Button>
     </StackPanel>
     <!--#endregion-->
   </Grid>

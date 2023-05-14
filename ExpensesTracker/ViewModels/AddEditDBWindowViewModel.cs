@@ -69,7 +69,7 @@ namespace ExpensesTracker.ViewModels
     /// <summary>
     /// Sets properties related to input of various TextBoxes
     /// </summary>
-    public void HandleTextboxInput(TextBox textBox)
+    public void HandleTextBoxInput(TextBox textBox)
     {
       switch (textBox.Name)
       {

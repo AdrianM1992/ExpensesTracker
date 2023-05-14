@@ -1,27 +1,29 @@
 ﻿using ExpensesTracker.DataTypes;
-using ExpensesTracker.DataTypes.Enums;
 using ExpensesTracker.Models.DataProviders;
+using System;
 using System.Collections.Generic;
 
 namespace ExpensesTracker.Models.DataControllers.Graphs_Classes
 {
-  abstract class GraphWPF : ScottPlot.WpfPlot
+  abstract class GraphWPF
   {
     protected readonly GraphSettings _settings;
     protected List<Expense>? _data;
+    protected ScottPlot.WpfPlot _plot;
     protected List<DateRange> _xAxisValues = new();
-    protected decimal?[,] _yAxisValues = new decimal?[0, 0];
-
+    protected double?[,] _yAxisValues = new double?[0, 0];
+    protected string[] _legendLabels = Array.Empty<string>();
     public List<Expense>? Data
     {
       get { return _data; }
       private set { _data = value; }
     }
 
-    public GraphWPF(GraphSettings settings, List<Expense>? data)
+    public GraphWPF(GraphSettings settings, List<Expense>? data, ScottPlot.WpfPlot plot)
     {
       _settings = settings;
       Data = data;
+      _plot = plot;
       PlotGraph();
     }
 
@@ -37,18 +39,10 @@ namespace ExpensesTracker.Models.DataControllers.Graphs_Classes
     /// <returns>List of DateRange</returns>
     protected abstract List<DateRange> CalculateXAxisIntervals();
     /// <summary>
-    /// Based on graph type calculates ranges to be shown on graph
-    /// </summary>
-    /// <param name="dateRange">User defined DateRange</param>
-    /// <param name="interval">Division specifier</param>
-    /// <returns>List of DateRange</returns>
-    protected abstract List<DateRange> CalculateCustomXAxisIntervals(DateRange dateRange, TimeDivisionIntervals interval);
-    /// <summary>
     /// Calculates YAxisValues based on graphSettings
     /// </summary>
     /// <returns>Array of values, where columns refer to ranges</returns>
-    protected abstract decimal?[,] CalculateYAxisValues();
-
-    protected void SetTitle() => Plot.Title(_settings.GraphName, size: 16);
+    protected abstract double?[,] CalculateYAxisValues();
+    protected void SetTitle() => _plot.Plot.Title(_settings.GraphName, size: 24);
   }
 }

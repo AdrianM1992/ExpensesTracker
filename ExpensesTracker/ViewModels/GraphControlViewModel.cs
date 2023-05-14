@@ -14,46 +14,44 @@ namespace ExpensesTracker.ViewModels
     private readonly IMainSettings _mainSettings;
     private readonly FilterSortController _filterSortController = new();
     private readonly GraphSettings _graphSettings = new();
-    private readonly GraphDataController _graphDataController = new();
     private List<Expense> _data;
 
     private GraphWPF _graph;
     public GraphControlViewModel(GraphControl graphControl, IMainSettings mainSettings)
     {
-
       _graphControl = graphControl;
       _mainSettings = mainSettings;
       _graphControl.GraphFilterCluster.SetFilterControllerRef(_filterSortController);
       _graphControl.GraphControlSelectros.SetGraphSettingsReference(_graphSettings);
       _data = _mainSettings.DatabaseRecords;
-      _mainSettings.PropertyChanged += MainSettings_PropertyChanged;
-      _filterSortController.PropertyChanged += FilterSortController_PropertyChanged;
-      _graphSettings.PropertyChanged += GraphSettings_PropertyChanged;
-      Test();
+      _mainSettings.PropertyChanged += UpdateGraph;
+      _filterSortController.PropertyChanged += UpdateGraph;
+      _graphSettings.PropertyChanged += UpdateGraph;
+      _mainSettings.PropertyChanged += UpdateGraph;
+      _graph = new BarGraph(_graphSettings, _data, _graphControl.Graph);
     }
-    //maybe use only one handler?
-    private void MainSettings_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+
+    private void UpdateGraph(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
+      if (e.PropertyName == "GraphType") ChangeGraphType();
       _data = _filterSortController.ApplyFilterCriteria(_mainSettings.DatabaseRecords, -1);
       _graph.UpdateGraph(_data);
     }
 
-    private void FilterSortController_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+    private void ChangeGraphType()
     {
-      _data = _filterSortController.ApplyFilterCriteria(_mainSettings.DatabaseRecords, -1);
-      _graph.UpdateGraph(_data);
-    }
-
-    private void GraphSettings_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
-    {
-      _graph.UpdateGraph(_data);
-      _graphControl.Graph = _graph;
-    }
-
-    public void Test()
-    {
-      _graph = new BarGraph(_graphSettings, _data);
-      _graphControl.Graph = _graph;
+      _graphControl.Graph.Reset();
+      switch (_graphSettings.GraphType)
+      {
+        case DataTypes.Enums.GraphTypes.BarGraph:
+          _graph = _graph = new BarGraph(_graphSettings, _data, _graphControl.Graph);
+          break;
+        case DataTypes.Enums.GraphTypes.PieGraph:
+          _graph = _graph = new PieGraph(_graphSettings, _data, _graphControl.Graph);
+          break;
+        default:
+          break;
+      }
     }
   }
 }

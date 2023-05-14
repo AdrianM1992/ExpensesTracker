@@ -110,7 +110,6 @@ namespace ExpensesTracker.Views.Controls
         if (TimeScope == TimeRanges.custom)
         {
           CustomTimeSettings.IsEnabled = true;
-          UserTimeScope = new DateRange();
           TimeDivisor = (TimeDivisionIntervals)TimeDivisorComboBox.SelectedIndex;
         }
         else

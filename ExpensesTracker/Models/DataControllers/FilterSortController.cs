@@ -95,7 +95,7 @@ namespace ExpensesTracker.Models.DataControllers
     {
       if (_name != null && _name != string.Empty) expensesToFilter = DatabaseModel.FilterByName(expensesToFilter, _name);
       if (_income != null) expensesToFilter = DatabaseModel.FilterByIncome(expensesToFilter, (bool)_income);
-      if (_recurring != null) expensesToFilter = DatabaseModel.FilterByRecurrance(expensesToFilter, (bool)_recurring);
+      if (_recurring != null) expensesToFilter = DatabaseModel.FilterByRecurrence(expensesToFilter, (bool)_recurring);
       if (_priceRange != null) expensesToFilter = DatabaseModel.FilterByPrice(expensesToFilter, _priceRange);
       if (_quantityRange != null) expensesToFilter = DatabaseModel.FilterByQuantity(expensesToFilter, _quantityRange);
       if (_totalRange != null) expensesToFilter = DatabaseModel.FilterByTotal(expensesToFilter, _totalRange);
@@ -104,7 +104,7 @@ namespace ExpensesTracker.Models.DataControllers
       if (_userDateRange != null) expensesToFilter = DatabaseModel.FilterByUserDate(expensesToFilter, _userDateRange);
       if (_categories != null) expensesToFilter = DatabaseModel.FilterByCategories(expensesToFilter, _categories);
       if (_subcategories != null) expensesToFilter = DatabaseModel.FilterBySubcategories(expensesToFilter, _subcategories);
-      if (_recurrances != null) expensesToFilter = DatabaseModel.FilterByRecurranceNames(expensesToFilter, _recurrances);
+      if (_recurrances != null) expensesToFilter = DatabaseModel.FilterByRecurrenceNames(expensesToFilter, _recurrances);
       expensesToFilter = DatabaseModel.FilterByRange(expensesToFilter, true, nuberOfRecordsToShow);
       return expensesToFilter;
     }

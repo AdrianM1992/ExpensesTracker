@@ -20,6 +20,11 @@ namespace ExpensesTracker.Models.DataControllers
     public static event EventHandler<EventArgs>? SubtablesChanged;
     public static event EventHandler<EventArgs>? DataChanged;
 
+    /// <summary>
+    /// Methods that affects directly database
+    /// </summary>
+    #region Editing
+
     public static void AddEditDBRecord(Expense expense, bool editMode)
     {
       using var db = new ExpensesContext();
@@ -70,8 +75,8 @@ namespace ExpensesTracker.Models.DataControllers
 
       if (!subcategories.Any())
       {
-        var newSubategory = new Subcategory { Name = subcategoryName, CategoryId = categoryId };
-        db.Subcategories.Add(newSubategory);
+        var newSubCategory = new Subcategory { Name = subcategoryName, CategoryId = categoryId };
+        db.Subcategories.Add(newSubCategory);
         db.SaveChanges();
         SubtablesChanged?.Invoke(null, new EventArgs());
       }
@@ -177,28 +182,52 @@ namespace ExpensesTracker.Models.DataControllers
       else MessageBox.Show("No recurrence to delete.", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
       return false;
     }
+    #endregion
 
     /// <summary>
-    /// Opens Categories table and returns its content or if Expense instance is passed returns name of category of instance
+    /// Methods that returns names or IDs values stored in subtables
     /// </summary>
-    /// <param name="expense">Optional Expanse instance</param>
-    /// <returns>List of all categories or category of Expense instance</returns>
-    public static List<string> GetCategoriesNames(Expense? expense = null)
+    #region Names and IDs
+
+    /// <summary>
+    /// Opens Categories table and returns its content
+    /// </summary>
+    /// <returns>List of category names</returns>
+    public static List<string> GetCategoriesNames()
     {
       using var db = new ExpensesContext();
-      if (expense != null)
-      {
-        var categories = (from c in db.Categories
-                          where c.Id == expense.CategoryId
-                          select c.Name).ToList();
-        return categories;
-      }
-      else
-      {
-        var categories = (from c in db.Categories
-                          select c.Name).ToList();
-        return categories;
-      }
+
+      var categories = (from c in db.Categories
+                        select c.Name).ToList();
+      return categories;
+    }
+    /// <summary>
+    /// Gets name of category of passed Expanse instance
+    /// </summary>
+    /// <param name="expense">Expanse instance</param>
+    /// <returns>List of category names</returns>
+    public static List<string> GetCategoriesNames(Expense expense)
+    {
+      using var db = new ExpensesContext();
+
+      var categories = (from c in db.Categories
+                        where c.Id == expense.CategoryId
+                        select c.Name).ToList();
+      return categories;
+    }
+    /// <summary>
+    /// Gets names of categories of passed category ID list
+    /// </summary>
+    /// <param name="IDs">List of categories IDs</param>
+    /// <returns>List of category names</returns>
+    public static List<string> GetCategoriesNames(List<short> IDs)
+    {
+      using var db = new ExpensesContext();
+
+      var categories = (from c in db.Categories
+                        where IDs.Contains(c.Id)
+                        select c.Name).ToList();
+      return categories;
     }
     /// <summary>
     /// Opens Categories table and searches matches in names on category in provided DatabaseViews list
@@ -217,30 +246,61 @@ namespace ExpensesTracker.Models.DataControllers
       }
       return categoriesIds;
     }
+
     /// <summary>
-    /// Search DB for all subcategories of selected category, or if Expense instance is passed returns name of subcategory of instance
+    /// Opens Subcategories table and returns its content
     /// </summary>
-    /// <param name="category">Category to search for subcategories </param>
-    /// <param name="expense">Optional Expanse instance</param>
-    /// <returns>List of all subcategories belong to category or subcategory of Expanse instance</returns>
-    public static List<string> GetSubcategoriesNames(string category = "None", Expense? expense = null)
+    /// <returns>List of subcategories</returns>
+    public static List<string> GetSubcategoriesNames()
     {
       using var db = new ExpensesContext();
-      if (expense != null)
-      {
-        var subcategories = (from s in db.Subcategories
-                             where s.Id == expense.SubcategoryId
-                             select s.Name).ToList();
-        return subcategories;
-      }
-      else
-      {
-        var subcategories = (from c in db.Categories
-                             where c.Name == category
-                             join s in db.Subcategories on c.Id equals s.CategoryId
-                             select s.Name).ToList();
-        return subcategories;
-      }
+
+      var subcategories = (from s in db.Subcategories
+                           select s.Name).ToList();
+      return subcategories;
+    }
+    /// <summary>
+    /// Gets name of subcategory of passed Expanse instance
+    /// </summary>
+    /// <param name="expense">Optional Expanse instance</param>
+    /// <returns>List of subcategories</returns>
+    public static List<string> GetSubcategoriesNames(Expense expense)
+    {
+      using var db = new ExpensesContext();
+
+      var subcategories = (from s in db.Subcategories
+                           where s.Id == expense.SubcategoryId
+                           select s.Name).ToList();
+      return subcategories;
+    }
+    /// <summary>
+    /// Gets names of subcategories of passed category name
+    /// </summary>
+    /// <param name="category">Category to search for subcategories </param>
+    /// <returns>List of subcategories</returns>
+    public static List<string> GetSubcategoriesNames(string category = "None")
+    {
+      using var db = new ExpensesContext();
+
+      var subcategories = (from c in db.Categories
+                           where c.Name == category
+                           join s in db.Subcategories on c.Id equals s.CategoryId
+                           select s.Name).ToList();
+      return subcategories;
+    }
+    /// <summary>
+    /// Gets names of subcategories of passed category ID list
+    /// </summary>
+    /// <param name="IDs">List of subcategories IDs</param>
+    /// <returns>List of subcategories</returns>
+    public static List<string> GetSubcategoriesNames(List<int?> IDs)
+    {
+      using var db = new ExpensesContext();
+
+      var subcategories = (from s in db.Subcategories
+                           where IDs.Contains(s.Id)
+                           select s.Name).ToList();
+      return subcategories;
     }
     /// <summary>
     /// Opens Subcategories table and searches matches in names on subcategory in provided DatabaseViews list
@@ -259,26 +319,47 @@ namespace ExpensesTracker.Models.DataControllers
       }
       return subcategoriesIds;
     }
-    /// Opens Recurrings table and returns its content, or if Expense instance is passed returns recurring name of instance
+
+    /// <summary>
+    /// Opens Recurrings table and returns its content
     /// </summary>
-    /// <param name="expense">Optional Expanse instance</param>
-    /// <returns>List of all recurrings or reccuring name of Expanse Instance</returns>
-    public static List<string> GetRecurringNames(Expense? expense = null)
+    /// <returns>List of recurrences names</returns>
+    public static List<string> GetRecurringNames()
     {
       using var db = new ExpensesContext();
-      if (expense != null)
-      {
-        var recurrings = (from r in db.Recurrings
-                          where r.Id == expense.RecurringId
-                          select r.Name).ToList();
-        return recurrings;
-      }
-      else
-      {
-        var recurrings = (from r in db.Recurrings
-                          select r.Name).ToList();
-        return recurrings;
-      }
+
+      var recurrences = (from r in db.Recurrings
+                         select r.Name).ToList();
+      return recurrences;
+
+    }
+    /// <summary>
+    /// Gets name of recurrence of passed Expanse instance
+    /// </summary>
+    /// <param name="expense">Expanse instance</param>
+    /// <returns>List of recurrences names</returns>
+    public static List<string> GetRecurringNames(Expense expense)
+    {
+      using var db = new ExpensesContext();
+
+      var recurrences = (from r in db.Recurrings
+                         where r.Id == expense.RecurringId
+                         select r.Name).ToList();
+      return recurrences;
+    }
+    /// <summary>
+    /// Gets names of recurrences of passed recurrences ID list
+    /// </summary>
+    /// <param name="IDs">List of recurrences IDs</param>
+    /// <returns>List of recurrences names</returns>
+    public static List<string> GetRecurringNames(List<short?> IDs)
+    {
+      using var db = new ExpensesContext();
+
+      var recurrences = (from r in db.Recurrings
+                         where IDs.Contains(r.Id)
+                         select r.Name).ToList();
+      return recurrences;
     }
     /// <summary>
     /// Opens Recurrings table and searches matches in names on recurringId in provided DatabaseViews list
@@ -297,12 +378,14 @@ namespace ExpensesTracker.Models.DataControllers
       }
       return recurringIds;
     }
+    #endregion
 
     /// <summary>
     /// All available filters that can be applied to filter database
     /// Output of every filter can be input to another filter
     /// </summary>
     #region Filters
+
     public static List<Expense> FilterByRange(List<Expense>? expenses, bool first, int count = 10)
     {
       List<Expense> listToReturn;
@@ -358,7 +441,7 @@ namespace ExpensesTracker.Models.DataControllers
         return listToReturn;
       }
     }
-    public static List<Expense> FilterByRecurrance(List<Expense>? expenses, bool recurring)
+    public static List<Expense> FilterByRecurrence(List<Expense>? expenses, bool recurring)
     {
       List<Expense> listToReturn;
       using var db = new ExpensesContext();
@@ -553,7 +636,7 @@ namespace ExpensesTracker.Models.DataControllers
         return listToReturn;
       }
     }
-    public static List<Expense> FilterByRecurranceNames(List<Expense>? expenses, List<string> recurringNames)
+    public static List<Expense> FilterByRecurrenceNames(List<Expense>? expenses, List<string> recurringNames)
     {
       List<Expense> listToReturn = new();
       using var db = new ExpensesContext();
