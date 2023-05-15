@@ -56,12 +56,12 @@
         </Button.Background>
       </Button>
       <Border Width="20"/>
-      <Button x:Name="LoadButton" Style="{StaticResource OpacityButtonStyle}" BorderBrush="{x:Null}" Foreground="{x:Null}" IsHitTestVisible="True" Width="36" Height="36" Margin="0,0,10,0" Click="DeleteButton_Click" ToolTip="Delete graph">
+      <Button x:Name="LoadButton" Style="{StaticResource OpacityButtonStyle}" BorderBrush="{x:Null}" Foreground="{x:Null}" IsHitTestVisible="True" Width="36" Height="36" Margin="0,0,10,0" Click="LoadButton_Click"  ToolTip="Delete graph">
         <Button.Background>
           <ImageBrush ImageSource="/Views/Assets/Icons/loadSettings.png" Stretch="Uniform"/>
         </Button.Background>
       </Button>
-      <Button x:Name="SaveButton" Style="{StaticResource OpacityButtonStyle}" BorderBrush="{x:Null}" Foreground="{x:Null}" IsHitTestVisible="True" Width="36" Height="36" Margin="0,0,10,0" Click="DeleteButton_Click" ToolTip="Delete graph">
+      <Button x:Name="SaveButton" Style="{StaticResource OpacityButtonStyle}" BorderBrush="{x:Null}" Foreground="{x:Null}" IsHitTestVisible="True" Width="36" Height="36" Margin="0,0,10,0" Click="SaveButton_Click"  ToolTip="Delete graph">
         <Button.Background>
           <ImageBrush ImageSource="/Views/Assets/Icons/saveSettings.png" Stretch="Uniform"/>
         </Button.Background>

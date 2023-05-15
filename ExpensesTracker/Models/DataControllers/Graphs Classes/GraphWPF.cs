@@ -1,5 +1,6 @@
 ﻿using ExpensesTracker.DataTypes;
 using ExpensesTracker.Models.DataProviders;
+using ExpensesTracker.Models.Settings;
 using System;
 using System.Collections.Generic;
 

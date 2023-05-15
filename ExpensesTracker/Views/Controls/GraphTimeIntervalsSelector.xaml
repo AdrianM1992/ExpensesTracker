@@ -28,11 +28,11 @@
       <StackPanel  >
         <StackPanel Orientation="Horizontal">
           <Label Content="X axis name"/>
-          <CheckBox VerticalAlignment="Center" Checked="CheckBox_CheckedChanged" Unchecked="CheckBox_CheckedChanged"/>
+          <CheckBox x:Name="XAxisNamed" VerticalAlignment="Center" Checked="CheckBox_CheckedChanged" Unchecked="CheckBox_CheckedChanged"/>
         </StackPanel>
         <TextBox x:Name="XAxisDescription" TextChanged="XAxisDescription_TextChanged" IsEnabled="False"/>
         <Label Content="Time scope"/>
-        <ComboBox SelectedIndex="2" SelectionChanged="ComboBox_SelectionChanged">
+        <ComboBox x:Name="TimeScopeCombo" SelectedIndex="2" SelectionChanged="ComboBox_SelectionChanged">
           <!-- These values are manually tied to TimeRanges Enum-->
           <ComboBoxItem Content="Current week"/>
           <ComboBoxItem Content="Past 7 days"/>

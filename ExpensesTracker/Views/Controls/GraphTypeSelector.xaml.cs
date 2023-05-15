@@ -1,5 +1,5 @@
 ﻿using ExpensesTracker.DataTypes.Enums;
-using ExpensesTracker.Models.DataControllers;
+using ExpensesTracker.Models.Settings;
 using System.ComponentModel;
 using System.Windows.Controls;
 
@@ -10,6 +10,7 @@ namespace ExpensesTracker.Views.Controls
   /// </summary>
   public partial class GraphTypeSelector : UserControl, INotifyPropertyChanged
   {
+    private bool _initFlag = false;
     private GraphSettings _graphSettings = new();
     private bool _nameGraph;
     private bool NameGraph
@@ -47,21 +48,36 @@ namespace ExpensesTracker.Views.Controls
       _graphSettings.GraphType = GraphType;
       _graphSettings.GraphName = GraphName;
     }
+    public void SetExistingGraphSettingsReference(GraphSettings graphSettings)
+    {
+      _initFlag = true;
 
+      _graphSettings = graphSettings;
+      GraphType = _graphSettings.GraphType;
+      GraphName = _graphSettings.GraphName;
+      GraphNamed.IsChecked = NameGraph = _graphSettings.GraphName == null;
+      GraphDescription.IsEnabled = NameGraph;
+      GraphTypeList.SelectedIndex = (int)GraphType;
+
+      _initFlag = false;
+    }
     private void OnPropertyChanged(string propertyName)
     {
-      switch (propertyName)
+      if (!_initFlag)
       {
-        case "GraphName":
-          _graphSettings.GraphName = GraphName;
-          break;
-        case "GraphType":
-          _graphSettings.GraphType = GraphType;
-          break;
-        default:
-          break;
+        switch (propertyName)
+        {
+          case "GraphName":
+            _graphSettings.GraphName = GraphName;
+            break;
+          case "GraphType":
+            _graphSettings.GraphType = GraphType;
+            break;
+          default:
+            break;
+        }
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
       }
-      PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
     private void CheckBox_CheckedChanged(object sender, System.Windows.RoutedEventArgs e)
     {
@@ -82,5 +98,7 @@ namespace ExpensesTracker.Views.Controls
       var listBox = (ListBox)sender;
       GraphType = (GraphTypes)listBox.SelectedIndex;
     }
+
+
   }
 }

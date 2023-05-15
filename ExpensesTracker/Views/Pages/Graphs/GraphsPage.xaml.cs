@@ -25,7 +25,7 @@ namespace ExpensesTracker.Views.Pages.Graphs
     private void AddDuplicateButton_Click(object sender, RoutedEventArgs e)
     {
       var button = (Button)sender;
-
+      //For future implementation
       if (button.Name == "DuplicateButton" && _currentTabName != null) _viewModel.DuplicateTab(_currentTabName);
       else _viewModel.AddNewTab();
     }
@@ -41,6 +41,16 @@ namespace ExpensesTracker.Views.Pages.Graphs
       GraphsContainer.Children.Clear();
       if (graph != null) GraphsContainer.Children.Add(graph);
       _currentTabName = newCurrentTabName;
+    }
+
+    private void LoadButton_Click(object sender, RoutedEventArgs e)
+    {
+      _viewModel.LoadGraphSettings(_currentTabName);
+    }
+
+    private void SaveButton_Click(object sender, RoutedEventArgs e)
+    {
+      _viewModel.SaveGraphSettings(_currentTabName);
     }
   }
 }

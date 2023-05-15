@@ -9,7 +9,7 @@ namespace ExpensesTracker.Models.Interfaces
   {
     public string Currency { get; }
     public void SetDefaultCurrency(Currencies currency);
-    public List<string> GetAvaliableCurrencies();
+    public List<string> GetAvailableCurrencies();
     public List<Expense> DatabaseRecords { get; }
     public event PropertyChangedEventHandler? PropertyChanged;
   }

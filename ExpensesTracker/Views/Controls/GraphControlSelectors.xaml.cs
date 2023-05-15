@@ -1,4 +1,4 @@
-﻿using ExpensesTracker.Models.DataControllers;
+﻿using ExpensesTracker.Models.Settings;
 using System.Windows.Controls;
 
 namespace ExpensesTracker.Views.Controls
@@ -21,6 +21,14 @@ namespace ExpensesTracker.Views.Controls
       GeneralSelector.SetGraphSettingsReference(_graphSettings);
       TimeSelector.SetGraphSettingsReference(_graphSettings);
       ValuesSelector.SetGraphSettingsReference(_graphSettings);
+    }
+
+    public void SetExistingGraphSettingsReference(GraphSettings graphSettings)
+    {
+      _graphSettings = graphSettings;
+      GeneralSelector.SetExistingGraphSettingsReference(_graphSettings);
+      TimeSelector.SetExistingGraphSettingsReference(_graphSettings);
+      ValuesSelector.SetExistingGraphSettingsReference(_graphSettings);
     }
   }
 }

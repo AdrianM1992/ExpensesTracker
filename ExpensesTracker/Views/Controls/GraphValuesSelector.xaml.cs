@@ -1,5 +1,5 @@
 ﻿using ExpensesTracker.DataTypes.Enums;
-using ExpensesTracker.Models.DataControllers;
+using ExpensesTracker.Models.Settings;
 using System.ComponentModel;
 using System.Windows.Controls;
 
@@ -10,6 +10,8 @@ namespace ExpensesTracker.Views.Controls
   /// </summary>
   public partial class GraphValuesSelector : UserControl, INotifyPropertyChanged
   {
+    private bool _initFlag = false;
+
     private GraphSettings _graphSettings = new();
     private bool _nameYAxis;
     private bool NameYAxis
@@ -54,24 +56,42 @@ namespace ExpensesTracker.Views.Controls
       _graphSettings.ValuesRelativeType = ValuesRelativeType;
       _graphSettings.ValuesScope = ValuesScope;
     }
+    public void SetExistingGraphSettingsReference(GraphSettings graphSettings)
+    {
+      _initFlag = true;
 
+      _graphSettings = graphSettings;
+      ValuesRelativeType = _graphSettings.ValuesRelativeType;
+      ValuesScope = _graphSettings.ValuesScope;
+      YAxisDescription.IsEnabled = NameYAxis = _graphSettings.YAxisName != null;
+      YAxisDescription.Text = YAxisName;
+      YAxisNamed.IsChecked = NameYAxis;
+      if (_graphSettings.ValuesRelativeType) RelativeRadioButton.IsChecked = true;
+      else AbsoluteRadioButton.IsChecked = true;
+      ValuesScopeCombo.SelectedIndex = (int)ValuesScope;
+
+      _initFlag = false;
+    }
     private void OnPropertyChanged(string propertyName)
     {
-      switch (propertyName)
+      if (!_initFlag)
       {
-        case "YAxisName":
-          _graphSettings.YAxisName = YAxisName;
-          break;
-        case "ValuesScope":
-          _graphSettings.ValuesScope = ValuesScope;
-          break;
-        case "ValuesRelativeType":
-          _graphSettings.ValuesRelativeType = ValuesRelativeType;
-          break;
-        default:
-          break;
+        switch (propertyName)
+        {
+          case "YAxisName":
+            _graphSettings.YAxisName = YAxisName;
+            break;
+          case "ValuesScope":
+            _graphSettings.ValuesScope = ValuesScope;
+            break;
+          case "ValuesRelativeType":
+            _graphSettings.ValuesRelativeType = ValuesRelativeType;
+            break;
+          default:
+            break;
+        }
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
       }
-      PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
     private void CheckBox_CheckedChanged(object sender, System.Windows.RoutedEventArgs e)
     {

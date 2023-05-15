@@ -1,11 +1,14 @@
 ﻿using ExpensesTracker.DataTypes;
+using ExpensesTracker.Models.DataControllers;
 using ExpensesTracker.Models.DataProviders;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 
-namespace ExpensesTracker.Models.DataControllers
+namespace ExpensesTracker.Models.Settings
 {
-  public class FilterSortController : INotifyPropertyChanged
+  [Serializable]
+  public class FilterSettings : INotifyPropertyChanged
   {
     private bool _newFlag = false;
 
@@ -20,8 +23,9 @@ namespace ExpensesTracker.Models.DataControllers
     private DateRange? _userDateRange = null;
     private List<string>? _categories = null;
     private List<string>? _subcategories = null;
-    private List<string>? _recurrances = null;
+    private List<string>? _recurrences = null;
 
+    #region Notifying properties
     public string? Name
     {
       get { return _name; }
@@ -77,11 +81,12 @@ namespace ExpensesTracker.Models.DataControllers
       get { return _subcategories; }
       set { _subcategories = value; OnPropertyChanged(nameof(Subcategories)); }
     }
-    public List<string>? Recurrances
+    public List<string>? Recurrences
     {
-      get { return _recurrances; }
-      set { _recurrances = value; OnPropertyChanged(nameof(Recurrances)); }
+      get { return _recurrences; }
+      set { _recurrences = value; OnPropertyChanged(nameof(Recurrences)); }
     }
+    #endregion
 
     public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -89,9 +94,9 @@ namespace ExpensesTracker.Models.DataControllers
     /// Apply all active filters to list of Expenses
     /// </summary>
     /// <param name="expensesToFilter">List of records to filter</param>
-    /// <param name="nuberOfRecordsToShow">Number of records in filtered list</param>
+    /// <param name="numberOfRecordsToShow">Number of records in filtered list</param>
     /// <returns></returns>
-    public List<Expense> ApplyFilterCriteria(List<Expense> expensesToFilter, int nuberOfRecordsToShow)
+    public List<Expense> ApplyFilterCriteria(List<Expense> expensesToFilter, int numberOfRecordsToShow)
     {
       if (_name != null && _name != string.Empty) expensesToFilter = DatabaseModel.FilterByName(expensesToFilter, _name);
       if (_income != null) expensesToFilter = DatabaseModel.FilterByIncome(expensesToFilter, (bool)_income);
@@ -104,8 +109,8 @@ namespace ExpensesTracker.Models.DataControllers
       if (_userDateRange != null) expensesToFilter = DatabaseModel.FilterByUserDate(expensesToFilter, _userDateRange);
       if (_categories != null) expensesToFilter = DatabaseModel.FilterByCategories(expensesToFilter, _categories);
       if (_subcategories != null) expensesToFilter = DatabaseModel.FilterBySubcategories(expensesToFilter, _subcategories);
-      if (_recurrances != null) expensesToFilter = DatabaseModel.FilterByRecurrenceNames(expensesToFilter, _recurrances);
-      expensesToFilter = DatabaseModel.FilterByRange(expensesToFilter, true, nuberOfRecordsToShow);
+      if (_recurrences != null) expensesToFilter = DatabaseModel.FilterByRecurrenceNames(expensesToFilter, _recurrences);
+      expensesToFilter = DatabaseModel.FilterByRange(expensesToFilter, true, numberOfRecordsToShow);
       return expensesToFilter;
     }
 
@@ -128,7 +133,7 @@ namespace ExpensesTracker.Models.DataControllers
       Subcategories = null;
       //Only one update is needed
       _newFlag = false;
-      Recurrances = null;
+      Recurrences = null;
 
     }
 

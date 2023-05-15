@@ -16,10 +16,11 @@ namespace ExpensesTracker.ViewModels
   {
     private readonly GraphsPage _graphsPage;
     private readonly IMainSettings _mainSettings;
-    private static GraphsPageViewModel? _instance;
     private readonly Dictionary<string, CustomTabControl> _tabs = new();
     private readonly Dictionary<string, GraphControl> _graphs = new();
     private readonly ModifyContainers _modifyView;
+
+    private static GraphsPageViewModel? _instance;
 
     private GraphsPageViewModel(GraphsPage page, ModifyContainers modify, IMainSettings mainSettings)
     {
@@ -84,6 +85,15 @@ namespace ExpensesTracker.ViewModels
     public void DuplicateTab(string tabName)
     {
       throw new NotImplementedException();
+    }
+    public void SaveGraphSettings(string? tabName)
+    {
+      if (_graphs.ContainsKey(tabName)) _graphs[tabName].SaveGraphSettings();
+    }
+
+    public void LoadGraphSettings(string? tabName)
+    {
+      if (_graphs.ContainsKey(tabName)) _graphs[tabName].LoadGraphSetting();
     }
 
     /// <summary>

@@ -29,12 +29,12 @@
       <StackPanel>
         <StackPanel Orientation="Horizontal">
           <Label Content="Graph name"/>
-          <CheckBox VerticalAlignment="Center" Checked="CheckBox_CheckedChanged" Unchecked="CheckBox_CheckedChanged"/>
+          <CheckBox x:Name="GraphNamed" VerticalAlignment="Center" Checked="CheckBox_CheckedChanged" Unchecked="CheckBox_CheckedChanged"/>
         </StackPanel>
         <TextBox x:Name="GraphDescription" TextChanged="GraphDescription_TextChanged" IsEnabled="False"/>
         <Label Content="Graph type"/>
         <Expander Header="Graph type">
-          <ListBox SelectionChanged="ListBox_SelectionChanged">
+          <ListBox x:Name="GraphTypeList" SelectionChanged="ListBox_SelectionChanged">
             <StackPanel Orientation="Horizontal" Selector.IsSelected="True">
               <svg:SvgViewbox Stretch="None" Height="100" Source="/Views/Assets/Icons/barGraph.svg"/>
               <Label Content="BAR GRAPH" VerticalAlignment="Center" Margin="10,0,0,0"/>

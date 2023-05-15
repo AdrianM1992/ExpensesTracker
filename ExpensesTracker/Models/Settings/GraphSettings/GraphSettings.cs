@@ -1,9 +1,11 @@
 ﻿using ExpensesTracker.DataTypes;
 using ExpensesTracker.DataTypes.Enums;
+using System;
 using System.ComponentModel;
 
-namespace ExpensesTracker.Models.DataControllers
+namespace ExpensesTracker.Models.Settings
 {
+  [Serializable]
   public class GraphSettings : INotifyPropertyChanged
   {
     private GraphTypes _graphType;
@@ -16,6 +18,7 @@ namespace ExpensesTracker.Models.DataControllers
     private bool _valuesRelativeType;
     private ValuesScopes _valuesScope;
 
+    #region Notifying properties
     public GraphTypes GraphType
     {
       get { return _graphType; }
@@ -61,6 +64,7 @@ namespace ExpensesTracker.Models.DataControllers
       get { return _valuesScope; }
       set { _valuesScope = value; OnPropertyChanged(nameof(ValuesScope)); }
     }
+    #endregion
 
     public event PropertyChangedEventHandler? PropertyChanged;
     private void OnPropertyChanged(string propertyName)

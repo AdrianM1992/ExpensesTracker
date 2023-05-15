@@ -1,6 +1,7 @@
 ﻿using ExpensesTracker.DataTypes;
 using ExpensesTracker.DataTypes.Enums;
 using ExpensesTracker.Models.DataProviders;
+using ExpensesTracker.Models.Settings;
 using Microsoft.IdentityModel.Tokens;
 using ScottPlot;
 using System;

@@ -10,7 +10,7 @@ namespace ExpensesTracker.Models.Settings
   public class MainSettings : IMainSettings, INotifyPropertyChanged
   {
     private static MainSettings? _mainSettingsInstance;
-    private List<Expense> _databaseRecords = new List<Expense>();
+    private List<Expense> _databaseRecords = new();
     private Currencies _currency;
     private readonly Dictionary<Currencies, string> _currencies = new()
     {
@@ -44,7 +44,7 @@ namespace ExpensesTracker.Models.Settings
     {
       _currency = currency;
     }
-    public List<string> GetAvaliableCurrencies()
+    public List<string> GetAvailableCurrencies()
     {
       var currencies = new List<string>();
       foreach (var currency in _currencies)

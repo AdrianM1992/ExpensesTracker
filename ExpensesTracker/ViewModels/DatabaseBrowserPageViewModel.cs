@@ -1,6 +1,7 @@
 ﻿using ExpensesTracker.Models.DataControllers;
 using ExpensesTracker.Models.DataProviders;
 using ExpensesTracker.Models.Interfaces;
+using ExpensesTracker.Models.Settings;
 using ExpensesTracker.Views.Classes;
 using ExpensesTracker.Views.Pages.DatabaseBrowser;
 using System.Collections.Generic;
@@ -16,7 +17,7 @@ namespace ExpensesTracker.ViewModels
     private int _itemsToShow = 10;
     private bool _allItems = false;
     private List<Expense> _expensesItems;
-    private readonly FilterSortController _filterSortController = new();
+    private readonly FilterSettings _filterSettings = new();
 
     public ObservableCollection<DatabaseView> DatabaseViewItems { get; private set; } = new();
 
@@ -26,8 +27,8 @@ namespace ExpensesTracker.ViewModels
       _mainSettings = mainSettings;
       _mainSettings.PropertyChanged += MainSettings_PropertyChanged;
       _expensesItems = _mainSettings.DatabaseRecords;
-      _databaseBrowserPage.FilterCluster.SetFilterControllerRef(_filterSortController);
-      _filterSortController.PropertyChanged += FilterSortController_PropertyChanged;
+      _databaseBrowserPage.FilterCluster.SetFilterSettingsRef(_filterSettings);
+      _filterSettings.PropertyChanged += FilterSettings_PropertyChanged;
       ShowRecords();
     }
 
@@ -63,7 +64,7 @@ namespace ExpensesTracker.ViewModels
     public void ShowRecords()
     {
       var listOfItems = new ObservableCollection<DatabaseView>();
-      foreach (var item in _filterSortController.ApplyFilterCriteria(_expensesItems, _itemsToShow)) listOfItems.Add(new DatabaseView(item, true));
+      foreach (var item in _filterSettings.ApplyFilterCriteria(_expensesItems, _itemsToShow)) listOfItems.Add(new DatabaseView(item, true));
 
       DatabaseViewItems = listOfItems;
       _databaseBrowserPage.DatabaseView.ItemsSource = DatabaseViewItems;
@@ -93,6 +94,6 @@ namespace ExpensesTracker.ViewModels
       ShowRecords();
     }
 
-    private void FilterSortController_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e) => ShowRecords();
+    private void FilterSettings_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e) => ShowRecords();
   }
 }

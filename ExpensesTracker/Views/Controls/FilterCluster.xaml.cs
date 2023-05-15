@@ -1,5 +1,6 @@
 ﻿using ExpensesTracker.DataTypes;
 using ExpensesTracker.Models.DataControllers;
+using ExpensesTracker.Models.Settings;
 using System;
 using System.Collections.Generic;
 using System.Windows;
@@ -14,23 +15,27 @@ namespace ExpensesTracker.Views.Controls
   /// </summary>
   public partial class FilterCluster : UserControl
   {
-    private FilterSortController _filterController = new();
+    private FilterSettings _filterSettings = new();
     private readonly FilterCluster _thisFilterCluster;
 
     public FilterCluster()
     {
       InitializeComponent();
-      SetDeafultValues();
+      SetDefaultValues();
       _thisFilterCluster = this;
       DatabaseModel.SubtablesChanged += DatabaseModel_SubtablesChanged;
     }
 
     private void DatabaseModel_SubtablesChanged(object? sender, EventArgs e) => ClearAll_MouseLeftButtonDown(ClearAll, null);
-    public void SetFilterControllerRef(FilterSortController filterSortController) => _filterController = filterSortController;
+    public void SetFilterSettingsRef(FilterSettings filterSettings) => _filterSettings = filterSettings;
+    internal void SetExistingFilterSettingsRef(FilterSettings filterSettings)
+    {
+      _filterSettings = filterSettings;
+    }
     private void ClearAll_MouseLeftButtonDown(object sender, MouseButtonEventArgs? e)
     {
-      SetDeafultValues();
-      _filterController.ClearAllFilters();
+      SetDefaultValues();
+      _filterSettings.ClearAllFilters();
       ClearAll.Visibility = Visibility.Hidden;
 
       //Exclude ClearButton inside ClearAll StackPanel, because it is hidden as whole
@@ -41,7 +46,7 @@ namespace ExpensesTracker.Views.Controls
         if (control is ClearButton clearButton && control != sendersClearButton) clearButton.Visibility = Visibility.Hidden;
       }
     }
-    private void SetDeafultValues()
+    private void SetDefaultValues()
     {
       SearchBox.Text = "Search database...";
       foreach (var control in GetChildElements(BasicGroup)) if (control is RadioButton radioButton) radioButton.IsChecked = false;
@@ -90,7 +95,7 @@ namespace ExpensesTracker.Views.Controls
       {
         if (searchPhrase.Text != "Search database...")
         {
-          _filterController.Name = searchPhrase.Text;
+          _filterSettings.Name = searchPhrase.Text;
           ClearBasic.Visibility = Visibility.Visible;
           ClearAll.Visibility = Visibility.Visible;
         }
@@ -104,8 +109,8 @@ namespace ExpensesTracker.Views.Controls
       if (radioButton.GroupName == "Income")
       {
         ClearType.Visibility = Visibility.Visible;
-        if (radioButton.Content.ToString() == "Income") _filterController.Income = true;
-        else _filterController.Income = false;
+        if (radioButton.Content.ToString() == "Income") _filterSettings.Income = true;
+        else _filterSettings.Income = false;
       }
       else
       {
@@ -113,12 +118,12 @@ namespace ExpensesTracker.Views.Controls
         if (radioButton.Content.ToString() == "Recurring")
         {
           Recurrences.IsEnabled = true;
-          _filterController.Recurring = true;
+          _filterSettings.Recurring = true;
         }
         else
         {
           Recurrences.IsEnabled = false;
-          _filterController.Recurring = false;
+          _filterSettings.Recurring = false;
         }
       }
     }
@@ -131,33 +136,33 @@ namespace ExpensesTracker.Views.Controls
       {
         case "PriceMin":
           ClearPrice.Visibility = Visibility.Visible;
-          if (_filterController.PriceRange == null) _filterController.PriceRange = new DecimalRange(numericBox.NumericValue);
-          else _filterController.PriceRange = new DecimalRange(numericBox.NumericValue, _filterController.PriceRange.NumberMax);
+          if (_filterSettings.PriceRange == null) _filterSettings.PriceRange = new DecimalRange(numericBox.NumericValue);
+          else _filterSettings.PriceRange = new DecimalRange(numericBox.NumericValue, _filterSettings.PriceRange.NumberMax);
           break;
         case "QuantityMin":
           ClearQuantity.Visibility = Visibility.Visible;
-          if (_filterController.QuantityRange == null) _filterController.QuantityRange = new DecimalRange(numericBox.NumericValue);
-          else _filterController.QuantityRange = new DecimalRange(numericBox.NumericValue, _filterController.QuantityRange.NumberMax);
+          if (_filterSettings.QuantityRange == null) _filterSettings.QuantityRange = new DecimalRange(numericBox.NumericValue);
+          else _filterSettings.QuantityRange = new DecimalRange(numericBox.NumericValue, _filterSettings.QuantityRange.NumberMax);
           break;
         case "TotalMin":
           ClearTotal.Visibility = Visibility.Visible;
-          if (_filterController.TotalRange == null) _filterController.TotalRange = new DecimalRange(numericBox.NumericValue);
-          else _filterController.TotalRange = new DecimalRange(numericBox.NumericValue, _filterController.TotalRange.NumberMax);
+          if (_filterSettings.TotalRange == null) _filterSettings.TotalRange = new DecimalRange(numericBox.NumericValue);
+          else _filterSettings.TotalRange = new DecimalRange(numericBox.NumericValue, _filterSettings.TotalRange.NumberMax);
           break;
         case "PriceMax":
           ClearPrice.Visibility = Visibility.Visible;
-          if (_filterController.PriceRange == null) _filterController.PriceRange = new DecimalRange(max: numericBox.NumericValue);
-          else _filterController.PriceRange = new DecimalRange(_filterController.PriceRange.NumberMin, numericBox.NumericValue);
+          if (_filterSettings.PriceRange == null) _filterSettings.PriceRange = new DecimalRange(max: numericBox.NumericValue);
+          else _filterSettings.PriceRange = new DecimalRange(_filterSettings.PriceRange.NumberMin, numericBox.NumericValue);
           break;
         case "QuantityMax":
           ClearQuantity.Visibility = Visibility.Visible;
-          if (_filterController.QuantityRange == null) _filterController.QuantityRange = new DecimalRange(max: numericBox.NumericValue);
-          else _filterController.QuantityRange = new DecimalRange(_filterController.QuantityRange.NumberMin, numericBox.NumericValue);
+          if (_filterSettings.QuantityRange == null) _filterSettings.QuantityRange = new DecimalRange(max: numericBox.NumericValue);
+          else _filterSettings.QuantityRange = new DecimalRange(_filterSettings.QuantityRange.NumberMin, numericBox.NumericValue);
           break;
         case "TotalMax":
           ClearTotal.Visibility = Visibility.Visible;
-          if (_filterController.TotalRange == null) _filterController.TotalRange = new DecimalRange(max: numericBox.NumericValue);
-          else _filterController.TotalRange = new DecimalRange(_filterController.TotalRange.NumberMin, numericBox.NumericValue);
+          if (_filterSettings.TotalRange == null) _filterSettings.TotalRange = new DecimalRange(max: numericBox.NumericValue);
+          else _filterSettings.TotalRange = new DecimalRange(_filterSettings.TotalRange.NumberMin, numericBox.NumericValue);
           break;
       }
     }
@@ -170,33 +175,33 @@ namespace ExpensesTracker.Views.Controls
       {
         case "SubmitDateMin":
           ClearDateAdded.Visibility = Visibility.Visible;
-          if (_filterController.SubmitDateRange == null) _filterController.SubmitDateRange = new DateRange(datePicker.SelectedDate);
-          else _filterController.SubmitDateRange = new DateRange(datePicker.SelectedDate, _filterController.SubmitDateRange.EndDate);
+          if (_filterSettings.SubmitDateRange == null) _filterSettings.SubmitDateRange = new DateRange(datePicker.SelectedDate);
+          else _filterSettings.SubmitDateRange = new DateRange(datePicker.SelectedDate, _filterSettings.SubmitDateRange.EndDate);
           break;
         case "UpdateDateMin":
           ClearDateUpdated.Visibility = Visibility.Visible;
-          if (_filterController.UpdateDateRange == null) _filterController.UpdateDateRange = new DateRange(datePicker.SelectedDate);
-          else _filterController.UpdateDateRange = new DateRange(datePicker.SelectedDate, _filterController.UpdateDateRange.EndDate);
+          if (_filterSettings.UpdateDateRange == null) _filterSettings.UpdateDateRange = new DateRange(datePicker.SelectedDate);
+          else _filterSettings.UpdateDateRange = new DateRange(datePicker.SelectedDate, _filterSettings.UpdateDateRange.EndDate);
           break;
         case "UserDateMin":
           ClearDateOccurred.Visibility = Visibility.Visible;
-          if (_filterController.UserDateRange == null) _filterController.UserDateRange = new DateRange(datePicker.SelectedDate);
-          else _filterController.UserDateRange = new DateRange(datePicker.SelectedDate, _filterController.UserDateRange.EndDate);
+          if (_filterSettings.UserDateRange == null) _filterSettings.UserDateRange = new DateRange(datePicker.SelectedDate);
+          else _filterSettings.UserDateRange = new DateRange(datePicker.SelectedDate, _filterSettings.UserDateRange.EndDate);
           break;
         case "SubmitDateMax":
           ClearDateAdded.Visibility = Visibility.Visible;
-          if (_filterController.SubmitDateRange == null) _filterController.SubmitDateRange = new DateRange(endDate: datePicker.SelectedDate);
-          else _filterController.SubmitDateRange = new DateRange(_filterController.SubmitDateRange.StartDate, datePicker.SelectedDate);
+          if (_filterSettings.SubmitDateRange == null) _filterSettings.SubmitDateRange = new DateRange(endDate: datePicker.SelectedDate);
+          else _filterSettings.SubmitDateRange = new DateRange(_filterSettings.SubmitDateRange.StartDate, datePicker.SelectedDate);
           break;
         case "UpdateDateMax":
           ClearDateUpdated.Visibility = Visibility.Visible;
-          if (_filterController.UpdateDateRange == null) _filterController.UpdateDateRange = new DateRange(endDate: datePicker.SelectedDate);
-          else _filterController.UpdateDateRange = new DateRange(_filterController.UpdateDateRange.StartDate, datePicker.SelectedDate);
+          if (_filterSettings.UpdateDateRange == null) _filterSettings.UpdateDateRange = new DateRange(endDate: datePicker.SelectedDate);
+          else _filterSettings.UpdateDateRange = new DateRange(_filterSettings.UpdateDateRange.StartDate, datePicker.SelectedDate);
           break;
         case "UserDateMax":
           ClearDateOccurred.Visibility = Visibility.Visible;
-          if (_filterController.UserDateRange == null) _filterController.UserDateRange = new DateRange(endDate: datePicker.SelectedDate);
-          else _filterController.UserDateRange = new DateRange(_filterController.UserDateRange.StartDate, datePicker.SelectedDate);
+          if (_filterSettings.UserDateRange == null) _filterSettings.UserDateRange = new DateRange(endDate: datePicker.SelectedDate);
+          else _filterSettings.UserDateRange = new DateRange(_filterSettings.UserDateRange.StartDate, datePicker.SelectedDate);
           break;
       }
     }
@@ -209,7 +214,7 @@ namespace ExpensesTracker.Views.Controls
     private void CategoriesList_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
       List<string> catList = new();
-      List<string> subcatList = new();
+      List<string> subCatList = new();
 
       ClearAll.Visibility = Visibility.Visible;
       ClearLists.Visibility = Visibility.Visible;
@@ -219,22 +224,22 @@ namespace ExpensesTracker.Views.Controls
         foreach (var category in CategoriesList.SelectedItems)
         {
           catList.Add((string)category);
-          subcatList.AddRange(DatabaseModel.GetSubcategoriesNames((string)category));
+          subCatList.AddRange(DatabaseModel.GetSubcategoriesNames((string)category));
         }
-        _filterController.Categories = catList;
+        _filterSettings.Categories = catList;
       }
-      else _filterController.Categories = null;
+      else _filterSettings.Categories = null;
 
-      if (subcatList.Count == 0)
+      if (subCatList.Count == 0)
       {
-        _filterController.Subcategories = null;
+        _filterSettings.Subcategories = null;
         SubcategoriesList.ItemsSource = null;
         Subcategories.IsExpanded = false;
         Subcategories.IsEnabled = false;
       }
       else
       {
-        SubcategoriesList.ItemsSource = subcatList;
+        SubcategoriesList.ItemsSource = subCatList;
         Subcategories.IsEnabled = true;
       }
     }
@@ -245,12 +250,12 @@ namespace ExpensesTracker.Views.Controls
       ClearSubcategory.Visibility = Visibility.Visible;
       if (SubcategoriesList.SelectedItems.Count != 0)
       {
-        List<string> subcatList = new();
-        foreach (var subcategory in SubcategoriesList.SelectedItems) subcatList.Add((string)subcategory);
+        List<string> subCatList = new();
+        foreach (var subcategory in SubcategoriesList.SelectedItems) subCatList.Add((string)subcategory);
 
-        _filterController.Subcategories = subcatList;
+        _filterSettings.Subcategories = subCatList;
       }
-      else _filterController.Subcategories = null;
+      else _filterSettings.Subcategories = null;
     }
     private void RecurrencesList_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
@@ -262,9 +267,9 @@ namespace ExpensesTracker.Views.Controls
         List<string> recList = new();
         foreach (var recurrence in RecurrencesList.SelectedItems) recList.Add((string)recurrence);
 
-        _filterController.Recurrances = recList;
+        _filterSettings.Recurrences = recList;
       }
-      else _filterController.Recurrances = null;
+      else _filterSettings.Recurrences = null;
     }
     #endregion
 
@@ -295,18 +300,18 @@ namespace ExpensesTracker.Views.Controls
       {
         IncomeT.IsChecked = false;
         IncomeF.IsChecked = false;
-        _filterController.Income = null;
+        _filterSettings.Income = null;
       }
       if (clearButton.Name == "ClearBasic" || clearButton.Name == "ClearRecurrence")
       {
         RecurringT.IsChecked = false;
         RecurringF.IsChecked = false;
-        _filterController.Recurring = null;
+        _filterSettings.Recurring = null;
       }
       if (clearButton.Name == "ClearBasic")
       {
         SearchBox.Text = "Search database...";
-        _filterController.Name = null;
+        _filterSettings.Name = null;
         foreach (var control in GetChildElements(BasicGroup)) if (control is ClearButton button) button.Visibility = Visibility.Hidden;
       }
       clearButton.Visibility = Visibility.Hidden;
@@ -319,19 +324,19 @@ namespace ExpensesTracker.Views.Controls
       {
         PriceMin.Clear();
         PriceMax.Clear();
-        _filterController.PriceRange = null;
+        _filterSettings.PriceRange = null;
       }
       if (clearButton.Name == "ClearPrices" || clearButton.Name == "ClearQuantity")
       {
         QuantityMin.Clear();
         QuantityMax.Clear();
-        _filterController.QuantityRange = null;
+        _filterSettings.QuantityRange = null;
       }
       if (clearButton.Name == "ClearPrices" || clearButton.Name == "ClearTotal")
       {
         TotalMin.Clear();
         TotalMax.Clear();
-        _filterController.TotalRange = null;
+        _filterSettings.TotalRange = null;
       }
       if (clearButton.Name == "ClearPrices")
       {
@@ -347,19 +352,19 @@ namespace ExpensesTracker.Views.Controls
       {
         SubmitDateMin.SelectedDate = null;
         SubmitDateMax.SelectedDate = null;
-        _filterController.SubmitDateRange = null;
+        _filterSettings.SubmitDateRange = null;
       }
       if (clearButton.Name == "ClearDateUpdated" || clearButton.Name == "ClearDates")
       {
         UpdateDateMin.SelectedDate = null;
         UpdateDateMax.SelectedDate = null;
-        _filterController.UpdateDateRange = null;
+        _filterSettings.UpdateDateRange = null;
       }
       if (clearButton.Name == "ClearDateOccurred" || clearButton.Name == "ClearDates")
       {
         UserDateMin.SelectedDate = null;
         UserDateMax.SelectedDate = null;
-        _filterController.UserDateRange = null;
+        _filterSettings.UserDateRange = null;
       }
       if (clearButton.Name == "ClearDates")
       {
@@ -374,17 +379,17 @@ namespace ExpensesTracker.Views.Controls
       if (clearButton.Name == "ClearCategory" || clearButton.Name == "ClearLists")
       {
         CategoriesList.UnselectAll();
-        _filterController.Categories = null;
+        _filterSettings.Categories = null;
       }
       if (clearButton.Name == "ClearSubcategory" || clearButton.Name == "ClearLists")
       {
         SubcategoriesList.UnselectAll();
-        _filterController.Subcategories = null;
+        _filterSettings.Subcategories = null;
       }
       if (clearButton.Name == "ClearRecurrenceList" || clearButton.Name == "ClearLists")
       {
         RecurrencesList.UnselectAll();
-        _filterController.Recurrances = null;
+        _filterSettings.Recurrences = null;
       }
       if (clearButton.Name == "ClearLists")
       {

@@ -1,6 +1,6 @@
 ﻿using ExpensesTracker.DataTypes;
 using ExpensesTracker.DataTypes.Enums;
-using ExpensesTracker.Models.DataControllers;
+using ExpensesTracker.Models.Settings;
 using System.ComponentModel;
 using System.Windows.Controls;
 
@@ -11,7 +11,7 @@ namespace ExpensesTracker.Views.Controls
   /// </summary>
   public partial class GraphTimeIntervalsSelector : UserControl, INotifyPropertyChanged
   {
-    private readonly bool _initFlag = true;
+    private bool _initFlag = true;
     private GraphSettings _graphSettings = new();
 
     private bool _nameXAxis;
@@ -65,27 +65,49 @@ namespace ExpensesTracker.Views.Controls
       _graphSettings.TimeDivisor = TimeDivisor;
       _graphSettings.XAxisName = XAxisName;
     }
+    public void SetExistingGraphSettingsReference(GraphSettings graphSettings)
+    {
+      _initFlag = true;
 
+      _graphSettings = graphSettings;
+      UserTimeScope = _graphSettings.UserTimeScope;
+      TimeDivisor = _graphSettings.TimeDivisor;
+      XAxisName = _graphSettings.XAxisName;
+      XAxisDescription.IsEnabled = NameXAxis = _graphSettings.XAxisName != null;
+      XAxisDescription.Text = XAxisName;
+      XAxisNamed.IsChecked = NameXAxis;
+      TimeScope = _graphSettings.TimeScope;
+      TimeScopeCombo.SelectedIndex = (int)TimeScope;
+      CustomTimeSettings.IsEnabled = TimeScope == TimeRanges.custom;
+      StartDate.SelectedDate = UserTimeScope?.StartDate;
+      EndDate.SelectedDate = UserTimeScope?.EndDate;
+      TimeDivisorComboBox.SelectedIndex = TimeDivisor == null ? 0 : (int)TimeDivisor;
+
+      _initFlag = false;
+    }
     private void OnPropertyChanged(string propertyName)
     {
-      switch (propertyName)
+      if (!_initFlag)
       {
-        case "XAxisName":
-          _graphSettings.XAxisName = XAxisName;
-          break;
-        case "TimeScope":
-          _graphSettings.TimeScope = TimeScope;
-          break;
-        case "UserTimeScope":
-          _graphSettings.UserTimeScope = UserTimeScope;
-          break;
-        case "TimeDivisor":
-          _graphSettings.TimeDivisor = TimeDivisor;
-          break;
-        default:
-          break;
+        switch (propertyName)
+        {
+          case "XAxisName":
+            _graphSettings.XAxisName = XAxisName;
+            break;
+          case "TimeScope":
+            _graphSettings.TimeScope = TimeScope;
+            break;
+          case "UserTimeScope":
+            _graphSettings.UserTimeScope = UserTimeScope;
+            break;
+          case "TimeDivisor":
+            _graphSettings.TimeDivisor = TimeDivisor;
+            break;
+          default:
+            break;
+        }
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
       }
-      PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
     private void CheckBox_CheckedChanged(object sender, System.Windows.RoutedEventArgs e)
     {
