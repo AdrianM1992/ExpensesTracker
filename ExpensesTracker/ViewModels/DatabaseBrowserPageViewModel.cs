@@ -41,6 +41,7 @@ namespace ExpensesTracker.ViewModels
         string textToShow = $"All ({_itemsToShow})";
         _databaseBrowserPage.NumberOfItems.Text = textToShow;
       }
+      _databaseBrowserPage.FilterCluster.ClearAll();
       ShowRecords();
     }
 

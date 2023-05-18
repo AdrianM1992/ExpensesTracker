@@ -155,10 +155,10 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Update="Views\Controls\GraphTypeSelector.xaml.cs">
+    <Compile Update="Views\Controls\GraphSettingsControls\GraphTypeSelector.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Views\Controls\GraphValuesSelector.xaml.cs">
+    <Compile Update="Views\Controls\GraphSettingsControls\GraphValuesSelector.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Views\Windows\AddEditDB\AddEditDBWindow.xaml.cs">
@@ -175,7 +175,6 @@
 
   <ItemGroup>
     <Folder Include="ViewModels\Converters\" />
-    <Folder Include="Views\Interfaces\" />
   </ItemGroup>
 
 </Project>

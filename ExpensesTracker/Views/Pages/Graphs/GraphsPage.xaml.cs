@@ -50,7 +50,7 @@ namespace ExpensesTracker.Views.Pages.Graphs
 
     private void SaveButton_Click(object sender, RoutedEventArgs e)
     {
-      _viewModel.SaveGraphSettings(_currentTabName);
+      _viewModel.SaveGraphSettings(_currentTabName, _viewModel.Get_graphs());
     }
   }
 }

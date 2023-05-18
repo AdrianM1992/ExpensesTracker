@@ -28,7 +28,7 @@ namespace ExpensesTracker.Views.Controls
 
     private void DatabaseModel_SubtablesChanged(object? sender, EventArgs e) => ClearAll_MouseLeftButtonDown(ClearAll, null);
     public void SetFilterSettingsRef(FilterSettings filterSettings) => _filterSettings = filterSettings;
-    internal void SetExistingFilterSettingsRef(FilterSettings filterSettings)
+    public void SetExistingFilterSettingsRef(FilterSettings filterSettings)
     {
       _filterSettings = filterSettings;
     }

@@ -1,0 +1,46 @@
+﻿<UserControl x:Class="ExpensesTracker.Views.Controls.FilterSettingsControls.FilterListsSelector"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ExpensesTracker.Views.Controls.FilterSettingsControls"
+             xmlns:ctrls="clr-namespace:ExpensesTracker.Views.Controls"
+             mc:Ignorable="d" Width="190"
+             d:Background="Aqua">
+    <Grid>
+    <GroupBox x:Name="ListGroup" Header="Lists" Grid.Row="4" >
+      <StackPanel>
+        <Expander x:Name="Categories" Expanded="Expander_Expanded">
+          <Expander.Header>
+            <StackPanel Orientation="Horizontal">
+              <TextBlock Text="Category"/>
+              <ctrls:ClearButton x:Name="ClearCategory" Height="8" Width="8" Margin="5,0,0,0" MouseLeftButtonDown="ClearButtonLists_MouseLeftButtonDown"/>
+            </StackPanel>
+          </Expander.Header>
+          <ListBox x:Name="CategoriesList" SelectionMode="Extended" Height="125" SelectionChanged="CategoriesList_SelectionChanged"/>
+        </Expander>
+
+        <Expander x:Name="Subcategories" Expanded="Expander_Expanded" IsEnabled="False">
+          <Expander.Header>
+            <StackPanel Orientation="Horizontal">
+              <TextBlock Text="Subcategory"/>
+              <ctrls:ClearButton x:Name="ClearSubcategory" Height="8" Width="8" Margin="5,0,0,0" MouseLeftButtonDown="ClearButtonLists_MouseLeftButtonDown"/>
+            </StackPanel>
+          </Expander.Header>
+          <ListBox x:Name="SubcategoriesList" SelectionMode="Extended" Height="125" SelectionChanged="SubcategoriesList_SelectionChanged"/>
+        </Expander>
+
+        <Expander x:Name="Recurrences" Expanded="Expander_Expanded" IsEnabled="False">
+          <Expander.Header>
+            <StackPanel Orientation="Horizontal">
+              <TextBlock Text="Recurrence"/>
+              <ctrls:ClearButton x:Name="ClearRecurrenceList" Height="8" Width="8" Margin="5,0,0,0" MouseLeftButtonDown="ClearButtonLists_MouseLeftButtonDown"/>
+            </StackPanel>
+          </Expander.Header>
+          <ListBox x:Name="RecurrencesList" SelectionMode="Extended" Height="125" SelectionChanged="RecurrencesList_SelectionChanged"/>
+        </Expander>
+      </StackPanel>
+    </GroupBox>
+    <ctrls:ClearButton x:Name="ClearLists" Grid.Row="4" Margin="0,15,5,0" MouseLeftButtonDown="ClearButtonLists_MouseLeftButtonDown"/>
+  </Grid>
+</UserControl>

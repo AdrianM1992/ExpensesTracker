@@ -86,14 +86,20 @@ namespace ExpensesTracker.ViewModels
     {
       throw new NotImplementedException();
     }
-    public void SaveGraphSettings(string? tabName)
+
+    public Dictionary<string, GraphControl> Get_graphs()
     {
-      if (_graphs.ContainsKey(tabName)) _graphs[tabName].SaveGraphSettings();
+      return _graphs;
+    }
+
+    public void SaveGraphSettings(string? tabName, Dictionary<string, GraphControl> _graphs)
+    {
+      if (tabName != null && _graphs.TryGetValue(tabName, out GraphControl? tab)) tab.SaveGraphSettings();
     }
 
     public void LoadGraphSettings(string? tabName)
     {
-      if (_graphs.ContainsKey(tabName)) _graphs[tabName].LoadGraphSetting();
+      if (tabName != null && _graphs.TryGetValue(tabName, out GraphControl? tab)) tab.LoadGraphSetting();
     }
 
     /// <summary>

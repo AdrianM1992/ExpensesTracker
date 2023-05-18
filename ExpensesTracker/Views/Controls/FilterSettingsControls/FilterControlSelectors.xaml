@@ -1,0 +1,44 @@
+﻿<UserControl x:Class="ExpensesTracker.Views.Controls.FilterSettingsControls.FilterControlSelectors"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ExpensesTracker.Views.Controls.FilterSettingsControls"
+             xmlns:ctrls="clr-namespace:ExpensesTracker.Views.Controls"
+             mc:Ignorable="d" 
+             d:Background="Aqua">
+  <UserControl.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/Views/Assets/Styles/Styles.xaml"/>
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+  </UserControl.Resources>
+
+  <Grid>
+    <Grid.Resources>
+      <Style TargetType="ScrollBar" BasedOn="{StaticResource NarrowScrollBars}"/>
+    </Grid.Resources>
+
+    <Grid.RowDefinitions>
+      <RowDefinition Height="28"/>
+      <RowDefinition Height="130"/>
+      <RowDefinition Height="165"/>
+      <RowDefinition Height="165"/>
+      <RowDefinition Height="220"/>
+      <RowDefinition Height="44"/>
+    </Grid.RowDefinitions>
+
+    <Label Content="FILTERS" Grid.Row="0" FontSize="16" HorizontalContentAlignment="Center" BorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}" BorderThickness="1,1,1,1" Padding="0,0,0,0" Margin="2,2,2,2"/>
+    
+    <local:FilterBasicSelector x:Name="BasicSelector" Grid.Row="1"/>
+    <local:FilterPricesSelector x:Name="PricesSelector" Grid.Row="2"/>
+    <local:FilterDatesSelector x:Name="DatesSelector" Grid.Row="3"/>
+    <local:FilterListsSelector x:Name="ListsSelector" Grid.Row="4"/>
+    
+    <StackPanel x:Name="ClearAllStackPanel" Orientation="Horizontal" Grid.Row="5" HorizontalAlignment="Center" Visibility="Hidden" MouseLeftButtonDown="ClearAll_MouseLeftButtonDown" IsHitTestVisible="True" Background="Transparent">
+      <ctrls:ClearButton VerticalAlignment="Center" Width="24" Height="24" Visibility="Visible"/>
+      <Label Content="CLEAR ALL FILTERS" VerticalAlignment="Center" Foreground="Red" FontSize="16"/>
+    </StackPanel>
+  </Grid>
+</UserControl>

@@ -1,0 +1,54 @@
+﻿<UserControl x:Class="ExpensesTracker.Views.Controls.FilterSettingsControls.FilterDatesSelector"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ExpensesTracker.Views.Controls.FilterSettingsControls"
+             xmlns:ctrls="clr-namespace:ExpensesTracker.Views.Controls"
+             mc:Ignorable="d" Width="190"
+            d:Background="Aqua">
+    <Grid>
+    <GroupBox x:Name="DateGroup" Header="Dates">
+      <Grid>
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition/>
+          <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.Resources>
+          <Style TargetType="DatePicker">
+            <Style.Setters >
+              <Setter Property="FontSize" Value="10"></Setter>
+            </Style.Setters>
+          </Style>
+        </Grid.Resources>
+        <StackPanel >
+          <StackPanel Orientation="Horizontal">
+            <Label Content="Date added" Padding="0,5,5,5"/>
+            <ctrls:ClearButton x:Name="ClearDateAdded" Grid.Row="0" Margin="0,5,0,0" Height="8" Width="8" MouseLeftButtonDown="ClearButtonDates_MouseLeftButtonDown"/>
+          </StackPanel>
+          <DatePicker x:Name="SubmitDateMin" VerticalAlignment="Top" HorizontalAlignment="Left" Width="80" SelectedDateChanged="DatePicker_SelectedDateChanged"/>
+          <StackPanel Orientation="Horizontal">
+            <Label Content="Last updated" Padding="0,0,5,5"/>
+            <ctrls:ClearButton x:Name="ClearDateUpdated" Grid.Row="0" Margin="0,5,0,0" Height="8" Width="8" MouseLeftButtonDown="ClearButtonDates_MouseLeftButtonDown"/>
+          </StackPanel>
+          <DatePicker x:Name="UpdateDateMin" VerticalAlignment="Top" HorizontalAlignment="Left" Width="80" SelectedDateChanged="DatePicker_SelectedDateChanged"/>
+          <StackPanel Orientation="Horizontal">
+            <Label Content="Date occurred" Padding="0,0,5,5"/>
+            <ctrls:ClearButton x:Name="ClearDateOccurred" Grid.Row="0" Margin="0,5,0,0" Height="8" Width="8" MouseLeftButtonDown="ClearButtonDates_MouseLeftButtonDown"/>
+          </StackPanel>
+          <DatePicker x:Name="UserDateMin" VerticalAlignment="Top" HorizontalAlignment="Left" FontSize="10" Width="80" SelectedDateChanged="DatePicker_SelectedDateChanged"/>
+        </StackPanel>
+
+        <StackPanel Grid.Column="1">
+          <Label Content="" Padding="10,5,0,5"/>
+          <DatePicker x:Name="SubmitDateMax" VerticalAlignment="Top" HorizontalAlignment="Left" Width="80" SelectedDateChanged="DatePicker_SelectedDateChanged"/>
+          <Label Content="" Padding="10,0,0,5"/>
+          <DatePicker x:Name="UpdateDateMax" VerticalAlignment="Top" HorizontalAlignment="Left" Width="80" SelectedDateChanged="DatePicker_SelectedDateChanged"/>
+          <Label Content="" Padding="10,0,0,5"/>
+          <DatePicker x:Name="UserDateMax"  VerticalAlignment="Top" HorizontalAlignment="Left" Width="80" SelectedDateChanged="DatePicker_SelectedDateChanged"/>
+        </StackPanel>
+      </Grid>
+    </GroupBox>
+    <ctrls:ClearButton x:Name="ClearDates" Margin="0,15,5,0" MouseLeftButtonDown="ClearButtonDates_MouseLeftButtonDown"/>
+  </Grid>
+</UserControl>

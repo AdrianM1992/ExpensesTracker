@@ -4,7 +4,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:ExpensesTracker.Views.Pages.DatabaseBrowser"
-      xmlns:ctrls="clr-namespace:ExpensesTracker.Views.Controls"
+      xmlns:ctrls="clr-namespace:ExpensesTracker.Views.Controls.FilterSettingsControls"
       xmlns:svg="http://sharpvectors.codeplex.com/svgc/"
       xmlns:vm="clr-namespace:ExpensesTracker.ViewModels"
       mc:Ignorable="d"
@@ -66,7 +66,7 @@
     </DataGrid>
     <!--#endregion-->
     
-    <ctrls:FilterCluster x:Name="FilterCluster" Grid.Column="1"/>
+    <ctrls:FilterControlSelectors x:Name="FilterCluster" Grid.Column="1"/>
     
     <!--#region Function buttons-->
     <StackPanel Grid.Row="1" HorizontalAlignment="Left" Margin="10,0,5,10" VerticalAlignment="Bottom" Orientation="Horizontal" Opacity="0.5">
