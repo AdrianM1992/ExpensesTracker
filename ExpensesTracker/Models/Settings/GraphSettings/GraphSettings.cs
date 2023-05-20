@@ -8,15 +8,15 @@ namespace ExpensesTracker.Models.Settings
   [Serializable]
   public class GraphSettings : INotifyPropertyChanged
   {
-    private GraphTypes _graphType;
+    private GraphTypes _graphType = GraphTypes.BarGraph;
     private string? _graphName;
     private string? _xAxisName;
     private string? _yAxisName;
-    private TimeRanges _timeScope;
+    private TimeRanges _timeScope = TimeRanges.month;
     private DateRange? _userTimeScope;
     private TimeDivisionIntervals? _timeDivisor;
-    private bool _valuesRelativeType;
-    private ValuesScopes _valuesScope;
+    private bool _valuesRelativeType = true;
+    private ValuesScopes _valuesScope = ValuesScopes.Balance;
 
     #region Notifying properties
     public GraphTypes GraphType

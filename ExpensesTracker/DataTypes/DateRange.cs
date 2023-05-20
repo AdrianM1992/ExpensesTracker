@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Text.Json.Serialization;
 
 namespace ExpensesTracker.DataTypes
 {
+  [Serializable]
   /// <summary>
   /// Time span represented by StartDate and EndDate
   /// </summary>
@@ -10,6 +12,12 @@ namespace ExpensesTracker.DataTypes
     public DateTime StartDate { get; private set; }
     public DateTime EndDate { get; private set; }
 
+    [JsonConstructorAttribute]
+    public DateRange(DateTime startDate, DateTime endDate)
+    {
+      StartDate = startDate;
+      EndDate = endDate;
+    }
     ///<summary>
     ///New DateRange
     /// </summary>

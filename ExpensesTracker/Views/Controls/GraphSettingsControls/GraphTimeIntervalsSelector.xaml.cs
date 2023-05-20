@@ -1,6 +1,7 @@
 ﻿using ExpensesTracker.DataTypes;
 using ExpensesTracker.DataTypes.Enums;
 using ExpensesTracker.Models.Settings;
+using ExpensesTracker.Views.Interfaces;
 using System.ComponentModel;
 using System.Windows.Controls;
 
@@ -9,7 +10,7 @@ namespace ExpensesTracker.Views.Controls
   /// <summary>
   ///  Graph time scope configuration control
   /// </summary>
-  public partial class GraphTimeIntervalsSelector : UserControl, INotifyPropertyChanged
+  public partial class GraphTimeIntervalsSelector : UserControl, INotifyPropertyChanged, ISettingsSetter
   {
     private bool _initFlag = true;
     private GraphSettings _graphSettings = new();
@@ -21,135 +22,121 @@ namespace ExpensesTracker.Views.Controls
       set { _nameXAxis = value; }
     }
 
+    public event PropertyChangedEventHandler? PropertyChanged;
+    private void OnPropertyChanged(string propertyName)
+    {
+      if (!_initFlag) PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
+
     #region Notifying properties
+    private bool? _clearAll;
 
-    private string? _xAxisName;
-    private TimeRanges _timeScope;
-    private TimeDivisionIntervals? _timeDivisor;
-    private DateRange? _userTimeScope;
-
-    public string? XAxisName
+    public bool? ClearAllVisible
     {
-      get { return _xAxisName; }
-      set { _xAxisName = value; OnPropertyChanged(nameof(XAxisName)); }
+      get { return _clearAll; }
+      set { _clearAll = value; OnPropertyChanged(nameof(ClearAll)); }
     }
-    public TimeRanges TimeScope
-    {
-      get { return _timeScope; }
-      set { _timeScope = value; OnPropertyChanged(nameof(TimeScope)); }
-    }
-    public DateRange? UserTimeScope
-    {
-      get { return _userTimeScope; }
-      set { _userTimeScope = value; OnPropertyChanged(nameof(UserTimeScope)); }
-    }
-    public TimeDivisionIntervals? TimeDivisor
-    {
-      get { return _timeDivisor; }
-      set { _timeDivisor = value; OnPropertyChanged(nameof(TimeDivisor)); }
-    }
-
     #endregion
 
-    public event PropertyChangedEventHandler? PropertyChanged;
     public GraphTimeIntervalsSelector()
     {
       InitializeComponent();
       _initFlag = false;
     }
-    public void SetGraphSettingsReference(GraphSettings graphSettings)
-    {
-      _graphSettings = graphSettings;
-      _graphSettings.TimeScope = TimeScope;
-      _graphSettings.UserTimeScope = UserTimeScope;
-      _graphSettings.TimeDivisor = TimeDivisor;
-      _graphSettings.XAxisName = XAxisName;
-    }
-    public void SetExistingGraphSettingsReference(GraphSettings graphSettings)
-    {
-      _initFlag = true;
 
-      _graphSettings = graphSettings;
-      UserTimeScope = _graphSettings.UserTimeScope;
-      TimeDivisor = _graphSettings.TimeDivisor;
-      XAxisName = _graphSettings.XAxisName;
-      XAxisDescription.IsEnabled = NameXAxis = _graphSettings.XAxisName != null;
-      XAxisDescription.Text = XAxisName;
-      XAxisNamed.IsChecked = NameXAxis;
-      TimeScope = _graphSettings.TimeScope;
-      TimeScopeCombo.SelectedIndex = (int)TimeScope;
-      CustomTimeSettings.IsEnabled = TimeScope == TimeRanges.custom;
-      StartDate.SelectedDate = UserTimeScope?.StartDate;
-      EndDate.SelectedDate = UserTimeScope?.EndDate;
-      TimeDivisorComboBox.SelectedIndex = TimeDivisor == null ? 0 : (int)TimeDivisor;
-
-      _initFlag = false;
-    }
-    private void OnPropertyChanged(string propertyName)
-    {
-      if (!_initFlag)
-      {
-        switch (propertyName)
-        {
-          case "XAxisName":
-            _graphSettings.XAxisName = XAxisName;
-            break;
-          case "TimeScope":
-            _graphSettings.TimeScope = TimeScope;
-            break;
-          case "UserTimeScope":
-            _graphSettings.UserTimeScope = UserTimeScope;
-            break;
-          case "TimeDivisor":
-            _graphSettings.TimeDivisor = TimeDivisor;
-            break;
-          default:
-            break;
-        }
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-      }
-    }
+    #region Front panel events
     private void CheckBox_CheckedChanged(object sender, System.Windows.RoutedEventArgs e)
     {
       var checkBox = (CheckBox)sender;
       if (checkBox.IsChecked != null)
       {
         XAxisDescription.IsEnabled = NameXAxis = checkBox.IsChecked.Value;
-        XAxisName = NameXAxis ? XAxisDescription.Text : null;
+        _graphSettings.XAxisName = NameXAxis ? XAxisDescription.Text : null;
+        ClearAllVisible = true;
       }
     }
     private void XAxisDescription_TextChanged(object sender, TextChangedEventArgs e)
     {
       var textBox = (TextBox)sender;
-      XAxisName = textBox.Text;
+      _graphSettings.XAxisName = textBox.Text;
+      ClearAllVisible = true;
     }
     private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
       var comboBox = (ComboBox)sender;
-      TimeScope = (TimeRanges)comboBox.SelectedIndex;
+      _graphSettings.TimeScope = (TimeRanges)comboBox.SelectedIndex;
+
       if (!_initFlag)
       {
-        if (TimeScope == TimeRanges.custom)
+        if (_graphSettings.TimeScope == TimeRanges.custom)
         {
           CustomTimeSettings.IsEnabled = true;
-          TimeDivisor = (TimeDivisionIntervals)TimeDivisorComboBox.SelectedIndex;
+          _graphSettings.TimeDivisor = (TimeDivisionIntervals)TimeDivisorComboBox.SelectedIndex;
         }
         else
         {
           CustomTimeSettings.IsEnabled = false;
-          UserTimeScope = null;
-          TimeDivisor = null;
+          _graphSettings.UserTimeScope = null;
+          _graphSettings.TimeDivisor = null;
         }
       }
+
+      ClearAllVisible = true;
     }
     private void TimeDivisorComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
       var comboBox = (ComboBox)sender;
-      TimeDivisor = (TimeDivisionIntervals)comboBox.SelectedIndex;
+      _graphSettings.TimeDivisor = (TimeDivisionIntervals)comboBox.SelectedIndex;
+      ClearAllVisible = true;
     }
     private void DatePicker_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
     {
-      UserTimeScope = new DateRange(StartDate.SelectedDate, EndDate.SelectedDate);
+      _graphSettings.UserTimeScope = new DateRange(StartDate.SelectedDate, EndDate.SelectedDate);
+      ClearAllVisible = true;
     }
+    #endregion
+
+    #region ISettingsSetter implementation
+    public void SetDefaultValues()
+    {
+      _initFlag = true;
+
+      XAxisNamed.IsChecked = false;
+      XAxisDescription.IsEnabled = false;
+      XAxisDescription.Text = string.Empty;
+      TimeScopeCombo.SelectedIndex = 2;
+      TimeDivisorComboBox.SelectedIndex = 0;
+      StartDate.SelectedDate = null;
+      EndDate.SelectedDate = null;
+      CustomTimeSettings.IsEnabled = false;
+
+      _initFlag = false;
+    }
+    public void SetNewSettingsRef(object graphSettings) => _graphSettings = (GraphSettings)graphSettings;
+    public void SetExistingSettingsRef(object graphSettings)
+    {
+      _initFlag = true;
+
+      _graphSettings = (GraphSettings)graphSettings;
+      XAxisDescription.IsEnabled = NameXAxis = _graphSettings.XAxisName != null;
+      XAxisDescription.Text = _graphSettings.XAxisName;
+      XAxisNamed.IsChecked = NameXAxis;
+      TimeScopeCombo.SelectedIndex = (int)_graphSettings.TimeScope;
+      CustomTimeSettings.IsEnabled = _graphSettings.TimeScope == TimeRanges.custom;
+      StartDate.SelectedDate = _graphSettings.UserTimeScope?.StartDate;
+      EndDate.SelectedDate = _graphSettings.UserTimeScope?.EndDate;
+      TimeDivisorComboBox.SelectedIndex = _graphSettings.TimeDivisor == null ? 0 : (int)_graphSettings.TimeDivisor;
+
+      _initFlag = false;
+    }
+    public void ClearAll()
+    {
+      _initFlag = true;
+
+      ClearAllVisible = false;
+
+      _initFlag = false;
+    }
+    #endregion
   }
 }

@@ -11,10 +11,16 @@ namespace ExpensesTracker.Views.Controls.FilterSettingsControls
   /// <summary>
   /// Prices database filter control
   /// </summary>
-  public partial class FilterPricesSelector : UserControl, INotifyPropertyChanged, IFilterSettings
+  public partial class FilterPricesSelector : UserControl, INotifyPropertyChanged, ISettingsSetter
   {
-    private FilterSettings _filterSettings = new();
     private bool _initFlag = false;
+    private FilterSettings _filterSettings = new();
+
+    public event PropertyChangedEventHandler? PropertyChanged;
+    private void OnPropertyChanged(string propertyName)
+    {
+      if (!_initFlag) PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
 
     #region Notifying properties
     private bool? _clearAll;
@@ -26,16 +32,19 @@ namespace ExpensesTracker.Views.Controls.FilterSettingsControls
     }
     #endregion
 
-    public event PropertyChangedEventHandler? PropertyChanged;
-    private void OnPropertyChanged(string propertyName)
-    {
-      if (!_initFlag) PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-    }
-
     public FilterPricesSelector() => InitializeComponent();
 
     #region IFilterSettings implementation
-    public void ClearAll() => ClearButtonPrices_MouseLeftButtonDown(ClearPrices, null);
+    public void ClearAll()
+    {
+      _initFlag = true;
+
+      ClearAllVisible = false;
+      ClearButtonPrices_MouseLeftButtonDown(ClearPrices, null);
+
+      _initFlag = false;
+    }
+
     public void SetDefaultValues()
     {
       PriceMin.Clear();
@@ -45,30 +54,30 @@ namespace ExpensesTracker.Views.Controls.FilterSettingsControls
       TotalMin.Clear();
       TotalMax.Clear();
     }
-    public void SetExistingFilterSettingsRef(FilterSettings filterSettings)
+    public void SetExistingSettingsRef(object filterSettings)
     {
       _initFlag = true;
 
-      _filterSettings = filterSettings;
+      _filterSettings = (FilterSettings)filterSettings;
       if (_filterSettings.PriceRange != null)
       {
-        PriceMin.NumericValue = _filterSettings.PriceRange.NumberMin;
-        PriceMax.NumericValue = _filterSettings.PriceRange.NumberMax;
+        PriceMin.Clear(_filterSettings.PriceRange.NumberMin);
+        PriceMax.Clear(_filterSettings.PriceRange.NumberMax);
       }
       if (_filterSettings.QuantityRange != null)
       {
-        QuantityMin.NumericValue = _filterSettings.QuantityRange.NumberMin;
-        QuantityMax.NumericValue = _filterSettings.QuantityRange.NumberMax;
+        QuantityMin.Clear(_filterSettings.QuantityRange.NumberMin);
+        QuantityMax.Clear(_filterSettings.QuantityRange.NumberMax);
       }
       if (_filterSettings.TotalRange != null)
       {
-        TotalMin.NumericValue = _filterSettings.TotalRange.NumberMin;
-        TotalMax.NumericValue = _filterSettings.TotalRange.NumberMax;
+        TotalMin.Clear(_filterSettings.TotalRange.NumberMin);
+        TotalMax.Clear(_filterSettings.TotalRange.NumberMax);
       }
 
       _initFlag = false;
     }
-    public void SetFilterSettingsRef(FilterSettings filterSettings) => _filterSettings = filterSettings;
+    public void SetNewSettingsRef(object filterSettings) => _filterSettings = (FilterSettings)filterSettings;
     #endregion
 
     #region Front panel events

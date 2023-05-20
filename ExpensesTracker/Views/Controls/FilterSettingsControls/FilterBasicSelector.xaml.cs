@@ -10,10 +10,10 @@ namespace ExpensesTracker.Views.Controls.FilterSettingsControls
   /// <summary>
   /// Basic database filter control
   /// </summary>
-  public partial class FilterBasicSelector : UserControl, INotifyPropertyChanged, IFilterSettings
+  public partial class FilterBasicSelector : UserControl, INotifyPropertyChanged, ISettingsSetter
   {
-    private FilterSettings _filterSettings = new();
     private bool _initFlag = false;
+    private FilterSettings _filterSettings = new();
 
     public event PropertyChangedEventHandler? PropertyChanged;
     private void OnPropertyChanged(string propertyName)
@@ -34,13 +34,13 @@ namespace ExpensesTracker.Views.Controls.FilterSettingsControls
     public FilterBasicSelector() => InitializeComponent();
 
     #region IFilterSettings implementation
-    public void SetFilterSettingsRef(FilterSettings filterSettings) => _filterSettings = filterSettings;
-    public void SetExistingFilterSettingsRef(FilterSettings filterSettings)
+    public void SetNewSettingsRef(object filterSettings) => _filterSettings = (FilterSettings)filterSettings;
+    public void SetExistingSettingsRef(object filterSettings)
     {
       _initFlag = true;
 
-      _filterSettings = filterSettings;
-      SearchBox.Text = _filterSettings.Name;
+      _filterSettings = (FilterSettings)filterSettings;
+      if (_filterSettings.Name != null) SearchBox.Text = _filterSettings.Name;
       if (_filterSettings.Income != null)
       {
         if (_filterSettings.Income == true) IncomeT.IsChecked = true;
@@ -66,7 +66,15 @@ namespace ExpensesTracker.Views.Controls.FilterSettingsControls
 
       _initFlag = false;
     }
-    public void ClearAll() => ClearButtonBasic_MouseLeftButtonDown(ClearBasic, null);
+    public void ClearAll()
+    {
+      _initFlag = true;
+
+      ClearAllVisible = false;
+      ClearButtonBasic_MouseLeftButtonDown(ClearBasic, null);
+
+      _initFlag = false;
+    }
     #endregion
 
     #region Front panel events

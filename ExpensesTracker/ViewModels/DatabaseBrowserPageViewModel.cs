@@ -27,7 +27,7 @@ namespace ExpensesTracker.ViewModels
       _mainSettings = mainSettings;
       _mainSettings.PropertyChanged += MainSettings_PropertyChanged;
       _expensesItems = _mainSettings.DatabaseRecords;
-      _databaseBrowserPage.FilterCluster.SetFilterSettingsRef(_filterSettings);
+      _databaseBrowserPage.FilterCluster.SetNewSettingsRef(_filterSettings);
       _filterSettings.PropertyChanged += FilterSettings_PropertyChanged;
       ShowRecords();
     }

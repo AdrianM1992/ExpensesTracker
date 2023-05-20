@@ -9,10 +9,10 @@ namespace ExpensesTracker.Views.Controls.FilterSettingsControls
   /// <summary>
   /// Dates database filter control
   /// </summary>
-  public partial class FilterDatesSelector : UserControl, INotifyPropertyChanged, IFilterSettings
+  public partial class FilterDatesSelector : UserControl, INotifyPropertyChanged, ISettingsSetter
   {
-    private FilterSettings _filterSettings = new();
     private bool _initFlag = false;
+    private FilterSettings _filterSettings = new();
 
     public event PropertyChangedEventHandler? PropertyChanged;
     private void OnPropertyChanged(string propertyName)
@@ -32,8 +32,16 @@ namespace ExpensesTracker.Views.Controls.FilterSettingsControls
 
     public FilterDatesSelector() => InitializeComponent();
 
-    #region IFilterSettings implementation
-    public void ClearAll() => ClearButtonDates_MouseLeftButtonDown(ClearDates, null);
+    #region ISettingsSetter implementation
+    public void ClearAll()
+    {
+      _initFlag = true;
+
+      ClearAllVisible = false;
+      ClearButtonDates_MouseLeftButtonDown(ClearDates, null);
+
+      _initFlag = false;
+    }
     public void SetDefaultValues()
     {
       SubmitDateMin.SelectedDate = null;
@@ -43,12 +51,12 @@ namespace ExpensesTracker.Views.Controls.FilterSettingsControls
       UserDateMin.SelectedDate = null;
       UserDateMax.SelectedDate = null;
     }
-    public void SetExistingFilterSettingsRef(FilterSettings filterSettings) => _filterSettings = filterSettings;
-    public void SetFilterSettingsRef(FilterSettings filterSettings)
+    public void SetNewSettingsRef(object filterSettings) => _filterSettings = (FilterSettings)filterSettings;
+    public void SetExistingSettingsRef(object filterSettings)
     {
       _initFlag = true;
 
-      _filterSettings = filterSettings;
+      _filterSettings = (FilterSettings)filterSettings;
       if (_filterSettings.SubmitDateRange != null)
       {
         SubmitDateMin.SelectedDate = _filterSettings.SubmitDateRange.StartDate;
@@ -134,7 +142,6 @@ namespace ExpensesTracker.Views.Controls.FilterSettingsControls
         ClearDateOccurred.Visibility = Visibility.Hidden;
         _filterSettings.UserDateRange = null;
       }
-
       clearButton.Visibility = Visibility.Hidden;
     }
     #endregion

@@ -22,8 +22,8 @@ namespace ExpensesTracker.ViewModels
     {
       _graphControl = graphControl;
       _mainSettings = mainSettings;
-      _graphControl.GraphFilterCluster.SetFilterSettingsRef(_filterSettings);
-      _graphControl.GraphControlSelectros.SetGraphSettingsReference(_graphSettings);
+      _graphControl.GraphFilterCluster.SetNewSettingsRef(_filterSettings);
+      _graphControl.GraphSettingsCluster.SetNewSettingsRef(_graphSettings);
       _data = _mainSettings.DatabaseRecords;
       _mainSettings.PropertyChanged += UpdateGraph;
       _filterSettings.PropertyChanged += UpdateGraph;
@@ -37,9 +37,10 @@ namespace ExpensesTracker.ViewModels
       _mainSettings = mainSettings;
       if (graphViewSettings.GraphSettings != null) _graphSettings = graphViewSettings.GraphSettings;
       if (graphViewSettings.FilterSettings != null) _filterSettings = graphViewSettings.FilterSettings;
-      _graphControl.GraphFilterCluster.SetExistingFilterSettingsRef(_filterSettings);
-      _graphControl.GraphControlSelectros.SetExistingGraphSettingsReference(_graphSettings);
+      _graphControl.GraphFilterCluster.SetExistingSettingsRef(_filterSettings);
+      _graphControl.GraphSettingsCluster.SetExistingSettingsRef(_graphSettings);
       _data = _mainSettings.DatabaseRecords;
+      _data = _filterSettings.ApplyFilterCriteria(_mainSettings.DatabaseRecords, -1);
       _mainSettings.PropertyChanged += UpdateGraph;
       _filterSettings.PropertyChanged += UpdateGraph;
       _graphSettings.PropertyChanged += UpdateGraph;

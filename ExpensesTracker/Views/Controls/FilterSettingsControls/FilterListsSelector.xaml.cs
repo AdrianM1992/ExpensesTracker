@@ -12,10 +12,10 @@ namespace ExpensesTracker.Views.Controls.FilterSettingsControls
   /// <summary>
   /// Lists database filter control
   /// </summary>
-  public partial class FilterListsSelector : UserControl, INotifyPropertyChanged, IFilterSettings
+  public partial class FilterListsSelector : UserControl, INotifyPropertyChanged, ISettingsSetter
   {
-    private FilterSettings _filterSettings = new();
     private bool _initFlag = false;
+    private FilterSettings _filterSettings = new();
 
     public event PropertyChangedEventHandler? PropertyChanged;
     private void OnPropertyChanged(string propertyName)
@@ -40,7 +40,16 @@ namespace ExpensesTracker.Views.Controls.FilterSettingsControls
     public FilterListsSelector() => InitializeComponent();
 
     #region IFilterSettings implementation
-    public void ClearAll() => ClearButtonLists_MouseLeftButtonDown(ClearLists, null);
+    public void ClearAll()
+    {
+      _initFlag = true;
+
+      ClearAllVisible = false;
+      ClearButtonLists_MouseLeftButtonDown(ClearLists, null);
+
+      _initFlag = false;
+    }
+
     public void SetDefaultValues()
     {
       _initFlag = true;
@@ -54,19 +63,19 @@ namespace ExpensesTracker.Views.Controls.FilterSettingsControls
 
       _initFlag = false;
     }
-    public void SetExistingFilterSettingsRef(FilterSettings filterSettings)
+    public void SetNewSettingsRef(object filterSettings)
     {
-      _filterSettings = filterSettings;
+      _filterSettings = (FilterSettings)filterSettings;
       _filterSettings.PropertyChanged += FilterSettings_PropertyChanged;
     }
 
-    public void SetFilterSettingsRef(FilterSettings filterSettings)
+    public void SetExistingSettingsRef(object filterSettings)
     {
       SetDefaultValues();
 
       _initFlag = true;
 
-      _filterSettings = filterSettings;
+      _filterSettings = (FilterSettings)filterSettings;
       _filterSettings.PropertyChanged += FilterSettings_PropertyChanged;
       if (_filterSettings.Categories != null)
       {

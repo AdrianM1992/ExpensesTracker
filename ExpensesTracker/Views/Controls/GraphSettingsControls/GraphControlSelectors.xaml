@@ -4,16 +4,21 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ExpensesTracker.Views.Controls"
-             xmlns:ctrls="clr-namespace:ExpensesTracker.Views.Controls"
              mc:Ignorable="d" d:Background="Aqua"
              Width="190">
   <UserControl.Resources>
   </UserControl.Resources>
   <StackPanel>
-    <ctrls:GraphTypeSelector x:Name="GeneralSelector" Grid.Row="0"/>
+    <Label Content=" GRAPH SETTINGS" Grid.Row="0" FontSize="16" HorizontalContentAlignment="Center" BorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}" BorderThickness="1,1,1,1" Padding="0,0,0,0" Margin="2,2,2,2"/>
+    <local:GraphTypeSelector x:Name="TypeSelector" Grid.Row="0"/>
     <Separator Height="20" BorderBrush="black" Width="100"/>
-    <ctrls:GraphTimeIntervalsSelector x:Name="TimeSelector" Grid.Row="1"/>
+    <local:GraphTimeIntervalsSelector x:Name="TimeSelector" Grid.Row="1"/>
     <Separator Height="20" BorderBrush="black" Width="100"/>
-    <ctrls:GraphValuesSelector x:Name="ValuesSelector" Grid.Row="2"/>
+    <local:GraphValuesSelector x:Name="ValuesSelector" Grid.Row="2"/>
+
+    <StackPanel x:Name="ClearAllStackPanel" Orientation="Horizontal" Grid.Row="5" HorizontalAlignment="Center" Visibility="Hidden" MouseLeftButtonDown="ClearAll_MouseLeftButtonDown" IsHitTestVisible="True" Background="Transparent">
+      <local:ClearButton VerticalAlignment="Center" Width="24" Height="24" Visibility="Visible"/>
+      <Label Content="CLEAR ALL SETTINGS" VerticalAlignment="Center" Foreground="Red" FontSize="16"/>
+    </StackPanel>
   </StackPanel>
 </UserControl>

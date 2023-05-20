@@ -1,5 +1,6 @@
 ﻿using ExpensesTracker.DataTypes.Enums;
 using ExpensesTracker.Models.Settings;
+using ExpensesTracker.Views.Interfaces;
 using System.ComponentModel;
 using System.Windows.Controls;
 
@@ -8,10 +9,11 @@ namespace ExpensesTracker.Views.Controls
   /// <summary>
   /// Graph general configuration control
   /// </summary>
-  public partial class GraphTypeSelector : UserControl, INotifyPropertyChanged
+  public partial class GraphTypeSelector : UserControl, INotifyPropertyChanged, ISettingsSetter
   {
     private bool _initFlag = false;
     private GraphSettings _graphSettings = new();
+
     private bool _nameGraph;
     private bool NameGraph
     {
@@ -19,86 +21,85 @@ namespace ExpensesTracker.Views.Controls
       set { _nameGraph = value; }
     }
 
+    public event PropertyChangedEventHandler? PropertyChanged;
+    private void OnPropertyChanged(string propertyName)
+    {
+      if (!_initFlag) PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
+
     #region Notifying properties
+    private bool? _clearAll;
 
-    private GraphTypes _graphType;
-    private string? _graphName;
-
-    public GraphTypes GraphType
+    public bool? ClearAllVisible
     {
-      get { return _graphType; }
-      set { _graphType = value; OnPropertyChanged(nameof(GraphType)); }
+      get { return _clearAll; }
+      set { _clearAll = value; OnPropertyChanged(nameof(ClearAll)); }
     }
-    public string? GraphName
-    {
-      get { return _graphName; }
-      set { _graphName = value; OnPropertyChanged(nameof(GraphName)); }
-    }
-
     #endregion
 
-    public event PropertyChangedEventHandler? PropertyChanged;
     public GraphTypeSelector()
     {
       InitializeComponent();
     }
-    public void SetGraphSettingsReference(GraphSettings graphSettings)
-    {
-      _graphSettings = graphSettings;
-      _graphSettings.GraphType = GraphType;
-      _graphSettings.GraphName = GraphName;
-    }
-    public void SetExistingGraphSettingsReference(GraphSettings graphSettings)
-    {
-      _initFlag = true;
 
-      _graphSettings = graphSettings;
-      GraphType = _graphSettings.GraphType;
-      GraphName = _graphSettings.GraphName;
-      GraphNamed.IsChecked = NameGraph = _graphSettings.GraphName == null;
-      GraphDescription.IsEnabled = NameGraph;
-      GraphTypeList.SelectedIndex = (int)GraphType;
+    #region Front panel events
 
-      _initFlag = false;
-    }
-    private void OnPropertyChanged(string propertyName)
-    {
-      if (!_initFlag)
-      {
-        switch (propertyName)
-        {
-          case "GraphName":
-            _graphSettings.GraphName = GraphName;
-            break;
-          case "GraphType":
-            _graphSettings.GraphType = GraphType;
-            break;
-          default:
-            break;
-        }
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-      }
-    }
     private void CheckBox_CheckedChanged(object sender, System.Windows.RoutedEventArgs e)
     {
       var checkBox = (CheckBox)sender;
       if (checkBox.IsChecked != null)
       {
         GraphDescription.IsEnabled = NameGraph = checkBox.IsChecked.Value;
-        GraphName = NameGraph ? GraphDescription.Text : null;
+        _graphSettings.GraphName = NameGraph ? GraphDescription.Text : null;
+        ClearAllVisible = true;
       }
     }
     private void GraphDescription_TextChanged(object sender, TextChangedEventArgs e)
     {
       var textBox = (TextBox)sender;
-      GraphName = textBox.Text;
+      _graphSettings.GraphName = textBox.Text;
+      ClearAllVisible = true;
     }
     private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
       var listBox = (ListBox)sender;
-      GraphType = (GraphTypes)listBox.SelectedIndex;
+      _graphSettings.GraphType = (GraphTypes)listBox.SelectedIndex;
+      ClearAllVisible = true;
     }
+    #endregion
 
+    #region ISettingsSetter implementation
+    public void SetDefaultValues()
+    {
+      _initFlag = true;
 
+      GraphNamed.IsChecked = false;
+      GraphDescription.IsEnabled = false;
+      GraphDescription.Text = string.Empty;
+      GraphTypeList.SelectedIndex = 0;
+
+      _initFlag = false;
+    }
+    public void SetNewSettingsRef(object graphSettings) => _graphSettings = (GraphSettings)graphSettings;
+    public void SetExistingSettingsRef(object graphSettings)
+    {
+      _initFlag = true;
+
+      _graphSettings = (GraphSettings)graphSettings;
+      GraphNamed.IsChecked = NameGraph = _graphSettings.GraphName == null;
+      GraphDescription.IsEnabled = NameGraph;
+      GraphTypeList.SelectedIndex = (int)_graphSettings.GraphType;
+
+      _initFlag = false;
+    }
+    public void ClearAll()
+    {
+      _initFlag = true;
+
+      ClearAllVisible = false;
+
+      _initFlag = false;
+    }
+    #endregion
   }
 }

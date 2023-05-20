@@ -7,7 +7,8 @@
              xmlns:enums="clr-namespace:ExpensesTracker.DataTypes.Enums"
              xmlns:svg="http://sharpvectors.codeplex.com/svgc/"
              mc:Ignorable="d" d:Background="Aqua"
-             d:DesignHeight="300" Width="190">
+             Width="190">
+  
   <UserControl.Resources>
     <ObjectDataProvider x:Key="TimeDivisionIntervals" MethodName="GetValues" ObjectType="{x:Type enums:TimeDivisionIntervals}">
       <ObjectDataProvider.MethodParameters>
@@ -18,14 +19,11 @@
   </UserControl.Resources>
   <Grid>
     <Grid.RowDefinitions>
-      <RowDefinition/>
       <RowDefinition Height="Auto"/>
       <RowDefinition Height="Auto"/>
     </Grid.RowDefinitions>
 
-    <Label Content="GENERAL SETTINGS" Grid.Row="0" FontSize="16" HorizontalContentAlignment="Center" BorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}" BorderThickness="1,1,1,1" Padding="0,0,0,0" Margin="2,2,2,2"/>
-
-    <GroupBox Grid.Row="1" Header="Basic">
+    <GroupBox Grid.Row="0" Header="General">
       <StackPanel>
         <StackPanel Orientation="Horizontal">
           <Label Content="Graph name"/>

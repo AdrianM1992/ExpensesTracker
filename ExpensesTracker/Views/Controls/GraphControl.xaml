@@ -47,7 +47,7 @@
         <Label x:Name="SelectrosLabel" Content="Type" HorizontalAlignment="Right"/>
         <Expander  x:Name="SelectorsExpander" ExpandDirection="Left" HorizontalAlignment="Right" Expanded="Expander_Expanded">
           <ScrollViewer Margin=" 0,-50,25,0" MaxHeight="650">
-            <ctrls:GraphControlSelectors x:Name="GraphControlSelectros"/>
+            <ctrls:GraphControlSelectors x:Name="GraphSettingsCluster"/>
           </ScrollViewer>
         </Expander>
       </StackPanel>

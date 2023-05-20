@@ -1,34 +1,55 @@
-﻿using ExpensesTracker.Models.Settings;
+﻿using ExpensesTracker.Views.Interfaces;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace ExpensesTracker.Views.Controls
 {
   /// <summary>
   /// Logika interakcji dla klasy GraphControlSelectors.xaml
   /// </summary>
-  public partial class GraphControlSelectors : UserControl
+  public partial class GraphControlSelectors : UserControl, ISettingsSetter
   {
-    private GraphSettings _graphSettings = new();
+    private readonly List<ISettingsSetter> _filters = new();
 
     public GraphControlSelectors()
     {
       InitializeComponent();
+      _filters.Add(TypeSelector);
+      TypeSelector.PropertyChanged += ClearAll_PropertyChanged;
+      _filters.Add(TimeSelector);
+      TimeSelector.PropertyChanged += ClearAll_PropertyChanged;
+      _filters.Add(ValuesSelector);
+      ValuesSelector.PropertyChanged += ClearAll_PropertyChanged;
     }
 
-    public void SetGraphSettingsReference(GraphSettings graphSettings)
+    private void ClearAll_PropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
-      _graphSettings = graphSettings;
-      GeneralSelector.SetGraphSettingsReference(_graphSettings);
-      TimeSelector.SetGraphSettingsReference(_graphSettings);
-      ValuesSelector.SetGraphSettingsReference(_graphSettings);
+      if (e.PropertyName == "ClearAll") ClearAllStackPanel.Visibility = Visibility.Visible;
     }
+    private void ClearAll_MouseLeftButtonDown(object sender, MouseButtonEventArgs? e) => ClearAll();
 
-    public void SetExistingGraphSettingsReference(GraphSettings graphSettings)
+    #region ISettingsSetter implementation
+    public void SetDefaultValues()
     {
-      _graphSettings = graphSettings;
-      GeneralSelector.SetExistingGraphSettingsReference(_graphSettings);
-      TimeSelector.SetExistingGraphSettingsReference(_graphSettings);
-      ValuesSelector.SetExistingGraphSettingsReference(_graphSettings);
+      foreach (var filter in _filters) filter.SetDefaultValues();
     }
+    public void SetNewSettingsRef(object graphSettings)
+    {
+      foreach (var filter in _filters) filter.SetNewSettingsRef(graphSettings);
+    }
+    public void SetExistingSettingsRef(object graphSettings)
+    {
+      foreach (var filter in _filters) filter.SetExistingSettingsRef(graphSettings);
+    }
+    public void ClearAll()
+    {
+      SetDefaultValues();
+      foreach (var filter in _filters) filter.ClearAll();
+      ClearAllStackPanel.Visibility = Visibility.Hidden;
+    }
+    #endregion
   }
 }

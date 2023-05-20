@@ -6,17 +6,13 @@
              xmlns:local="clr-namespace:ExpensesTracker.Views.Controls"
              xmlns:enums="clr-namespace:ExpensesTracker.DataTypes.Enums"
              mc:Ignorable="d" d:Background="Aqua"
-             d:DesignHeight="300" Width="190">
+             Width="190">
   <Grid>
     <Grid.RowDefinitions>
-      <RowDefinition/>
-      <RowDefinition Height="Auto"/>
       <RowDefinition Height="Auto"/>
     </Grid.RowDefinitions>
-
-    <Label Content="VALUES SETTINGS" Grid.Row="0" FontSize="16" HorizontalContentAlignment="Center" BorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}" BorderThickness="1,1,1,1" Padding="0,0,0,0" Margin="2,2,2,2"/>
-
-    <GroupBox Grid.Row="1" Header="Basic">
+    
+    <GroupBox Grid.Row="0" Header="Values">
       <StackPanel>
         <StackPanel Orientation="Horizontal">
           <Label Content="Y axis name"/>
@@ -37,7 +33,7 @@
         
         <Label Content="Values scope"/>
         <!-- These values are manually tied to ValuesScopes Enum-->
-        <ComboBox x:Name="ValuesScopeCombo" SelectedIndex="1" SelectionChanged="ComboBox_SelectionChanged">
+        <ComboBox x:Name="ValuesScopeCombo" SelectedIndex="0" SelectionChanged="ComboBox_SelectionChanged">
           <ComboBoxItem Content="Balance"/>
           <ComboBoxItem Content="Categories"/>
           <ComboBoxItem Content="Recurring"/>

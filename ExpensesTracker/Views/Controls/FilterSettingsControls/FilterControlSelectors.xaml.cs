@@ -1,5 +1,4 @@
-﻿using ExpensesTracker.Models.Settings;
-using ExpensesTracker.Views.Interfaces;
+﻿using ExpensesTracker.Views.Interfaces;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
@@ -10,9 +9,9 @@ namespace ExpensesTracker.Views.Controls.FilterSettingsControls
   /// <summary>
   /// Logika interakcji dla klasy FilterControlSelectors.xaml
   /// </summary>
-  public partial class FilterControlSelectors : UserControl, IFilterSettings
+  public partial class FilterControlSelectors : UserControl, ISettingsSetter
   {
-    private readonly List<IFilterSettings> _filters = new();
+    private readonly List<ISettingsSetter> _filters = new();
 
     public FilterControlSelectors()
     {
@@ -33,20 +32,20 @@ namespace ExpensesTracker.Views.Controls.FilterSettingsControls
     }
     private void ClearAll_MouseLeftButtonDown(object sender, MouseButtonEventArgs? e) => ClearAll();
 
-    #region IFilterSettings implementation
+    #region ISettingsSetter implementation
     public void SetDefaultValues()
     {
       foreach (var filter in _filters) filter.SetDefaultValues();
     }
 
-    public void SetFilterSettingsRef(FilterSettings filterSettings)
+    public void SetNewSettingsRef(object filterSettings)
     {
-      foreach (var filter in _filters) filter.SetFilterSettingsRef(filterSettings);
+      foreach (var filter in _filters) filter.SetNewSettingsRef(filterSettings);
     }
 
-    public void SetExistingFilterSettingsRef(FilterSettings filterSettings)
+    public void SetExistingSettingsRef(object filterSettings)
     {
-      foreach (var filter in _filters) filter.SetExistingFilterSettingsRef(filterSettings);
+      foreach (var filter in _filters) filter.SetExistingSettingsRef(filterSettings);
     }
 
     public void ClearAll()
