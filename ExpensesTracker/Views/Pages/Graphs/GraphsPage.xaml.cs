@@ -25,7 +25,7 @@ namespace ExpensesTracker.Views.Pages.Graphs
     private void AddDuplicateButton_Click(object sender, RoutedEventArgs e)
     {
       var button = (Button)sender;
-      //For future implementation
+
       if (button.Name == "DuplicateButton" && _currentTabName != null) _viewModel.DuplicateTab(_currentTabName);
       else _viewModel.AddNewTab();
     }

@@ -39,29 +39,30 @@
 
     <!--#region Function buttons-->
     <StackPanel Grid.Row="1" HorizontalAlignment="Left" Margin="10,0,5,10" VerticalAlignment="Bottom" Orientation="Horizontal" Opacity="0.5">
+      
       <Button x:Name="AddButton" Style="{StaticResource OpacityButtonStyle}" Click="AddDuplicateButton_Click" BorderBrush="{x:Null}" Foreground="{x:Null}" IsHitTestVisible="True" Width="36" Height="36" Margin="0,0,10,0" ToolTip="Add new graph">
         <Button.Background>
           <ImageBrush ImageSource="/Views/Assets/Icons/newRecord.png" Stretch="Uniform"/>
         </Button.Background>
       </Button>
-      <!-- For future implementation
       <Button x:Name="DuplicateButton" Style="{StaticResource OpacityButtonStyle}" Click="AddDuplicateButton_Click" BorderBrush="{x:Null}" Foreground="{x:Null}" IsHitTestVisible="True" Width="36" Height="36" Margin="0,0,10,0" ToolTip="Duplicate graph">
         <Button.Background>
           <ImageBrush ImageSource="/Views/Assets/Icons/duplicateRecord.png" Stretch="Uniform"/>
         </Button.Background>
-      </Button>-->
+      </Button>
       <Button x:Name="DeleteButton" Style="{StaticResource OpacityButtonStyle}" BorderBrush="{x:Null}" Foreground="{x:Null}" IsHitTestVisible="True" Width="36" Height="36" Margin="0,0,10,0" Click="DeleteButton_Click" ToolTip="Delete graph">
         <Button.Background>
           <ImageBrush ImageSource="/Views/Assets/Icons/deleteRecord.png" Stretch="Uniform"/>
         </Button.Background>
       </Button>
+      
       <Border Width="20"/>
-      <Button x:Name="LoadButton" Style="{StaticResource OpacityButtonStyle}" BorderBrush="{x:Null}" Foreground="{x:Null}" IsHitTestVisible="True" Width="36" Height="36" Margin="0,0,10,0" Click="LoadButton_Click"  ToolTip="Delete graph">
+      <Button x:Name="LoadButton" Style="{StaticResource OpacityButtonStyle}" BorderBrush="{x:Null}" Foreground="{x:Null}" IsHitTestVisible="True" Width="36" Height="36" Margin="0,0,10,0" Click="LoadButton_Click"  ToolTip="Load graph settings">
         <Button.Background>
           <ImageBrush ImageSource="/Views/Assets/Icons/loadSettings.png" Stretch="Uniform"/>
         </Button.Background>
       </Button>
-      <Button x:Name="SaveButton" Style="{StaticResource OpacityButtonStyle}" BorderBrush="{x:Null}" Foreground="{x:Null}" IsHitTestVisible="True" Width="36" Height="36" Margin="0,0,10,0" Click="SaveButton_Click"  ToolTip="Delete graph">
+      <Button x:Name="SaveButton" Style="{StaticResource OpacityButtonStyle}" BorderBrush="{x:Null}" Foreground="{x:Null}" IsHitTestVisible="True" Width="36" Height="36" Margin="0,0,10,0" Click="SaveButton_Click"  ToolTip="Save graph settings">
         <Button.Background>
           <ImageBrush ImageSource="/Views/Assets/Icons/saveSettings.png" Stretch="Uniform"/>
         </Button.Background>

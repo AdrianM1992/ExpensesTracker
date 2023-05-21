@@ -7,6 +7,6 @@ namespace ExpensesTracker.Views.Delegates
   {
     public delegate void CustomTabEventHandler(string tabName, CustomTabEnums customTabEvent, string oldTabName = "");
     public delegate void AddEditRecordHandler();
-    public delegate void ModifyContainers(CustomTabControl? grpahTab, GraphTabActions? tabAction, GraphControl? graph, string? newCurrentTabName);
+    public delegate void ModifyContainers(CustomTabControl? graphTab, GraphTabActions? tabAction, GraphControl? graph, string? newCurrentTabName);
   }
 }

@@ -8,7 +8,7 @@ using System.Windows.Input;
 namespace ExpensesTracker.Views.Controls
 {
   /// <summary>
-  /// Logika interakcji dla klasy GraphControlSelectors.xaml
+  /// Container for all graph settings controls
   /// </summary>
   public partial class GraphControlSelectors : UserControl, ISettingsSetter
   {

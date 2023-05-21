@@ -47,8 +47,7 @@ namespace ExpensesTracker.ViewModels
       _mainSettings.PropertyChanged += UpdateGraph;
       ChangeGraphType();
     }
-    public GraphSettings GetGraphSettings() => _graphSettings;
-    public FilterSettings GetFilterSettings() => _filterSettings;
+    public GraphViewSettings GetGraphSettings() => new() { FilterSettings = _filterSettings, GraphSettings = _graphSettings };
 
     private void UpdateGraph(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
     {

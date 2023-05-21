@@ -1,9 +1,10 @@
 ﻿using ExpensesTracker.DataTypes.Enums;
+using ExpensesTracker.Models.DataControllers.FileOperations;
 using ExpensesTracker.Models.Interfaces;
+using ExpensesTracker.Models.Settings;
 using ExpensesTracker.Views.Controls;
 using ExpensesTracker.Views.Pages.Graphs;
 using Microsoft.IdentityModel.Tokens;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
@@ -65,9 +66,9 @@ namespace ExpensesTracker.ViewModels
     /// <summary>
     /// Adds new tab and graph control to page
     /// </summary>
-    public void AddNewTab()
+    public void AddNewTab(string? basedOn = null)
     {
-      string newTabName = GetNewGraphName();
+      string newTabName = basedOn == null ? GetNewGraphName() : GetNewGraphName(basedOn);
 
       var tabToAdd = new CustomTabControl() { TabName = newTabName, IsHeaderEditable = true };
       tabToAdd.CustomTabEvent += CustomTabEventHandler;
@@ -84,7 +85,12 @@ namespace ExpensesTracker.ViewModels
     }
     public void DuplicateTab(string tabName)
     {
-      throw new NotImplementedException();
+      object? settings = ClassSerializer.CopyClass(_graphs[tabName].DuplicateGraph(), typeof(GraphViewSettings));
+      if (settings != null)
+      {
+        AddNewTab(tabName);
+        _graphs.Last().Value.LoadGraphSetting((GraphViewSettings)settings);
+      }
     }
 
     public Dictionary<string, GraphControl> Get_graphs()
@@ -124,6 +130,7 @@ namespace ExpensesTracker.ViewModels
           _tabs.Remove(oldTabName);
           _graphs.Add(currentTabName, _graphs[oldTabName]);
           _graphs.Remove(oldTabName);
+          _modifyView(null, null, _graphs[currentTabName], currentTabName);
           SwapGraphTab(currentTabName);
           break;
 

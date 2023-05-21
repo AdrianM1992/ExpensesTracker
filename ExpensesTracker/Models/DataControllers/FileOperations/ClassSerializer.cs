@@ -4,6 +4,7 @@ using Microsoft.Win32;
 using System;
 using System.IO;
 using System.Text.Json;
+using System.Windows;
 
 namespace ExpensesTracker.Models.DataControllers.FileOperations
 {
@@ -47,9 +48,53 @@ namespace ExpensesTracker.Models.DataControllers.FileOperations
         using StreamReader sr = new(fs);
         string classString = sr.ReadToEnd();
 
-        return JsonSerializer.Deserialize(classString, classType);
+        object? classInstance = null;
+
+        try
+        {
+          classInstance = JsonSerializer.Deserialize(classString, classType);
+        }
+        catch (Exception ex)
+        {
+          MessageBox.Show($"Unable to load the class instance.\n\nError details:\n\n{ex.Message}\n\nTrying to create blank instance.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+          try
+          {
+            classInstance = Activator.CreateInstance(classType);
+          }
+          catch (Exception ex2)
+          {
+            MessageBox.Show($"Unable to create blank instance.\nError details:\n{ex2.Message}\n", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+          }
+        }
+        return classInstance;
       }
       else return null;
+    }
+    public static object? CopyClass(object? classToCopy, Type classType)
+    {
+      object? classInstance = null;
+      if (classToCopy != null)
+      {
+        try
+        {
+          string classString = JsonSerializer.Serialize(classToCopy);
+          classInstance = JsonSerializer.Deserialize(classString, classType);
+        }
+        catch (Exception ex)
+        {
+          MessageBox.Show($"Unable to copy class instance.\n\nError details:\n\n{ex.Message}\n\nTrying to create blank instance.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+          try
+          {
+            classInstance = Activator.CreateInstance(classType);
+          }
+          catch (Exception ex2)
+          {
+            MessageBox.Show($"Unable to create blank instance.\nError details:\n{ex2.Message}\n", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+          }
+        }
+      }
+
+      return classInstance;
     }
   }
 }

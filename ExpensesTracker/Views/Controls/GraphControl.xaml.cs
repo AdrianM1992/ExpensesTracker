@@ -19,19 +19,17 @@ namespace ExpensesTracker.Views.Controls
       _mainSettings = mainSettings;
       _viewModel = new GraphControlViewModel(this, _mainSettings);
     }
-    public void SaveGraphSettings()
+    public void SaveGraphSettings() => ClassSerializer.SaveClass(_viewModel.GetGraphSettings());
+
+    public void LoadGraphSetting(GraphViewSettings? graphViewSettings = null)
     {
-      GraphViewSettings graphViewSettings = new()
-      {
-        GraphSettings = _viewModel.GetGraphSettings(),
-        FilterSettings = _viewModel.GetFilterSettings()
-      };
-      ClassSerializer.SaveClass(graphViewSettings);
-    }
-    public void LoadGraphSetting()
-    {
-      var graphViewSettings = (GraphViewSettings?)ClassSerializer.LoadClassFromFile(typeof(GraphViewSettings));
+      graphViewSettings ??= (GraphViewSettings?)ClassSerializer.LoadClassFromFile(typeof(GraphViewSettings));
+
       _viewModel = graphViewSettings != null ? new GraphControlViewModel(this, _mainSettings, graphViewSettings) : _viewModel;
+    }
+    public GraphViewSettings? DuplicateGraph()
+    {
+      return _viewModel.GetGraphSettings();
     }
     private void Expander_Expanded(object sender, System.Windows.RoutedEventArgs e)
     {

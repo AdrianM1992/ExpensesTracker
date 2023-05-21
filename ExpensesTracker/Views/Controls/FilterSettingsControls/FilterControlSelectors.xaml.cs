@@ -7,7 +7,7 @@ using System.Windows.Input;
 namespace ExpensesTracker.Views.Controls.FilterSettingsControls
 {
   /// <summary>
-  /// Logika interakcji dla klasy FilterControlSelectors.xaml
+  /// Container for all filter controls
   /// </summary>
   public partial class FilterControlSelectors : UserControl, ISettingsSetter
   {
